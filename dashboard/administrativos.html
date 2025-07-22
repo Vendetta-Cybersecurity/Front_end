@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Administrativo - Figger Energy SAS</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="dashboard-body">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <img src="../images/logo.png" alt="Figger Energy SAS">
+            <h3>Panel Administrativo</h3>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li class="active">
+                    <a href="#dashboard" onclick="showSection('dashboard')">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#personal" onclick="showSection('personal')">
+                        <i class="fas fa-users"></i>
+                        <span>Gestión de Personal</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#reportes" onclick="showSection('reportes')">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Reportes Operativos</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#proyectos" onclick="showSection('proyectos')">
+                        <i class="fas fa-project-diagram"></i>
+                        <span>Coordinación Proyectos</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#produccion" onclick="showSection('produccion')">
+                        <i class="fas fa-industry"></i>
+                        <span>Datos de Producción</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#notificaciones" onclick="showSection('notificaciones')">
+                        <i class="fas fa-bell"></i>
+                        <span>Notificaciones</span>
+                        <span class="notification-badge">5</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#perfil" onclick="showSection('perfil')">
+                        <i class="fas fa-user"></i>
+                        <span>Mi Perfil</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <button class="sidebar-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 id="pageTitle">Dashboard Administrativo</h1>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <span class="user-name">María González</span>
+                    <span class="user-role">Coordinadora de Operaciones</span>
+                </div>
+                <div class="user-menu">
+                    <button class="user-button" onclick="toggleUserMenu()">
+                        <img src="../images/avatar-placeholder.png" alt="Usuario" class="user-avatar">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="#perfil" onclick="showSection('perfil')">
+                            <i class="fas fa-user"></i> Mi Perfil
+                        </a>
+                        <a href="#" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="content-area">
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="content-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Personal Activo</h3>
+                            <p class="stat-number">245</p>
+                            <p class="stat-period">Empleados</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon blue">
+                            <i class="fas fa-project-diagram"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Proyectos Activos</h3>
+                            <p class="stat-number">8</p>
+                            <p class="stat-period">En ejecución</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon orange">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Productividad</h3>
+                            <p class="stat-number">95%</p>
+                            <p class="stat-period">Este mes</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon purple">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Horas Trabajadas</h3>
+                            <p class="stat-number">9,840</p>
+                            <p class="stat-period">Este mes</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-charts">
+                    <div class="chart-container">
+                        <h3>Producción Mensual</h3>
+                        <div class="chart-placeholder">
+                            <i class="fas fa-chart-area"></i>
+                            <p>Gráfico de producción por sector</p>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Asistencia del Personal</h3>
+                        <div class="attendance-summary">
+                            <div class="attendance-item">
+                                <span class="attendance-label">Presentes:</span>
+                                <span class="attendance-value green">232 (95%)</span>
+                            </div>
+                            <div class="attendance-item">
+                                <span class="attendance-label">Ausentes:</span>
+                                <span class="attendance-value orange">8 (3%)</span>
+                            </div>
+                            <div class="attendance-item">
+                                <span class="attendance-label">Permisos:</span>
+                                <span class="attendance-value blue">5 (2%)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recent-activities">
+                    <h3>Actividades Recientes</h3>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p><strong>Nuevo empleado registrado:</strong> Carlos Mendoza - Técnico de Seguridad</p>
+                                <span class="activity-time">Hace 2 horas</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p><strong>Reporte de incidente:</strong> Sector B - Revisión de equipos completada</p>
+                                <span class="activity-time">Hace 4 horas</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="activity-content">
+                                <p><strong>Proyecto completado:</strong> Capacitación en Prevención de Riesgos - 25 empleados</p>
+                                <span class="activity-time">Ayer</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Personal Section -->
+            <section id="personal-section" class="content-section">
+                <div class="section-header">
+                    <h2>Gestión de Personal</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" onclick="addEmployee()">
+                            <i class="fas fa-user-plus"></i> Agregar Empleado
+                        </button>
+                        <button class="btn btn-secondary" onclick="exportPersonnel()">
+                            <i class="fas fa-download"></i> Exportar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="personnel-filters">
+                    <input type="text" placeholder="Buscar empleado..." class="search-input">
+                    <select class="filter-select">
+                        <option value="">Todos los departamentos</option>
+                        <option value="operaciones">Operaciones</option>
+                        <option value="seguridad">Seguridad</option>
+                        <option value="mantenimiento">Mantenimiento</option>
+                    </select>
+                    <select class="filter-select">
+                        <option value="">Todos los estados</option>
+                        <option value="activo">Activo</option>
+                        <option value="inactivo">Inactivo</option>
+                        <option value="vacaciones">En vacaciones</option>
+                    </select>
+                </div>
+
+                <div class="personnel-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Empleado</th>
+                                <th>Cargo</th>
+                                <th>Departamento</th>
+                                <th>Estado</th>
+                                <th>Último Acceso</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="employee-info">
+                                        <img src="../images/avatar-placeholder.png" alt="Avatar">
+                                        <div>
+                                            <span class="employee-name">Juan Pérez</span>
+                                            <span class="employee-id">EMP-001</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Técnico Operativo</td>
+                                <td>Operaciones</td>
+                                <td><span class="status-badge active">Activo</span></td>
+                                <td>Hoy, 08:30</td>
+                                <td>
+                                    <button class="btn-icon" onclick="viewEmployee(1)"><i class="fas fa-eye"></i></button>
+                                    <button class="btn-icon" onclick="editEmployee(1)"><i class="fas fa-edit"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="employee-info">
+                                        <img src="../images/avatar-placeholder.png" alt="Avatar">
+                                        <div>
+                                            <span class="employee-name">Ana Silva</span>
+                                            <span class="employee-id">EMP-002</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Supervisora de Seguridad</td>
+                                <td>Seguridad</td>
+                                <td><span class="status-badge active">Activo</span></td>
+                                <td>Hoy, 07:45</td>
+                                <td>
+                                    <button class="btn-icon" onclick="viewEmployee(2)"><i class="fas fa-eye"></i></button>
+                                    <button class="btn-icon" onclick="editEmployee(2)"><i class="fas fa-edit"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Reportes Section -->
+            <section id="reportes-section" class="content-section">
+                <div class="section-header">
+                    <h2>Reportes Operativos</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" onclick="generateReport()">
+                            <i class="fas fa-file-alt"></i> Generar Reporte
+                        </button>
+                    </div>
+                </div>
+
+                <div class="reports-grid">
+                    <div class="report-card">
+                        <div class="report-header">
+                            <h3>Reporte de Producción</h3>
+                            <i class="fas fa-industry"></i>
+                        </div>
+                        <div class="report-content">
+                            <p>Producción diaria por sector y tipo de operación</p>
+                            <div class="report-stats">
+                                <span>Última actualización: Hoy, 16:00</span>
+                            </div>
+                        </div>
+                        <div class="report-actions">
+                            <button class="btn btn-sm btn-primary">Ver Reporte</button>
+                            <button class="btn btn-sm btn-secondary">Descargar PDF</button>
+                        </div>
+                    </div>
+
+                    <div class="report-card">
+                        <div class="report-header">
+                            <h3>Reporte de Seguridad</h3>
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="report-content">
+                            <p>Incidentes, capacitaciones y cumplimiento de protocolos</p>
+                            <div class="report-stats">
+                                <span>Última actualización: Ayer, 18:00</span>
+                            </div>
+                        </div>
+                        <div class="report-actions">
+                            <button class="btn btn-sm btn-primary">Ver Reporte</button>
+                            <button class="btn btn-sm btn-secondary">Descargar PDF</button>
+                        </div>
+                    </div>
+
+                    <div class="report-card">
+                        <div class="report-header">
+                            <h3>Reporte de Personal</h3>
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="report-content">
+                            <p>Asistencia, capacitaciones y evaluaciones de desempeño</p>
+                            <div class="report-stats">
+                                <span>Última actualización: Hoy, 12:00</span>
+                            </div>
+                        </div>
+                        <div class="report-actions">
+                            <button class="btn btn-sm btn-primary">Ver Reporte</button>
+                            <button class="btn btn-sm btn-secondary">Descargar PDF</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Proyectos Section -->
+            <section id="proyectos-section" class="content-section">
+                <div class="section-header">
+                    <h2>Coordinación de Proyectos</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" onclick="createProject()">
+                            <i class="fas fa-plus"></i> Nuevo Proyecto
+                        </button>
+                    </div>
+                </div>
+
+                <div class="projects-kanban">
+                    <div class="kanban-column">
+                        <h3>Planificación <span class="count">3</span></h3>
+                        <div class="kanban-cards">
+                            <div class="project-card">
+                                <h4>Expansión Sector D</h4>
+                                <p>Ampliación de operaciones mineras en nueva área</p>
+                                <div class="project-meta">
+                                    <span class="project-priority high">Alta</span>
+                                    <span class="project-date">Inicio: 1 Ago</span>
+                                </div>
+                                <div class="project-team">
+                                    <img src="../images/avatar-placeholder.png" alt="Usuario">
+                                    <img src="../images/avatar-placeholder.png" alt="Usuario">
+                                    <span>+3</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="kanban-column">
+                        <h3>En Progreso <span class="count">5</span></h3>
+                        <div class="kanban-cards">
+                            <div class="project-card">
+                                <h4>Capacitación ISO 14001</h4>
+                                <p>Certificación en gestión ambiental para 50 empleados</p>
+                                <div class="project-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 70%"></div>
+                                    </div>
+                                    <span>70%</span>
+                                </div>
+                                <div class="project-meta">
+                                    <span class="project-priority medium">Media</span>
+                                    <span class="project-date">Vence: 15 Ago</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="kanban-column">
+                        <h3>Revisión <span class="count">2</span></h3>
+                        <div class="kanban-cards">
+                            <div class="project-card">
+                                <h4>Actualización de Equipos</h4>
+                                <p>Renovación de maquinaria en Sector A</p>
+                                <div class="project-meta">
+                                    <span class="project-priority low">Baja</span>
+                                    <span class="project-date">Completo: 95%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="kanban-column">
+                        <h3>Completado <span class="count">12</span></h3>
+                        <div class="kanban-cards">
+                            <div class="project-card completed">
+                                <h4>Rehabilitación Área B</h4>
+                                <p>Restauración de 100 hectáreas post-minería</p>
+                                <div class="project-meta">
+                                    <span class="project-date">Completado: 20 Jul</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Producción Section -->
+            <section id="produccion-section" class="content-section">
+                <div class="section-header">
+                    <h2>Datos de Producción</h2>
+                    <div class="header-actions">
+                        <select class="filter-select">
+                            <option value="daily">Diario</option>
+                            <option value="weekly">Semanal</option>
+                            <option value="monthly">Mensual</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="production-overview">
+                    <div class="production-stats">
+                        <div class="production-stat">
+                            <h3>Carbón Extraído</h3>
+                            <p class="stat-value">1,250 <span class="unit">toneladas</span></p>
+                            <p class="stat-change positive">+5.2% vs. ayer</p>
+                        </div>
+                        <div class="production-stat">
+                            <h3>Eficiencia Operativa</h3>
+                            <p class="stat-value">94.8 <span class="unit">%</span></p>
+                            <p class="stat-change positive">+1.2% vs. ayer</p>
+                        </div>
+                        <div class="production-stat">
+                            <h3>Tiempo de Inactividad</h3>
+                            <p class="stat-value">1.5 <span class="unit">horas</span></p>
+                            <p class="stat-change negative">+0.3h vs. ayer</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="production-by-sector">
+                    <h3>Producción por Sector</h3>
+                    <div class="sector-grid">
+                        <div class="sector-card">
+                            <h4>Sector A</h4>
+                            <div class="sector-stats">
+                                <div class="stat">
+                                    <span class="label">Producción:</span>
+                                    <span class="value">450 ton</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="label">Eficiencia:</span>
+                                    <span class="value">96%</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="label">Personal:</span>
+                                    <span class="value">45</span>
+                                </div>
+                            </div>
+                            <div class="sector-status active">Operativo</div>
+                        </div>
+
+                        <div class="sector-card">
+                            <h4>Sector B</h4>
+                            <div class="sector-stats">
+                                <div class="stat">
+                                    <span class="label">Producción:</span>
+                                    <span class="value">380 ton</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="label">Eficiencia:</span>
+                                    <span class="value">93%</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="label">Personal:</span>
+                                    <span class="value">38</span>
+                                </div>
+                            </div>
+                            <div class="sector-status active">Operativo</div>
+                        </div>
+
+                        <div class="sector-card">
+                            <h4>Sector C</h4>
+                            <div class="sector-stats">
+                                <div class="stat">
+                                    <span class="label">Producción:</span>
+                                    <span class="value">420 ton</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="label">Eficiencia:</span>
+                                    <span class="value">95%</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="label">Personal:</span>
+                                    <span class="value">42</span>
+                                </div>
+                            </div>
+                            <div class="sector-status maintenance">Mantenimiento</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Perfil Section -->
+            <section id="perfil-section" class="content-section">
+                <div class="section-header">
+                    <h2>Mi Perfil</h2>
+                </div>
+                <div class="profile-container">
+                    <div class="profile-card">
+                        <div class="profile-header">
+                            <img src="../images/avatar-placeholder.png" alt="Avatar" class="profile-avatar">
+                            <div class="profile-info">
+                                <h3>María González</h3>
+                                <p>Coordinadora de Operaciones</p>
+                                <p>ID: ADM-001</p>
+                            </div>
+                        </div>
+                        <div class="profile-details">
+                            <div class="detail-group">
+                                <label>Email:</label>
+                                <span>maria.gonzalez@figgerenergy.com</span>
+                            </div>
+                            <div class="detail-group">
+                                <label>Teléfono:</label>
+                                <span>+57 310 987 6543</span>
+                            </div>
+                            <div class="detail-group">
+                                <label>Fecha de Ingreso:</label>
+                                <span>10 de enero, 2020</span>
+                            </div>
+                            <div class="detail-group">
+                                <label>Área de Responsabilidad:</label>
+                                <span>Operaciones Generales - Todos los Sectores</span>
+                            </div>
+                        </div>
+                        <div class="profile-actions">
+                            <button class="btn btn-primary" onclick="editProfile()">Editar Perfil</button>
+                            <button class="btn btn-secondary" onclick="changePassword()">Cambiar Contraseña</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="../js/dashboard.js"></script>
+</body>
+</html>
