@@ -49,6 +49,16 @@ function checkAuthentication() {
     // Check if session is expired (24 hours)
     const loginTime = new Date(user.loginTime);
     const now = new Date();
+    const diffHours = (now - loginTime) / (1000 * 60 * 60);
+    
+    if (diffHours > 24) {
+        logout();
+        return false;
+    }
+    
+    return true;
+}
+    const now = new Date();
     const timeDiff = now - loginTime;
     const hoursDiff = timeDiff / (1000 * 60 * 60);
     
@@ -436,10 +446,14 @@ function logout() {
     // Show logout message
     showMessage('Sesión cerrada correctamente', 'success');
     
-    // Redirect to login page
+    // Redirect to login page - determine correct path
     setTimeout(() => {
-        window.location.href = '../login.html';
+        // Check if we're in a subdirectory
+        const currentPath = window.location.pathname;
+        const loginPath = currentPath.includes('/dashboard/') ? '../login.html' : 'login.html';
+        window.location.href = loginPath;
     }, 1000);
+}
 }
 
 /**

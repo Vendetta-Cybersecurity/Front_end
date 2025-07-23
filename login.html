@@ -3,51 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acceso - Figger Energy SAS</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/login.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <title>Acceso Seguro - FIGGER ENERGY</title>
+    <!-- Bootstrap 5.3 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/login.css">
 </head>
 <body class="login-body">
-    <div class="login-container">
-        <div class="login-header">
-            <a href="index.html" class="back-link">
-                <i class="fas fa-arrow-left"></i> Volver al inicio
-            </a>
-        </div>
-        
-        <div class="login-card">
-            <div class="login-logo">
-                <img src="images/logo.png" alt="Figger Energy SAS">
-                <h1>Figger Energy SAS</h1>
-                <p>Portal de Acceso Corporativo</p>
-            </div>
-
-            <form id="loginForm" class="login-form">
-                <div class="form-group">
-                    <label for="email">
-                        <i class="fas fa-envelope"></i>
-                        Correo Electrónico
-                    </label>
-                    <input type="email" id="email" name="email" required autocomplete="email">
-                </div>
-
-                <div class="form-group">
-                    <label for="password">
-                        <i class="fas fa-lock"></i>
-                        Contraseña
-                    </label>
-                    <div class="password-input">
-                        <input type="password" id="password" name="password" required autocomplete="current-password">
-                        <button type="button" class="toggle-password" onclick="togglePassword()">
-                            <i class="fas fa-eye" id="toggleIcon"></i>
-                        </button>
+    <div class="container-fluid">
+        <div class="row min-vh-100">
+            <!-- Left Panel - Branding -->
+            <div class="col-lg-6 d-flex align-items-center justify-content-center bg-gradient">
+                <div class="text-center text-white p-5">
+                    <div class="mb-4">
+                        <img src="images/logo.png" alt="FIGGER ENERGY" class="logo-large mb-3">
+                        <h1 class="display-6 fw-bold">FIGGER ENERGY</h1>
+                        <p class="lead">Gobierno de Colombia</p>
+                        <p class="fs-5">Unidad de Monitoreo de Minería Ilegal</p>
+                    </div>
+                    
+                    <div class="info-panel mt-5">
+                        <h3 class="h5 mb-3">Sistema Gubernamental Seguro</h3>
+                        <div class="row text-center">
+                            <div class="col-6 mb-3">
+                                <div class="info-badge">
+                                    <i class="fas fa-shield-alt fa-2x mb-2"></i>
+                                    <small class="d-block">Seguridad Avanzada</small>
+                                </div>
+                            </div>
+                            <div class="col-6 mb-3">
+                                <div class="info-badge">
+                                    <i class="fas fa-satellite fa-2x mb-2"></i>
+                                    <small class="d-block">Monitoreo 24/7</small>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="form-options">
-                    <label class="remember-me">
+            <!-- Right Panel - Login Form -->
+            <div class="col-lg-6 d-flex align-items-center justify-content-center">
+                <div class="login-card p-5">
+                    <div class="text-center mb-4">
+                        <a href="index.html" class="btn btn-outline-secondary btn-sm mb-3">
+                            <i class="fas fa-arrow-left me-2"></i>Volver al inicio
+                        </a>
+                        <h2 class="mb-2">Acceso Seguro al Sistema</h2>
+                        <p class="text-muted">Ingrese sus credenciales institucionales</p>
+                    </div>
+
+                    <!-- Security Alert -->
+                    <div class="alert alert-info d-flex align-items-center mb-4" role="alert">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <small>Acceso seguro al sistema gubernamental. Sus actividades serán registradas.</small>
+                    </div>
+
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">
+                                <i class="fas fa-envelope me-2"></i>Correo Institucional
+                            </label>
+                            <input type="email" class="form-control form-control-lg" id="email" 
+                                   placeholder="usuario@figgerenergy.gov.co" required>
+                            <div class="invalid-feedback">Por favor ingrese un email válido.</div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">
+                                <i class="fas fa-lock me-2"></i>Contraseña
+                            </label>
+                            <div class="input-group">
+                                <input type="password" class="form-control form-control-lg" id="password" 
+                                       placeholder="Ingrese su contraseña" required>
+                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                    <i class="fas fa-eye" id="toggleIcon"></i>
+                                </button>
+                            </div>
+                            <div class="invalid-feedback">La contraseña es requerida.</div>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="rememberMe">
+                                <label class="form-check-label" for="rememberMe">
+                                    Mantener sesión activa
+                                </label>
+                            </div>
+                            <button type="button" class="btn btn-link text-decoration-none" 
+                                    data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">
+                                ¿Olvidó su contraseña?
+                            </button>
+                        </div>
+
+                        <!-- Rate Limiting Display -->
+                        <div id="rateLimitAlert" class="alert alert-warning d-none">
+                            <i class="fas fa-clock me-2"></i>
+                            <span id="rateLimitMessage"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg w-100 mb-3" id="loginBtn">
+                            <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+                        </button>
+
+                        <div class="text-center">
+                            <small class="text-muted">
+                                Sistema seguro | Timeout de sesión: 30 min
+                            </small>
+                        </div>
+                    </form>
+
+                    <!-- Demo Credentials -->
+                    <div class="mt-4">
+                        <div class="card bg-light">
+                            <div class="card-header">
+                                <h6 class="mb-0">
+                                    <i class="fas fa-key me-2"></i>Credenciales de Demo
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6 mb-2">
+                                        <strong>Administrador:</strong><br>
+                                        <code>admin@figgerenergy.gov.co</code><br>
+                                        <code>admin123</code>
+                                    </div>
+                                    <div class="col-md-6 mb-2">
+                                        <strong>Empleado Campo:</strong><br>
+                                        <code>campo@figgerenergy.gov.co</code><br>
+                                        <code>campo123</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div class="modal fade" id="forgotPasswordModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Recuperar Contraseña</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="forgotPasswordForm">
+                        <p>Ingrese su correo institucional para recibir instrucciones de recuperación:</p>
+                        <div class="mb-3">
+                            <label for="recoveryEmail" class="form-label">Correo Institucional</label>
+                            <input type="email" class="form-control" id="recoveryEmail" 
+                                   placeholder="usuario@figgerenergy.gov.co" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" form="forgotPasswordForm" class="btn btn-primary">
+                        Enviar Instrucciones
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="js/auth.js"></script>
+</body>
+</html>
                         <input type="checkbox" name="remember" id="remember">
                         <span class="checkmark"></span>
                         Recordar sesión

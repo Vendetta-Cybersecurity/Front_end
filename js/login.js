@@ -31,6 +31,12 @@ function initializeLogin() {
     
     // Check for blocked status on page load
     checkBlockedStatus();
+    
+    // Check if user is already logged in
+    if (getCurrentUser()) {
+        const user = getCurrentUser();
+        redirectToDashboard(user);
+    }
 }
 
 /**
@@ -57,15 +63,9 @@ async function handleLogin(e) {
     }
     
     // Show loading state
-    const submitButton = e.target.querySelector('button[type="submit"]');
-    const originalText = submitButton.innerHTML;
-    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verificando...';
-    submitButton.disabled = true;
+    showLoginLoading(true);
     
     try {
-        // Simulate API call delay
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        
         // Check credentials (demo implementation)
         const authResult = await authenticateUser(credentials);
         
@@ -73,22 +73,25 @@ async function handleLogin(e) {
             showLoginSuccess();
             // Reset attempts on successful login
             loginAttempts = 0;
-            updateAttemptsDisplay();
+            clearBlockedStatus();
+            
+            // Store user session
+            storeUserSession(authResult.user, credentials.remember);
             
             // Redirect after short delay
             setTimeout(() => {
-                window.location.href = authResult.redirectUrl;
+                redirectToDashboard(authResult.user);
             }, 1500);
         } else {
-            handleFailedLogin();
+            handleFailedLogin(authResult.message);
         }
     } catch (error) {
+        console.error('Login error:', error);
         showLoginError('Error de conexión. Por favor intenta nuevamente.');
     } finally {
-        // Reset button state
-        submitButton.innerHTML = originalText;
-        submitButton.disabled = false;
+        showLoginLoading(false);
     }
+}
 }
 
 /**
@@ -118,6 +121,108 @@ function validateLoginForm(credentials) {
 }
 
 /**
+ * Store user session
+ */
+function storeUserSession(user, remember) {
+    const sessionData = {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        type: user.type,
+        loginTime: new Date().toISOString()
+    };
+    
+    if (remember) {
+        localStorage.setItem('figger_user', JSON.stringify(sessionData));
+    } else {
+        sessionStorage.setItem('figger_user', JSON.stringify(sessionData));
+    }
+}
+
+/**
+ * Get current user
+ */
+function getCurrentUser() {
+    let user = sessionStorage.getItem('figger_user');
+    if (!user) {
+        user = localStorage.getItem('figger_user');
+    }
+    
+    if (user) {
+        try {
+            const userData = JSON.parse(user);
+            // Check if session is expired (24 hours)
+            const loginTime = new Date(userData.loginTime);
+            const now = new Date();
+            const diffHours = (now - loginTime) / (1000 * 60 * 60);
+            
+            if (diffHours > 24) {
+                logout();
+                return null;
+            }
+            
+            return userData;
+        } catch (e) {
+            console.error('Error parsing user data:', e);
+            return null;
+        }
+    }
+    
+    return null;
+}
+
+/**
+ * Redirect to appropriate dashboard
+ */
+function redirectToDashboard(user) {
+    let redirectUrl;
+    
+    switch (user.type) {
+        case 'admin':
+            redirectUrl = 'dashboard-admin.html';
+            break;
+        case 'auditor':
+            redirectUrl = 'dashboard/auditores.html';
+            break;
+        case 'employee':
+            redirectUrl = 'dashboard/empleados.html';
+            break;
+        case 'administrative':
+            redirectUrl = 'dashboard/administrativos.html';
+            break;
+        default:
+            redirectUrl = 'dashboard-admin.html';
+    }
+    
+    window.location.href = redirectUrl;
+}
+
+/**
+ * Logout function
+ */
+function logout() {
+    sessionStorage.removeItem('figger_user');
+    localStorage.removeItem('figger_user');
+    window.location.href = 'login.html';
+}
+
+/**
+ * Show login loading state
+ */
+function showLoginLoading(show) {
+    const submitButton = document.querySelector('#loginForm button[type="submit"]');
+    if (submitButton) {
+        if (show) {
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verificando...';
+            submitButton.disabled = true;
+        } else {
+            submitButton.innerHTML = '<i class="fas fa-sign-in-alt"></i> Iniciar Sesión';
+            submitButton.disabled = false;
+        }
+    }
+}
+
+/**
  * Authenticate user (demo implementation)
  */
 async function authenticateUser(credentials) {
@@ -125,17 +230,30 @@ async function authenticateUser(credentials) {
     const demoUsers = {
         'empleado@figgerenergy.com': {
             password: 'empleado123',
-            type: 'empleado',
+            type: 'employee',
+            name: 'Juan Empleado',
+            id: 1,
             redirectUrl: 'dashboard/empleados.html'
         },
         'admin@figgerenergy.com': {
             password: 'admin123',
-            type: 'administrativo',
+            type: 'admin',
+            name: 'María González',
+            id: 2,
+            redirectUrl: 'dashboard-admin.html'
+        },
+        'administrativo@figgerenergy.com': {
+            password: 'admin123',
+            type: 'administrative',
+            name: 'Carlos Admin',
+            id: 3,
             redirectUrl: 'dashboard/administrativos.html'
         },
         'auditor@figgerenergy.com': {
             password: 'auditor123',
             type: 'auditor',
+            name: 'Ana Auditora',
+            id: 4,
             redirectUrl: 'dashboard/auditores.html'
         }
     };
@@ -143,28 +261,15 @@ async function authenticateUser(credentials) {
     const user = demoUsers[credentials.email.toLowerCase()];
     
     if (user && user.password === credentials.password) {
-        // Store session data
-        if (credentials.remember) {
-            localStorage.setItem('figger_user', JSON.stringify({
-                email: credentials.email,
-                type: user.type,
-                loginTime: new Date().toISOString()
-            }));
-        } else {
-            sessionStorage.setItem('figger_user', JSON.stringify({
-                email: credentials.email,
-                type: user.type,
-                loginTime: new Date().toISOString()
-            }));
-        }
-        
-        // Log access attempt
-        logAccessAttempt(credentials.email, 'login', true);
-        
         return {
             success: true,
-            redirectUrl: user.redirectUrl,
-            userType: user.type
+            user: {
+                id: user.id,
+                email: credentials.email,
+                name: user.name,
+                type: user.type,
+                loginTime: new Date().toISOString()
+            }
         };
     }
     
@@ -173,7 +278,7 @@ async function authenticateUser(credentials) {
     
     return {
         success: false,
-        error: 'Credenciales incorrectas'
+        message: 'Credenciales incorrectas'
     };
 }
 

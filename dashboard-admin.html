@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Administrativo - FIGGER ENERGY</title>
+    <meta name="description" content="Panel de administración gubernamental para monitoreo de minería ilegal">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-governmental fixed-top">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center">
+                <button class="btn btn-link text-white me-3" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a class="navbar-brand d-flex align-items-center" href="#">
+                    <img src="images/logo.png" alt="FIGGER ENERGY" height="40" class="me-2">
+                    <div>
+                        <div class="fw-bold">FIGGER ENERGY</div>
+                        <small class="text-muted">Gobierno de Colombia</small>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="navbar-nav ms-auto d-flex flex-row align-items-center">
+                <!-- Notifications -->
+                <div class="nav-item dropdown me-3">
+                    <a class="nav-link dropdown-toggle position-relative" href="#" id="notificationsDropdown" 
+                       role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-bell"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            3
+                        </span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end notification-dropdown">
+                        <div class="dropdown-header">
+                            <i class="fas fa-bell me-2"></i>Notificaciones
+                        </div>
+                        <div class="notification-item">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <div class="notification-icon bg-danger">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-2">
+                                    <h6 class="mb-1">Alerta Crítica</h6>
+                                    <p class="mb-1">Actividad ilegal detectada en Caucasia</p>
+                                    <small class="text-muted">Hace 2 horas</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- User Profile -->
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" 
+                       id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        <img src="https://via.placeholder.com/32x32/059669/FFFFFF?text=MG" 
+                             alt="Usuario" class="rounded-circle me-2">
+                        <span id="userName">María González</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <div class="dropdown-header">
+                            <div class="fw-bold" id="userFullName">María González</div>
+                            <small class="text-muted" id="userRole">Administrador</small>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Mi Perfil</a>
+                        <a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Configuración</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-danger" href="#" onclick="logout()">
+                            <i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="text-center py-4">
+                <img src="images/logo.png" alt="Logo" height="50" class="mb-2">
+                <h6 class="text-white mb-0">Panel Admin</h6>
+            </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#monitoring">
+                        <i class="fas fa-satellite"></i>
+                        <span>Monitoreo</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#reports">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Reportes</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#users">
+                        <i class="fas fa-users"></i>
+                        <span>Usuarios</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#settings">
+                        <i class="fas fa-cogs"></i>
+                        <span>Configuración</span>
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="sidebar-footer mt-auto p-3">
+                <div class="system-badge">
+                    <i class="fas fa-shield-alt"></i>
+                    <div>
+                        <div class="fw-bold">Sistema Seguro</div>
+                        <small>Gubernamental</small>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container-fluid py-4">
+            <!-- Page Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h3 mb-0">Dashboard Administrativo</h1>
+                    <p class="text-muted mb-0">Monitoreo en tiempo real de actividad minera ilegal</p>
+                </div>
+                <div>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Nueva Alerta
+                    </button>
+                </div>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="row mb-4">
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card stats-card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="stats-icon bg-primary text-white rounded-circle">
+                                    <i class="fas fa-map-marked-alt"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <div class="stats-number" data-count="2847">0</div>
+                                    <div class="stats-label">Sitios Monitoreados</div>
+                                </div>
+                            </div>
+                            <div class="stats-change text-success">
+                                <i class="fas fa-arrow-up me-1"></i>+12% vs mes anterior
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card stats-card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="stats-icon bg-danger text-white rounded-circle">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <div class="stats-number" data-count="143">0</div>
+                                    <div class="stats-label">Alertas Activas</div>
+                                </div>
+                            </div>
+                            <div class="stats-change text-danger">
+                                <i class="fas fa-arrow-up me-1"></i>+8% vs mes anterior
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card stats-card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="stats-icon bg-success text-white rounded-circle">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <div class="stats-number" data-count="89">0</div>
+                                    <div class="stats-label">Empleados Activos</div>
+                                </div>
+                            </div>
+                            <div class="stats-change text-success">
+                                <i class="fas fa-arrow-up me-1"></i>+5% vs mes anterior
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card stats-card border-0 shadow-sm h-100">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="stats-icon bg-info text-white rounded-circle">
+                                    <i class="fas fa-file-alt"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <div class="stats-number" data-count="312">0</div>
+                                    <div class="stats-label">Reportes Mensuales</div>
+                                </div>
+                            </div>
+                            <div class="stats-change text-success">
+                                <i class="fas fa-arrow-up me-1"></i>+15% vs mes anterior
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="row mb-4">
+                <div class="col-xl-8 mb-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-transparent">
+                            <h5 class="card-title mb-0">Detecciones por Región</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="regionalChart" height="400"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-xl-4 mb-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-header bg-transparent">
+                            <h5 class="card-title mb-0">Tipos de Alertas</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="alertsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="row">
+                <div class="col-xl-8 mb-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-transparent">
+                            <h5 class="card-title mb-0">Actividad Reciente</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Tiempo</th>
+                                            <th>Ubicación</th>
+                                            <th>Tipo</th>
+                                            <th>Estado</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recentActivityTable">
+                                        <!-- Populated by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-xl-4 mb-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-transparent">
+                            <h5 class="card-title mb-0">Estado del Sistema</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="security-status mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span>Estado del Sistema</span>
+                                    <span class="badge bg-success">Activo</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span>Última Actualización</span>
+                                    <span class="text-muted">Hace 2 min</span>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span>Nivel de Seguridad</span>
+                                    <span class="badge bg-primary">Alto</span>
+                                </div>
+                            </div>
+                            
+                            <div class="system-compliance">
+                                <h6 class="mb-3">Estado Operacional</h6>
+                                <div class="compliance-item">
+                                    <span>Monitoreo Satelital</span>
+                                    <i class="fas fa-check-circle text-success"></i>
+                                </div>
+                                <div class="compliance-item">
+                                    <span>Base de Datos</span>
+                                    <i class="fas fa-check-circle text-success"></i>
+                                </div>
+                                <div class="compliance-item">
+                                    <span>Notificaciones</span>
+                                    <i class="fas fa-check-circle text-success"></i>
+                                </div>
+                                <div class="compliance-item">
+                                    <span>Reportes Automáticos</span>
+                                    <i class="fas fa-check-circle text-success"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const session = requireAuth();
+            
+            if (session) {
+                // Update user info in navbar
+                document.getElementById('userName').textContent = session.name;
+                document.getElementById('userFullName').textContent = session.name;
+                document.getElementById('userRole').textContent = session.role === 'admin' ? 'Administrador' : 'Empleado';
+                
+                // Initialize dashboard
+                initializeDashboard();
+            }
+        });
+
+        function initializeDashboard() {
+            // Sidebar toggle
+            document.getElementById('sidebarToggle').addEventListener('click', function() {
+                document.getElementById('sidebar').classList.toggle('active');
+                document.querySelector('.main-content').classList.toggle('sidebar-open');
+            });
+
+            // Setup sidebar navigation
+            const navLinks = document.querySelectorAll('.sidebar-nav .nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all links
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    this.classList.add('active');
+                    
+                    // Show corresponding section
+                    const sectionId = this.getAttribute('href').substring(1);
+                    showSection(sectionId);
+                });
+            });
+
+            // Initialize charts
+            initializeCharts();
+            
+            // Load recent activity
+            loadRecentActivity();
+            
+            // Initialize counter animations
+            if (window.figgerSystem) {
+                window.figgerSystem.setupCounters();
+            }
+        }
+        
+        function showSection(sectionId) {
+            // Hide all sections (in a real app, you'd have different sections)
+            console.log('Showing section:', sectionId);
+            
+            // Update page title based on section
+            const pageTitle = document.querySelector('h1');
+            const titles = {
+                dashboard: 'Dashboard Administrativo',
+                monitoring: 'Monitoreo en Tiempo Real',
+                reports: 'Reportes y Análisis',
+                users: 'Gestión de Usuarios',
+                settings: 'Configuración del Sistema'
+            };
+            
+            if (pageTitle && titles[sectionId]) {
+                pageTitle.textContent = titles[sectionId];
+            }
+            
+            // In a real application, you would show/hide different content sections
+            // For now, we'll just update the title and show a message
+            const subtitle = document.querySelector('.text-muted');
+            if (subtitle) {
+                subtitle.textContent = `Sección activa: ${titles[sectionId] || sectionId}`;
+            }
+        }
+
+        function initializeCharts() {
+            // Regional Chart
+            const regionalCtx = document.getElementById('regionalChart').getContext('2d');
+            new Chart(regionalCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Antioquia', 'Cundinamarca', 'Bolivar', 'Choco', 'Nariño', 'Cauca'],
+                    datasets: [{
+                        label: 'Sitios Monitoreados',
+                        data: [456, 298, 387, 234, 189, 156],
+                        backgroundColor: '#059669',
+                        borderRadius: 4
+                    }, {
+                        label: 'Alertas Activas',
+                        data: [23, 15, 31, 19, 12, 8],
+                        backgroundColor: '#dc3545',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Alerts Chart
+            const alertsCtx = document.getElementById('alertsChart').getContext('2d');
+            new Chart(alertsCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Críticas', 'Altas', 'Medias', 'Bajas'],
+                    datasets: [{
+                        data: [23, 45, 67, 34],
+                        backgroundColor: ['#dc3545', '#fd7e14', '#ffc107', '#28a745'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        function loadRecentActivity() {
+            const activities = [
+                {
+                    time: 'Hace 15 min',
+                    location: 'Caucasia, Antioquia',
+                    type: 'Minería Ilegal',
+                    status: 'critical',
+                    statusText: 'Crítico'
+                },
+                {
+                    time: 'Hace 32 min',
+                    location: 'Segovia, Antioquia',
+                    type: 'Anomalía de Excavación',
+                    status: 'warning',
+                    statusText: 'Advertencia'
+                },
+                {
+                    time: 'Hace 1 hora',
+                    location: 'Puerto Libertador, Córdoba',
+                    type: 'Cambio de Vegetación',
+                    status: 'info',
+                    statusText: 'Información'
+                },
+                {
+                    time: 'Hace 2 horas',
+                    location: 'Condoto, Chocó',
+                    type: 'Alteración del Suelo',
+                    status: 'warning',
+                    statusText: 'Advertencia'
+                }
+            ];
+
+            const tbody = document.getElementById('recentActivityTable');
+            tbody.innerHTML = activities.map(activity => `
+                <tr>
+                    <td>${activity.time}</td>
+                    <td>${activity.location}</td>
+                    <td>${activity.type}</td>
+                    <td>
+                        <span class="badge bg-${activity.status === 'critical' ? 'danger' : 
+                                                  activity.status === 'warning' ? 'warning' : 'info'}">
+                            ${activity.statusText}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-success ms-1">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
