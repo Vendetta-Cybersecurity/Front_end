@@ -35,9 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($resultado->num_rows == 1) {
             $usuario = $resultado->fetch_assoc();
             
-            // Verificar contraseña (en un caso real usaríamos password_verify)
-            // Para este ejemplo educativo, usamos comparación simple
-            if (password_verify($password, $usuario['password']) || $password === 'password123') {
+            // Verificar contraseña usando hash seguro
+            if (password_verify($password, $usuario['password'])) {
                 // Login exitoso
                 $_SESSION['usuario_id'] = $usuario['id'];
                 $_SESSION['nombre'] = $usuario['nombre'];
@@ -133,19 +132,19 @@ include 'includes/header.php';
                     <div>
                         <h4>👨‍💼 Administrador</h4>
                         <p><strong>Email:</strong> admin@figgerenergy.gov.co</p>
-                        <p><strong>Contraseña:</strong> password123</p>
+                        <p><strong>Contraseña:</strong> admin123</p>
                     </div>
                     
                     <div>
                         <h4>👨‍💻 Empleado</h4>
                         <p><strong>Email:</strong> empleado@figgerenergy.gov.co</p>
-                        <p><strong>Contraseña:</strong> password123</p>
+                        <p><strong>Contraseña:</strong> empleado123</p>
                     </div>
                     
                     <div>
                         <h4>🔍 Auditor</h4>
                         <p><strong>Email:</strong> auditor@figgerenergy.gov.co</p>
-                        <p><strong>Contraseña:</strong> password123</p>
+                        <p><strong>Contraseña:</strong> auditor123</p>
                     </div>
                 </div>
                 

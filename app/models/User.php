@@ -235,7 +235,7 @@ class User {
         }
         
         // Verificar contraseña
-        if (Security::verifyPassword($password, $user['password']) || $password === 'password123') {
+        if (Security::verifyPassword($password, $user['password'])) {
             $this->updateLastLogin($user['id']);
             return $user;
         }
