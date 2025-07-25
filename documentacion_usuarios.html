@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación Técnica - Sistema de Usuarios</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        h3 {
+            color: #7f8c8d;
+        }
+        .code-block {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .info {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        .step {
+            background-color: #f8f9fa;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛡️ Sistema de Gestión de Usuarios - Figger Energy SAS</h1>
+        
+        <div class="info">
+            <strong>📋 Documento Técnico:</strong> Guía completa para el manejo seguro de usuarios y resolución de errores de foreign key constraints.
+        </div>
+
+        <h2>🎯 Problema Resuelto</h2>
+        <p>El sistema inicial presentaba errores de <code>foreign key constraint</code> al intentar eliminar usuarios que tenían registros relacionados en otras tablas. La solución implementada proporciona:</p>
+        <ul>
+            <li>✅ Eliminación segura de usuarios</li>
+            <li>✅ Manejo automático de dependencias</li>
+            <li>✅ Registro de auditoría completo</li>
+            <li>✅ Opción de desactivación vs eliminación</li>
+        </ul>
+
+        <h2>🔧 Archivos del Sistema</h2>
+        <table>
+            <tr>
+                <th>Archivo</th>
+                <th>Función</th>
+                <th>Descripción</th>
+            </tr>
+            <tr>
+                <td><code>gestionar_usuarios.php</code></td>
+                <td>Gestión Principal</td>
+                <td>Interfaz completa para administrar usuarios con eliminación segura</td>
+            </tr>
+            <tr>
+                <td><code>parche_foreign_keys.sql</code></td>
+                <td>Configuración BD</td>
+                <td>Script SQL para configurar foreign keys con CASCADE y SET NULL</td>
+            </tr>
+            <tr>
+                <td><code>dashboard_admin.php</code></td>
+                <td>Panel Admin</td>
+                <td>Dashboard actualizado con acceso al sistema de gestión</td>
+            </tr>
+        </table>
+
+        <h2>⚙️ Configuración de Base de Datos</h2>
+        
+        <h3>1. Aplicar Parche SQL</h3>
+        <div class="step">
+            <strong>Paso 1:</strong> Ejecutar el parche de foreign keys
+            <div class="code-block">mysql -u root -p figger_energy_db < data/parche_foreign_keys.sql</div>
+        </div>
+
+        <h3>2. Nuevas Configuraciones de Foreign Keys</h3>
+        <table>
+            <tr>
+                <th>Tabla</th>
+                <th>Campo</th>
+                <th>Comportamiento</th>
+                <th>Resultado</th>
+            </tr>
+            <tr>
+                <td>alertas_mineria</td>
+                <td>usuario_asignado</td>
+                <td>ON DELETE SET NULL</td>
+                <td>Las alertas quedan sin asignar</td>
+            </tr>
+            <tr>
+                <td>actividades</td>
+                <td>usuario_id</td>
+                <td>ON DELETE CASCADE</td>
+                <td>Las actividades se eliminan automáticamente</td>
+            </tr>
+            <tr>
+                <td>contactos</td>
+                <td>-</td>
+                <td>Sin foreign key</td>
+                <td>No afecta la eliminación</td>
+            </tr>
+        </table>
+
+        <h2>🚀 Funcionalidades del Sistema</h2>
+
+        <h3>1. Gestión de Usuarios</h3>
+        <ul>
+            <li><strong>Ver usuarios:</strong> Lista completa con información relevante</li>
+            <li><strong>Agregar usuarios:</strong> Formulario de creación con validación</li>
+            <li><strong>Editar usuarios:</strong> Modificación de datos existentes</li>
+            <li><strong>Eliminar usuarios:</strong> Eliminación segura con manejo de dependencias</li>
+            <li><strong>Desactivar usuarios:</strong> Opción no destructiva para preservar auditoría</li>
+        </ul>
+
+        <h3>2. Sistema de Eliminación Segura</h3>
+        <div class="code-block">
+// Proceso de eliminación en transacción
+BEGIN TRANSACTION
+1. Reasignar alertas a NULL
+2. Registrar actividad de eliminación
+3. Eliminar actividades del usuario
+4. Eliminar usuario
+COMMIT
+        </div>
+
+        <h3>3. Registro de Auditoría</h3>
+        <p>Cada eliminación genera automáticamente:</p>
+        <ul>
+            <li>📝 Registro en tabla de actividades</li>
+            <li>⏰ Timestamp de la operación</li>
+            <li>👤 Usuario administrador que realizó la acción</li>
+            <li>🔍 Detalles del usuario eliminado</li>
+        </ul>
+
+        <h2>🛠️ Guía de Uso</h2>
+
+        <h3>Para Administradores</h3>
+        <div class="step">
+            <strong>Acceso:</strong> Dashboard Admin → "Gestionar Usuarios"
+        </div>
+
+        <div class="step">
+            <strong>Eliminar Usuario:</strong>
+            <ol>
+                <li>Buscar usuario en la lista</li>
+                <li>Hacer clic en "Gestionar"</li>
+                <li>Seleccionar "Eliminar" o "Desactivar"</li>
+                <li>Confirmar la acción</li>
+            </ol>
+        </div>
+
+        <h3>Para Desarrolladores</h3>
+        <div class="warning">
+            <strong>⚠️ Importante:</strong> Siempre usar transacciones para operaciones que afecten múltiples tablas relacionadas.
+        </div>
+
+        <div class="code-block">
+// Ejemplo de eliminación segura en PHP
+try {
+    $pdo->beginTransaction();
+    
+    // Reasignar alertas
+    $stmt = $pdo->prepare("UPDATE alertas_mineria SET usuario_asignado = NULL WHERE usuario_asignado = ?");
+    $stmt->execute([$user_id]);
+    
+    // Eliminar actividades
+    $stmt = $pdo->prepare("DELETE FROM actividades WHERE usuario_id = ?");
+    $stmt->execute([$user_id]);
+    
+    // Eliminar usuario
+    $stmt = $pdo->prepare("DELETE FROM usuarios WHERE id = ?");
+    $stmt->execute([$user_id]);
+    
+    $pdo->commit();
+} catch (Exception $e) {
+    $pdo->rollback();
+    throw $e;
+}
+        </div>
+
+        <h2>🔍 Solución de Problemas</h2>
+
+        <h3>Error: Foreign Key Constraint Fails</h3>
+        <div class="success">
+            <strong>✅ Solucionado:</strong> El nuevo sistema maneja automáticamente las dependencias.
+        </div>
+
+        <h3>Error: Cannot Delete User</h3>
+        <ol>
+            <li>Verificar que el parche SQL se aplicó correctamente</li>
+            <li>Confirmar que las foreign keys tienen CASCADE/SET NULL</li>
+            <li>Usar la interfaz de gestión en lugar de DELETE directo</li>
+        </ol>
+
+        <h3>Verificar Configuración</h3>
+        <div class="code-block">
+-- Verificar foreign keys
+SHOW CREATE TABLE alertas_mineria;
+SHOW CREATE TABLE actividades;
+
+-- Verificar triggers
+SHOW TRIGGERS;
+        </div>
+
+        <h2>📊 Ventajas del Sistema</h2>
+        <ul>
+            <li>🔒 <strong>Seguridad:</strong> Eliminación controlada con verificaciones</li>
+            <li>📋 <strong>Auditoría:</strong> Registro completo de todas las operaciones</li>
+            <li>⚡ <strong>Rendimiento:</strong> Índices optimizados para operaciones frecuentes</li>
+            <li>🔧 <strong>Mantenimiento:</strong> Fácil administración desde interfaz web</li>
+            <li>💾 <strong>Integridad:</strong> Preservación de datos críticos</li>
+        </ul>
+
+        <div class="info">
+            <strong>💡 Recomendación:</strong> Realizar backups regulares antes de operaciones masivas de eliminación de usuarios.
+        </div>
+
+        <h2>📞 Soporte</h2>
+        <p>Para problemas técnicos o dudas sobre el sistema:</p>
+        <ul>
+            <li>📧 Revisar logs en <code>php_errors.log</code></li>
+            <li>🔍 Verificar configuración de base de datos</li>
+            <li>📋 Consultar tabla de actividades para auditoría</li>
+        </ul>
+
+        <div class="success">
+            <strong>🎉 Sistema Implementado:</strong> El error de foreign key constraints ha sido completamente resuelto. Los administradores pueden ahora gestionar usuarios de forma segura.
+        </div>
+    </div>
+</body>
+</html>

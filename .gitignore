@@ -1,0 +1,43 @@
+# Sistema operativo y archivos temporales
+Thumbs.db
+.DS_Store
+*~
+*.tmp
+*.temp
+
+# Logs
+*.log
+storage/logs/*
+!storage/logs/.gitkeep
+
+# Cache
+storage/cache/*
+!storage/cache/.gitkeep
+
+# Sesiones
+storage/sessions/*
+!storage/sessions/.gitkeep
+
+# Uploads (archivos subidos por usuarios)
+storage/uploads/*
+!storage/uploads/.gitkeep
+public/uploads/*
+!public/uploads/.gitkeep
+
+# Configuración sensible
+config/database.php
+.env
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Dependencias (si usas composer o npm en el futuro)
+vendor/
+node_modules/
+
+# Archivos de backup
+*.bak
+*.backup

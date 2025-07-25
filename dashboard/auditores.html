@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Auditoría - Figger Energy SAS</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="dashboard-body">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <img src="../images/logo.png" alt="Figger Energy SAS">
+            <h3>Panel de Auditoría</h3>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li class="active">
+                    <a href="#dashboard" onclick="showSection('dashboard')">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#cumplimiento" onclick="showSection('cumplimiento')">
+                        <i class="fas fa-clipboard-check"></i>
+                        <span>Métricas de Cumplimiento</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#seguridad" onclick="showSection('seguridad')">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Informes de Seguridad</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#politicas" onclick="showSection('politicas')">
+                        <i class="fas fa-book"></i>
+                        <span>Gestión de Políticas</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#logs" onclick="showSection('logs')">
+                        <i class="fas fa-list-alt"></i>
+                        <span>Logs de Acceso</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#auditoria" onclick="showSection('auditoria')">
+                        <i class="fas fa-search"></i>
+                        <span>Auditorías</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#reportes" onclick="showSection('reportes')">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Reportes Ejecutivos</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#perfil" onclick="showSection('perfil')">
+                        <i class="fas fa-user"></i>
+                        <span>Mi Perfil</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <button class="sidebar-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 id="pageTitle">Dashboard de Auditoría</h1>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <span class="user-name">Dr. Carlos Rodríguez</span>
+                    <span class="user-role">CISO - Chief Information Security Officer</span>
+                </div>
+                <div class="user-menu">
+                    <button class="user-button" onclick="toggleUserMenu()">
+                        <img src="../images/avatar-placeholder.png" alt="Usuario" class="user-avatar">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="#perfil" onclick="showSection('perfil')">
+                            <i class="fas fa-user"></i> Mi Perfil
+                        </a>
+                        <a href="#" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="content-area">
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="content-section active">
+                <div class="audit-overview">
+                    <div class="overview-cards">
+                        <div class="overview-card critical">
+                            <div class="card-header">
+                                <h3>Alertas Críticas</h3>
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="card-content">
+                                <span class="big-number">2</span>
+                                <p>Requieren atención inmediata</p>
+                            </div>
+                        </div>
+                        <div class="overview-card warning">
+                            <div class="card-header">
+                                <h3>Cumplimiento General</h3>
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                            <div class="card-content">
+                                <span class="big-number">94%</span>
+                                <p>Nivel de cumplimiento normativo</p>
+                            </div>
+                        </div>
+                        <div class="overview-card success">
+                            <div class="card-header">
+                                <h3>Auditorías Completadas</h3>
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="card-content">
+                                <span class="big-number">15</span>
+                                <p>Este trimestre</p>
+                            </div>
+                        </div>
+                        <div class="overview-card info">
+                            <div class="card-header">
+                                <h3>Accesos al Sistema</h3>
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="card-content">
+                                <span class="big-number">1,247</span>
+                                <p>Últimas 24 horas</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="audit-charts">
+                    <div class="chart-container large">
+                        <h3>Tendencia de Seguridad - Últimos 30 días</h3>
+                        <div class="security-trend">
+                            <div class="trend-item">
+                                <div class="trend-label">Incidentes de Seguridad</div>
+                                <div class="trend-chart">
+                                    <div class="chart-bar" style="height: 20%"></div>
+                                    <div class="chart-bar" style="height: 15%"></div>
+                                    <div class="chart-bar" style="height: 30%"></div>
+                                    <div class="chart-bar" style="height: 10%"></div>
+                                    <div class="chart-bar" style="height: 25%"></div>
+                                    <div class="chart-bar" style="height: 5%"></div>
+                                    <div class="chart-bar" style="height: 18%"></div>
+                                </div>
+                                <div class="trend-value decrease">-12%</div>
+                            </div>
+                            <div class="trend-item">
+                                <div class="trend-label">Intentos de Acceso Fallidos</div>
+                                <div class="trend-chart">
+                                    <div class="chart-bar" style="height: 40%"></div>
+                                    <div class="chart-bar" style="height: 35%"></div>
+                                    <div class="chart-bar" style="height: 50%"></div>
+                                    <div class="chart-bar" style="height: 20%"></div>
+                                    <div class="chart-bar" style="height: 15%"></div>
+                                    <div class="chart-bar" style="height: 10%"></div>
+                                    <div class="chart-bar" style="height: 8%"></div>
+                                </div>
+                                <div class="trend-value decrease">-45%</div>
+                            </div>
+                            <div class="trend-item">
+                                <div class="trend-label">Cumplimiento de Políticas</div>
+                                <div class="trend-chart">
+                                    <div class="chart-bar success" style="height: 85%"></div>
+                                    <div class="chart-bar success" style="height: 90%"></div>
+                                    <div class="chart-bar success" style="height: 88%"></div>
+                                    <div class="chart-bar success" style="height: 92%"></div>
+                                    <div class="chart-bar success" style="height: 94%"></div>
+                                    <div class="chart-bar success" style="height: 95%"></div>
+                                    <div class="chart-bar success" style="height: 96%"></div>
+                                </div>
+                                <div class="trend-value increase">+8%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <h3>Estado de Certificaciones</h3>
+                        <div class="certifications-status">
+                            <div class="cert-item">
+                                <div class="cert-info">
+                                    <span class="cert-name">ISO 27001</span>
+                                    <span class="cert-status valid">Vigente</span>
+                                </div>
+                                <div class="cert-expiry">Vence: Dic 2025</div>
+                            </div>
+                            <div class="cert-item">
+                                <div class="cert-info">
+                                    <span class="cert-name">ISO 14001</span>
+                                    <span class="cert-status valid">Vigente</span>
+                                </div>
+                                <div class="cert-expiry">Vence: Mar 2026</div>
+                            </div>
+                            <div class="cert-item">
+                                <div class="cert-info">
+                                    <span class="cert-name">OHSAS 18001</span>
+                                    <span class="cert-status warning">Renovación</span>
+                                </div>
+                                <div class="cert-expiry">Vence: Sep 2025</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recent-alerts">
+                    <h3>Alertas Recientes</h3>
+                    <div class="alerts-list">
+                        <div class="alert-item high">
+                            <div class="alert-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="alert-content">
+                                <h4>Múltiples intentos de acceso fallidos</h4>
+                                <p>Usuario: admin@figgerenergy.com - IP: 192.168.1.45</p>
+                                <span class="alert-time">Hace 15 minutos</span>
+                            </div>
+                            <div class="alert-actions">
+                                <button class="btn btn-sm btn-primary">Investigar</button>
+                                <button class="btn btn-sm btn-secondary">Bloquear IP</button>
+                            </div>
+                        </div>
+                        <div class="alert-item medium">
+                            <div class="alert-icon">
+                                <i class="fas fa-key"></i>
+                            </div>
+                            <div class="alert-content">
+                                <h4>Contraseña expirada</h4>
+                                <p>15 usuarios requieren actualización de contraseña</p>
+                                <span class="alert-time">Hace 2 horas</span>
+                            </div>
+                            <div class="alert-actions">
+                                <button class="btn btn-sm btn-primary">Ver Lista</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Cumplimiento Section -->
+            <section id="cumplimiento-section" class="content-section">
+                <div class="section-header">
+                    <h2>Métricas de Cumplimiento</h2>
+                    <div class="header-actions">
+                        <select class="filter-select">
+                            <option value="month">Este mes</option>
+                            <option value="quarter">Este trimestre</option>
+                            <option value="year">Este año</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="compliance-metrics">
+                    <div class="metric-category">
+                        <h3>Seguridad de la Información</h3>
+                        <div class="metrics-grid">
+                            <div class="metric-card">
+                                <h4>Políticas de Acceso</h4>
+                                <div class="metric-progress">
+                                    <div class="progress-circle" data-progress="96">
+                                        <span>96%</span>
+                                    </div>
+                                </div>
+                                <p class="metric-status success">Excelente</p>
+                            </div>
+                            <div class="metric-card">
+                                <h4>Capacitación en Seguridad</h4>
+                                <div class="metric-progress">
+                                    <div class="progress-circle" data-progress="89">
+                                        <span>89%</span>
+                                    </div>
+                                </div>
+                                <p class="metric-status warning">Mejorar</p>
+                            </div>
+                            <div class="metric-card">
+                                <h4>Gestión de Incidentes</h4>
+                                <div class="metric-progress">
+                                    <div class="progress-circle" data-progress="100">
+                                        <span>100%</span>
+                                    </div>
+                                </div>
+                                <p class="metric-status success">Excelente</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="metric-category">
+                        <h3>Cumplimiento Ambiental</h3>
+                        <div class="metrics-grid">
+                            <div class="metric-card">
+                                <h4>Gestión de Residuos</h4>
+                                <div class="metric-progress">
+                                    <div class="progress-circle" data-progress="92">
+                                        <span>92%</span>
+                                    </div>
+                                </div>
+                                <p class="metric-status success">Bueno</p>
+                            </div>
+                            <div class="metric-card">
+                                <h4>Emisiones</h4>
+                                <div class="metric-progress">
+                                    <div class="progress-circle" data-progress="85">
+                                        <span>85%</span>
+                                    </div>
+                                </div>
+                                <p class="metric-status warning">Atención</p>
+                            </div>
+                            <div class="metric-card">
+                                <h4>Rehabilitación</h4>
+                                <div class="metric-progress">
+                                    <div class="progress-circle" data-progress="94">
+                                        <span>94%</span>
+                                    </div>
+                                </div>
+                                <p class="metric-status success">Excelente</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Logs Section -->
+            <section id="logs-section" class="content-section">
+                <div class="section-header">
+                    <h2>Logs de Acceso al Sistema</h2>
+                    <div class="header-actions">
+                        <input type="date" class="date-input" id="logDate">
+                        <select class="filter-select">
+                            <option value="">Todos los tipos</option>
+                            <option value="login">Inicios de sesión</option>
+                            <option value="logout">Cierres de sesión</option>
+                            <option value="failed">Intentos fallidos</option>
+                            <option value="admin">Acciones admin</option>
+                        </select>
+                        <button class="btn btn-secondary" onclick="exportLogs()">
+                            <i class="fas fa-download"></i> Exportar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="logs-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Usuario</th>
+                                <th>Acción</th>
+                                <th>IP Address</th>
+                                <th>Resultado</th>
+                                <th>Detalles</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2025-07-21 08:30:15</td>
+                                <td>juan.perez@figgerenergy.com</td>
+                                <td>Login</td>
+                                <td>192.168.1.25</td>
+                                <td><span class="status-badge success">Exitoso</span></td>
+                                <td>Dashboard Empleados</td>
+                            </tr>
+                            <tr>
+                                <td>2025-07-21 08:28:42</td>
+                                <td>admin@figgerenergy.com</td>
+                                <td>Login Attempt</td>
+                                <td>192.168.1.45</td>
+                                <td><span class="status-badge error">Fallido</span></td>
+                                <td>Contraseña incorrecta</td>
+                            </tr>
+                            <tr>
+                                <td>2025-07-21 08:25:33</td>
+                                <td>maria.gonzalez@figgerenergy.com</td>
+                                <td>Data Export</td>
+                                <td>192.168.1.30</td>
+                                <td><span class="status-badge success">Exitoso</span></td>
+                                <td>Reporte de Personal</td>
+                            </tr>
+                            <tr>
+                                <td>2025-07-21 08:20:11</td>
+                                <td>carlos.rodriguez@figgerenergy.com</td>
+                                <td>Policy Update</td>
+                                <td>192.168.1.10</td>
+                                <td><span class="status-badge success">Exitoso</span></td>
+                                <td>Política de Acceso v2.1</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="logs-analytics">
+                    <h3>Análisis de Logs</h3>
+                    <div class="analytics-grid">
+                        <div class="analytics-card">
+                            <h4>Accesos por Hora</h4>
+                            <div class="hour-chart">
+                                <div class="hour-bar" style="height: 20%"><span>6</span></div>
+                                <div class="hour-bar" style="height: 45%"><span>7</span></div>
+                                <div class="hour-bar" style="height: 80%"><span>8</span></div>
+                                <div class="hour-bar" style="height: 90%"><span>9</span></div>
+                                <div class="hour-bar" style="height: 75%"><span>10</span></div>
+                                <div class="hour-bar" style="height: 60%"><span>11</span></div>
+                            </div>
+                        </div>
+                        <div class="analytics-card">
+                            <h4>Top IPs</h4>
+                            <div class="ip-list">
+                                <div class="ip-item">
+                                    <span class="ip">192.168.1.25</span>
+                                    <span class="count">156 accesos</span>
+                                </div>
+                                <div class="ip-item">
+                                    <span class="ip">192.168.1.30</span>
+                                    <span class="count">98 accesos</span>
+                                </div>
+                                <div class="ip-item">
+                                    <span class="ip">192.168.1.45</span>
+                                    <span class="count warning">45 fallidos</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Políticas Section -->
+            <section id="politicas-section" class="content-section">
+                <div class="section-header">
+                    <h2>Gestión de Políticas</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" onclick="createPolicy()">
+                            <i class="fas fa-plus"></i> Nueva Política
+                        </button>
+                    </div>
+                </div>
+
+                <div class="policies-grid">
+                    <div class="policy-card">
+                        <div class="policy-header">
+                            <h3>Política de Seguridad de la Información</h3>
+                            <span class="policy-status active">Activa</span>
+                        </div>
+                        <div class="policy-content">
+                            <p>Establece los lineamientos para el manejo seguro de información corporativa y de empleados.</p>
+                            <div class="policy-meta">
+                                <span><i class="fas fa-calendar"></i> Última actualización: 15 Jul 2025</span>
+                                <span><i class="fas fa-user"></i> Aprobada por: Dr. Carlos Rodríguez</span>
+                            </div>
+                        </div>
+                        <div class="policy-actions">
+                            <button class="btn btn-sm btn-primary">Ver Política</button>
+                            <button class="btn btn-sm btn-secondary">Editar</button>
+                            <button class="btn btn-sm btn-info">Historial</button>
+                        </div>
+                    </div>
+
+                    <div class="policy-card">
+                        <div class="policy-header">
+                            <h3>Política Ambiental</h3>
+                            <span class="policy-status active">Activa</span>
+                        </div>
+                        <div class="policy-content">
+                            <p>Define los compromisos ambientales y procedimientos para la gestión sostenible de operaciones.</p>
+                            <div class="policy-meta">
+                                <span><i class="fas fa-calendar"></i> Última actualización: 10 Jun 2025</span>
+                                <span><i class="fas fa-user"></i> Aprobada por: CEO</span>
+                            </div>
+                        </div>
+                        <div class="policy-actions">
+                            <button class="btn btn-sm btn-primary">Ver Política</button>
+                            <button class="btn btn-sm btn-secondary">Editar</button>
+                            <button class="btn btn-sm btn-info">Historial</button>
+                        </div>
+                    </div>
+
+                    <div class="policy-card">
+                        <div class="policy-header">
+                            <h3>Política de Acceso y Control</h3>
+                            <span class="policy-status review">En Revisión</span>
+                        </div>
+                        <div class="policy-content">
+                            <p>Regula el acceso a sistemas, instalaciones y información según los niveles de autorización.</p>
+                            <div class="policy-meta">
+                                <span><i class="fas fa-calendar"></i> En revisión desde: 20 Jul 2025</span>
+                                <span><i class="fas fa-user"></i> Revisor: CTO</span>
+                            </div>
+                        </div>
+                        <div class="policy-actions">
+                            <button class="btn btn-sm btn-primary">Ver Borrador</button>
+                            <button class="btn btn-sm btn-warning">Aprobar</button>
+                            <button class="btn btn-sm btn-secondary">Comentarios</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Perfil Section -->
+            <section id="perfil-section" class="content-section">
+                <div class="section-header">
+                    <h2>Mi Perfil</h2>
+                </div>
+                <div class="profile-container">
+                    <div class="profile-card">
+                        <div class="profile-header">
+                            <img src="../images/avatar-placeholder.png" alt="Avatar" class="profile-avatar">
+                            <div class="profile-info">
+                                <h3>Dr. Carlos Rodríguez</h3>
+                                <p>CISO - Chief Information Security Officer</p>
+                                <p>ID: AUD-001</p>
+                            </div>
+                        </div>
+                        <div class="profile-details">
+                            <div class="detail-group">
+                                <label>Email:</label>
+                                <span>carlos.rodriguez@figgerenergy.com</span>
+                            </div>
+                            <div class="detail-group">
+                                <label>Teléfono:</label>
+                                <span>+57 320 555 7890</span>
+                            </div>
+                            <div class="detail-group">
+                                <label>Fecha de Ingreso:</label>
+                                <span>5 de agosto, 2019</span>
+                            </div>
+                            <div class="detail-group">
+                                <label>Área de Responsabilidad:</label>
+                                <span>Seguridad de la Información, Cumplimiento y Auditoría</span>
+                            </div>
+                            <div class="detail-group">
+                                <label>Certificaciones:</label>
+                                <span>CISSP, CISA, ISO 27001 Lead Auditor</span>
+                            </div>
+                        </div>
+                        <div class="profile-actions">
+                            <button class="btn btn-primary" onclick="editProfile()">Editar Perfil</button>
+                            <button class="btn btn-secondary" onclick="changePassword()">Cambiar Contraseña</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="../js/dashboard.js"></script>
+</body>
+</html>

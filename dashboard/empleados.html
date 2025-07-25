@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Empleados - Figger Energy SAS</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="dashboard-body">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <img src="../images/logo.png" alt="Figger Energy SAS">
+            <h3>Panel Empleados</h3>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li class="active">
+                    <a href="#dashboard" onclick="showSection('dashboard')">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#horarios" onclick="showSection('horarios')">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Mis Horarios</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#notificaciones" onclick="showSection('notificaciones')">
+                        <i class="fas fa-bell"></i>
+                        <span>Notificaciones</span>
+                        <span class="notification-badge">3</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#capacitaciones" onclick="showSection('capacitaciones')">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>Capacitaciones</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#seguridad" onclick="showSection('seguridad')">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Seguridad Laboral</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#perfil" onclick="showSection('perfil')">
+                        <i class="fas fa-user"></i>
+                        <span>Mi Perfil</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-left">
+                <button class="sidebar-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 id="pageTitle">Dashboard</h1>
+            </div>
+            <div class="header-right">
+                <div class="user-info">
+                    <span class="user-name">Juan Pérez</span>
+                    <span class="user-role">Técnico Operativo</span>
+                </div>
+                <div class="user-menu">
+                    <button class="user-button" onclick="toggleUserMenu()">
+                        <img src="../images/avatar-placeholder.png" alt="Usuario" class="user-avatar">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="#perfil" onclick="showSection('perfil')">
+                            <i class="fas fa-user"></i> Mi Perfil
+                        </a>
+                        <a href="#" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="content-area">
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="content-section active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Horas Trabajadas</h3>
+                            <p class="stat-number">168</p>
+                            <p class="stat-period">Este mes</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon blue">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Capacitaciones</h3>
+                            <p class="stat-number">3</p>
+                            <p class="stat-period">Pendientes</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon orange">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Alertas Seguridad</h3>
+                            <p class="stat-number">0</p>
+                            <p class="stat-period">Activas</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon purple">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Certificaciones</h3>
+                            <p class="stat-number">5</p>
+                            <p class="stat-period">Completadas</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-widgets">
+                    <div class="widget">
+                        <h3>Próximos Turnos</h3>
+                        <div class="schedule-preview">
+                            <div class="schedule-item">
+                                <div class="schedule-date">
+                                    <span class="day">22</span>
+                                    <span class="month">Jul</span>
+                                </div>
+                                <div class="schedule-details">
+                                    <h4>Turno Mañana</h4>
+                                    <p>06:00 - 14:00</p>
+                                    <span class="location">Sector A - Mina Verde</span>
+                                </div>
+                            </div>
+                            <div class="schedule-item">
+                                <div class="schedule-date">
+                                    <span class="day">23</span>
+                                    <span class="month">Jul</span>
+                                </div>
+                                <div class="schedule-details">
+                                    <h4>Turno Tarde</h4>
+                                    <p>14:00 - 22:00</p>
+                                    <span class="location">Sector B - Mina Verde</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="widget">
+                        <h3>Anuncios Recientes</h3>
+                        <div class="announcements">
+                            <div class="announcement-item">
+                                <i class="fas fa-bullhorn"></i>
+                                <div class="announcement-content">
+                                    <h4>Nueva Política de Seguridad</h4>
+                                    <p>Se ha actualizado el protocolo de seguridad para equipos de protección personal.</p>
+                                    <span class="announcement-date">Hace 2 días</span>
+                                </div>
+                            </div>
+                            <div class="announcement-item">
+                                <i class="fas fa-calendar"></i>
+                                <div class="announcement-content">
+                                    <h4>Capacitación Obligatoria</h4>
+                                    <p>Recordatorio: Capacitación en prevención de riesgos el viernes 25 de julio.</p>
+                                    <span class="announcement-date">Hace 1 semana</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Horarios Section -->
+            <section id="horarios-section" class="content-section">
+                <div class="section-header">
+                    <h2>Mis Horarios</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-secondary" onclick="exportSchedule()">
+                            <i class="fas fa-download"></i> Exportar
+                        </button>
+                    </div>
+                </div>
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button onclick="previousWeek()">&lt;</button>
+                        <h3 id="currentWeek">Semana del 21 al 27 de Julio, 2025</h3>
+                        <button onclick="nextWeek()">&gt;</button>
+                    </div>
+                    <div class="calendar-grid">
+                        <div class="calendar-day">
+                            <h4>Lun 21</h4>
+                            <div class="shift-block morning">
+                                <span class="shift-time">06:00 - 14:00</span>
+                                <span class="shift-location">Sector A</span>
+                            </div>
+                        </div>
+                        <div class="calendar-day">
+                            <h4>Mar 22</h4>
+                            <div class="shift-block afternoon">
+                                <span class="shift-time">14:00 - 22:00</span>
+                                <span class="shift-location">Sector B</span>
+                            </div>
+                        </div>
+                        <div class="calendar-day">
+                            <h4>Mié 23</h4>
+                            <div class="shift-block morning">
+                                <span class="shift-time">06:00 - 14:00</span>
+                                <span class="shift-location">Sector A</span>
+                            </div>
+                        </div>
+                        <div class="calendar-day">
+                            <h4>Jue 24</h4>
+                            <div class="day-off">
+                                <span>Día libre</span>
+                            </div>
+                        </div>
+                        <div class="calendar-day">
+                            <h4>Vie 25</h4>
+                            <div class="shift-block training">
+                                <span class="shift-time">08:00 - 16:00</span>
+                                <span class="shift-location">Capacitación</span>
+                            </div>
+                        </div>
+                        <div class="calendar-day weekend">
+                            <h4>Sáb 26</h4>
+                            <div class="day-off">
+                                <span>Fin de semana</span>
+                            </div>
+                        </div>
+                        <div class="calendar-day weekend">
+                            <h4>Dom 27</h4>
+                            <div class="day-off">
+                                <span>Fin de semana</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Notificaciones Section -->
+            <section id="notificaciones-section" class="content-section">
+                <div class="section-header">
+                    <h2>Notificaciones</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-secondary" onclick="markAllRead()">
+                            <i class="fas fa-check-double"></i> Marcar todas como leídas
+                        </button>
+                    </div>
+                </div>
+                <div class="notifications-list">
+                    <div class="notification-item unread">
+                        <div class="notification-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="notification-content">
+                            <h4>Alerta de Seguridad</h4>
+                            <p>Mantenimiento programado en Sector C. Se requiere uso de EPP adicional.</p>
+                            <span class="notification-time">Hace 2 horas</span>
+                        </div>
+                        <div class="notification-actions">
+                            <button onclick="markAsRead(this)">Marcar como leída</button>
+                        </div>
+                    </div>
+                    <div class="notification-item unread">
+                        <div class="notification-icon">
+                            <i class="fas fa-calendar"></i>
+                        </div>
+                        <div class="notification-content">
+                            <h4>Cambio de Horario</h4>
+                            <p>Tu turno del miércoles ha sido modificado de 06:00-14:00 a 08:00-16:00.</p>
+                            <span class="notification-time">Hace 1 día</span>
+                        </div>
+                        <div class="notification-actions">
+                            <button onclick="markAsRead(this)">Marcar como leída</button>
+                        </div>
+                    </div>
+                    <div class="notification-item">
+                        <div class="notification-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="notification-content">
+                            <h4>Nueva Capacitación Disponible</h4>
+                            <p>Curso: "Prevención de Riesgos en Operaciones Mineras" - Inscripción abierta.</p>
+                            <span class="notification-time">Hace 3 días</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Capacitaciones Section -->
+            <section id="capacitaciones-section" class="content-section">
+                <div class="section-header">
+                    <h2>Capacitaciones</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" onclick="showAvailableTrainings()">
+                            <i class="fas fa-plus"></i> Explorar Capacitaciones
+                        </button>
+                    </div>
+                </div>
+                <div class="training-tabs">
+                    <button class="tab-button active" onclick="showTrainingTab('enrolled')">Inscrito</button>
+                    <button class="tab-button" onclick="showTrainingTab('completed')">Completado</button>
+                    <button class="tab-button" onclick="showTrainingTab('available')">Disponible</button>
+                </div>
+                <div class="training-content">
+                    <div id="enrolled-trainings" class="training-tab-content active">
+                        <div class="training-card">
+                            <div class="training-header">
+                                <h3>Prevención de Riesgos en Operaciones Mineras</h3>
+                                <span class="training-status in-progress">En Progreso</span>
+                            </div>
+                            <div class="training-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 65%"></div>
+                                </div>
+                                <span class="progress-text">65% completado</span>
+                            </div>
+                            <div class="training-details">
+                                <p><i class="fas fa-clock"></i> 8 horas restantes</p>
+                                <p><i class="fas fa-calendar"></i> Vence: 30 de julio</p>
+                            </div>
+                            <div class="training-actions">
+                                <button class="btn btn-primary">Continuar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seguridad Section -->
+            <section id="seguridad-section" class="content-section">
+                <div class="section-header">
+                    <h2>Seguridad Laboral</h2>
+                </div>
+                <div class="safety-dashboard">
+                    <div class="safety-alerts">
+                        <h3>Alertas de Seguridad Activas</h3>
+                        <div class="alert-item low">
+                            <i class="fas fa-info-circle"></i>
+                            <div class="alert-content">
+                                <h4>Condiciones Meteorológicas</h4>
+                                <p>Lluvia ligera prevista para mañana. Precaución en áreas exteriores.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="safety-protocols">
+                        <h3>Protocolos de Seguridad</h3>
+                        <div class="protocol-list">
+                            <div class="protocol-item">
+                                <i class="fas fa-hard-hat"></i>
+                                <span>Uso obligatorio de casco en todas las áreas</span>
+                            </div>
+                            <div class="protocol-item">
+                                <i class="fas fa-eye"></i>
+                                <span>Gafas de seguridad en zonas de riesgo</span>
+                            </div>
+                            <div class="protocol-item">
+                                <i class="fas fa-shoe-prints"></i>
+                                <span>Calzado de seguridad con puntera de acero</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Perfil Section -->
+            <section id="perfil-section" class="content-section">
+                <div class="section-header">
+                    <h2>Mi Perfil</h2>
+                </div>
+                <div class="profile-container">
+                    <div class="profile-card">
+                        <div class="profile-header">
+                            <img src="../images/avatar-placeholder.png" alt="Avatar" class="profile-avatar">
+                            <div class="profile-info">
+                                <h3>Juan Pérez Rodríguez</h3>
+                                <p>Técnico Operativo</p>
+                                <p>ID: EMP-001</p>
+                            </div>
+                        </div>
+                        <div class="profile-details">
+                            <div class="detail-group">
+                                <label>Email:</label>
+                                <span>juan.perez@figgerenergy.com</span>
+                            </div>
+                            <div class="detail-group">
+                                <label>Teléfono:</label>
+                                <span>+57 300 123 4567</span>
+                            </div>
+                            <div class="detail-group">
+                                <label>Fecha de Ingreso:</label>
+                                <span>15 de marzo, 2023</span>
+                            </div>
+                            <div class="detail-group">
+                                <label>Área de Trabajo:</label>
+                                <span>Operaciones Mineras - Sector A</span>
+                            </div>
+                        </div>
+                        <div class="profile-actions">
+                            <button class="btn btn-primary" onclick="editProfile()">Editar Perfil</button>
+                            <button class="btn btn-secondary" onclick="changePassword()">Cambiar Contraseña</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="../js/dashboard.js"></script>
+</body>
+</html>
