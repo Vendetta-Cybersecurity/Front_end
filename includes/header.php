@@ -14,7 +14,13 @@ $directorio_actual = dirname($_SERVER['PHP_SELF']);
 
 // Si estamos en un subdirectorio, ajustar la ruta base
 if (strpos($directorio_actual, 'views') !== false) {
-    $ruta_base = '../';
+    // Contar niveles de subdirectorios para ajustar la ruta
+    $niveles = substr_count(trim($directorio_actual, '/'), '/');
+    if ($niveles >= 2 || strpos($directorio_actual, 'views/') !== false) {
+        $ruta_base = '../../';
+    } else {
+        $ruta_base = '../';
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -27,6 +33,16 @@ if (strpos($directorio_actual, 'views') !== false) {
     <meta name="keywords" content="Figger Energy, Colombia, minería ilegal, energías renovables, monitoreo gubernamental">
     <link rel="icon" type="image/x-icon" href="<?php echo $ruta_base; ?>assets/images/favicon.ico">
     <link rel="stylesheet" href="<?php echo $ruta_base; ?>assets/css/estilos.css">
+    
+    <?php if (strpos($directorio_actual, 'auth') !== false || $archivo_actual == 'login.php' || $archivo_actual == 'register.php'): ?>
+        <!-- CSS específico para páginas de autenticación -->
+        <link rel="stylesheet" href="<?php echo $ruta_base; ?>assets/css/login.css">
+    <?php endif; ?>
+    
+    <?php if (strpos($directorio_actual, 'dashboard') !== false || strpos($archivo_actual, 'dashboard') !== false): ?>
+        <!-- CSS específico para dashboards -->
+        <link rel="stylesheet" href="<?php echo $ruta_base; ?>assets/css/dashboard.css">
+    <?php endif; ?>
     
     <?php if ($archivo_actual == 'index.php'): ?>
         <!-- Scripts para estadísticas dinámicas solo en página principal -->
