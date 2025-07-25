@@ -4,6 +4,7 @@
  * Panel de control refactorizado para administradores
  */
 
+
 // Cargar dependencias
 require_once '../../config/database.php';
 require_once '../../lib/functions.php';
