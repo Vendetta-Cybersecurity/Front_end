@@ -399,7 +399,7 @@ function getSecurityLogs($userType) {
     
     $logs = $db->fetchAll(
         "SELECT la.*, u.nombre as usuario_nombre 
-         FROM logs_acceso la 
+         FROM actividades la 
          LEFT JOIN usuarios u ON la.user_id = u.id 
          ORDER BY la.timestamp DESC 
          LIMIT 50"

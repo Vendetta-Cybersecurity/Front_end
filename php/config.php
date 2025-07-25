@@ -241,7 +241,7 @@ function checkRateLimit($identifier, $maxAttempts = MAX_LOGIN_ATTEMPTS, $timeWin
     
     // Count recent attempts
     $attempts = $db->fetch(
-        "SELECT COUNT(*) as count FROM login_attempts WHERE identifier = ?",
+        "SELECT COUNT(*) as count FROM sesiones WHERE ip_address = ? AND ultimo_acceso > DATE_SUB(NOW(), INTERVAL 15 MINUTE)",
         [$identifier]
     );
     
@@ -257,7 +257,7 @@ function recordLoginAttempt($identifier, $success = false) {
     if (!$success) {
         // Record failed attempt
         $db->insert(
-            "INSERT INTO login_attempts (identifier, attempted_at, ip_address) VALUES (?, NOW(), ?)",
+            "INSERT INTO actividades (usuario_id, accion, descripcion, ip_address, fecha_actividad) VALUES (1, 'intento_login', 'Intento de login fallido', ?, NOW())",
             [$identifier, $_SERVER['REMOTE_ADDR'] ?? 'unknown']
         );
     } else {

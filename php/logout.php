@@ -26,7 +26,7 @@ try {
     }
     
     $wasAuthenticated = isAuthenticated();
-    $userId = $_SESSION['user_id'] ?? null;
+    $userId = $_SESSION['usuario_id'] ?? null;
     $userEmail = $_SESSION['user_email'] ?? null;
     $clientIP = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
     $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'unknown';
@@ -37,14 +37,14 @@ try {
         
         try {
             $db->insert(
-                "INSERT INTO logs_acceso (user_id, accion, ip_address, user_agent, resultado, timestamp) 
+                "INSERT INTO actividades (usuario_id, accion, ip_address, user_agent, resultado, timestamp) 
                  VALUES (?, 'logout', ?, ?, 'exitoso', NOW())",
                 [$userId, $clientIP, $userAgent]
             );
             
             // Log security event
             logSecurityEvent('logout', [
-                'user_id' => $userId,
+                'usuario_id' => $userId,
                 'email' => $userEmail,
                 'ip' => $clientIP,
                 'user_agent' => $userAgent,
@@ -114,7 +114,7 @@ function sendJsonResponse($data, $statusCode = 200) {
  * Check if user is authenticated
  */
 function isAuthenticated() {
-    return isset($_SESSION['user_id']) && 
+    return isset($_SESSION['usuario_id']) && 
            isset($_SESSION['user_email']) && 
            isset($_SESSION['user_type']);
 }

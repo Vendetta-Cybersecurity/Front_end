@@ -149,7 +149,7 @@ function handleLogin() {
         
         // Create session
         session_regenerate_id(true);
-        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['usuario_id'] = $user['id'];
         $_SESSION['user_email'] = $user['email'];
         $_SESSION['user_type'] = $user['tipo_usuario'];
         $_SESSION['user_name'] = $user['nombre'];
@@ -172,12 +172,12 @@ function handleLogin() {
         
         // Log successful access
         $db->insert(
-            "INSERT INTO logs_acceso (user_id, accion, ip_address, user_agent, resultado, timestamp) 
+            "INSERT INTO actividades (usuario_id, accion, ip_address, user_agent, resultado, fecha_actividad) 
              VALUES (?, 'login', ?, ?, 'exitoso', NOW())",
             [$user['id'], $clientIP, $_SERVER['HTTP_USER_AGENT'] ?? 'unknown']
         );
         
-        logSecurityEvent('login_success', ['email' => $email, 'user_id' => $user['id']]);
+        logSecurityEvent('login_success', ['email' => $email, 'usuario_id' => $user['id']]);
         
         // Determine redirect URL based on user type
         $redirectUrls = [
@@ -211,18 +211,18 @@ function handleLogin() {
  */
 function handleLogout() {
     if (isAuthenticated()) {
-        $userId = $_SESSION['user_id'];
+        $userId = $_SESSION['usuario_id'];
         $email = $_SESSION['user_email'];
         
         // Log logout
         $db = Database::getInstance();
         $db->insert(
-            "INSERT INTO logs_acceso (user_id, accion, ip_address, user_agent, resultado, timestamp) 
+            "INSERT INTO actividades (usuario_id, accion, ip_address, user_agent, resultado, fecha_actividad) 
              VALUES (?, 'logout', ?, ?, 'exitoso', NOW())",
             [$userId, $_SERVER['REMOTE_ADDR'] ?? 'unknown', $_SERVER['HTTP_USER_AGENT'] ?? 'unknown']
         );
         
-        logSecurityEvent('logout', ['email' => $email, 'user_id' => $userId]);
+        logSecurityEvent('logout', ['email' => $email, 'usuario_id' => $userId]);
     }
     
     // Destroy session
@@ -265,8 +265,8 @@ function handleForgotPassword() {
     
     // Store reset token
     $db->insert(
-        "INSERT INTO password_resets (email, token, expires_at, created_at) VALUES (?, ?, ?, NOW())
-         ON DUPLICATE KEY UPDATE token = VALUES(token), expires_at = VALUES(expires_at), created_at = NOW()",
+        "INSERT INTO tokens_seguridad (email, token, fecha_expiracion, fecha_creacion) VALUES (?, ?, ?, NOW())
+         ON DUPLICATE KEY UPDATE token = VALUES(token), fecha_expiracion = VALUES(fecha_expiracion), fecha_creacion = NOW()",
         [$email, hash('sha256', $token), $expires]
     );
     
@@ -301,7 +301,7 @@ function handleResetPassword() {
     
     // Verify token
     $reset = $db->fetch(
-        "SELECT email FROM password_resets WHERE token = ? AND expires_at > NOW()",
+        "SELECT email FROM tokens_seguridad WHERE token = ? AND fecha_expiracion > NOW()",
         [hash('sha256', $token)]
     );
     
@@ -320,7 +320,7 @@ function handleResetPassword() {
         );
         
         $db->delete(
-            "DELETE FROM password_resets WHERE email = ?",
+            "DELETE FROM tokens_seguridad WHERE email = ?",
             [$reset['email']]
         );
         
@@ -357,7 +357,7 @@ function checkSession() {
     sendJsonResponse([
         'authenticated' => true,
         'user' => [
-            'id' => $_SESSION['user_id'],
+            'id' => $_SESSION['usuario_id'],
             'email' => $_SESSION['user_email'],
             'name' => $_SESSION['user_name'],
             'type' => $_SESSION['user_type']
@@ -375,7 +375,7 @@ function getUserInfo() {
     $user = $db->fetch(
         "SELECT id, email, nombre, tipo_usuario, fecha_creacion, ultimo_acceso 
          FROM usuarios WHERE id = ?",
-        [$_SESSION['user_id']]
+        [$_SESSION['usuario_id']]
     );
     
     if (!$user) {
@@ -389,7 +389,7 @@ function getUserInfo() {
             'email' => $user['email'],
             'name' => $user['nombre'],
             'type' => $user['tipo_usuario'],
-            'created_at' => $user['fecha_creacion'],
+            'fecha_creacion' => $user['fecha_creacion'],
             'last_access' => $user['ultimo_acceso']
         ]
     ]);
