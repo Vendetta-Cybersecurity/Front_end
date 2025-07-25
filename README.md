@@ -288,13 +288,13 @@ Calle 1, Carrera 1, Edificio 1
 Macondo, Colombia
 
 **📱 Línea Nacional:**
-+57 0180000001
++57 300 0000 000
 
 **📧 Email Institucional:**
 contacto@figgerenergy.gov.co
 
 **🆘 Emergencias 24/7:**
-+57 (1) 987-6543
++57 018000001
 
 ---
 

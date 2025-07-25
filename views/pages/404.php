@@ -50,7 +50,7 @@
                     <p>Si continúa experimentando problemas, puede:</p>
                     <ul>
                         <li>Contactar al departamento de sistemas: <a href="mailto:sistemas@figgerenergy.gov.co">sistemas@figgerenergy.gov.co</a></li>
-                        <li>Llamar a la línea de soporte: <a href="tel:+570180000001">+57 0180000001</a></li>
+                        <li>Llamar a la línea de soporte: <a href="tel:+573000000000">+57 300 0000 000</a></li>
                         <li>Reportar el problema a través del <a href="<?php echo getBaseUrl(); ?>contact">formulario de contacto</a></li>
                     </ul>
                 </div>

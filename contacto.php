@@ -116,9 +116,9 @@ include 'includes/header.php';
             <div class="dashboard-grid mb-2">
                 <div class="tarjeta">
                     <h3>📞 Líneas de Atención</h3>
-                    <p><strong>Línea Principal:</strong><br>+57 (1) 123-4567</p>
-                    <p><strong>Emergencias 24/7:</strong><br>+57 (1) 987-6543</p>
-                    <p><strong>WhatsApp:</strong><br>+57 300 123 4567</p>
+                    <p><strong>Línea Principal:</strong><br>+57 300 0000 000</p>
+                    <p><strong>Emergencias 24/7:</strong><br>+57 018000001</p>
+                    <p><strong>WhatsApp:</strong><br>+57 300 0000 000</p>
                     <p><strong>Horario:</strong><br>Lunes a Viernes<br>8:00 AM - 5:00 PM</p>
                 </div>
                 
@@ -133,17 +133,16 @@ include 'includes/header.php';
                 <div class="tarjeta">
                     <h3>🏢 Oficina Principal</h3>
                     <p><strong>Dirección:</strong><br>
-                    Carrera 7 No. 24-89<br>
-                    Edificio Figger Energy<br>
-                    Bogotá D.C., Colombia</p>
-                    <p><strong>Código Postal:</strong> 110311</p>
-                    <p><strong>Ubicación:</strong> Zona Centro</p>
+                    Calle 1, Carrera 1, Edificio 1<br>
+                    Macondo, Colombia</p>
+                    <p><strong>Código Postal:</strong> 250001</p>
+                    <p><strong>Ubicación:</strong> Centro de la Ciudad</p>
                 </div>
                 
                 <div class="tarjeta">
                     <h3>🚨 Emergencias</h3>
                     <p><strong>Reporte de Minería Ilegal:</strong></p>
-                    <p>📞 Línea directa: +57 (1) 987-6543</p>
+                    <p>📞 Línea directa: +57 018000001</p>
                     <p>📧 emergencias@figgerenergy.gov.co</p>
                     <p><strong>Disponible 24 horas / 7 días</strong></p>
                     <p style="color: red;"><strong>Para emergencias ambientales inmediatas</strong></p>

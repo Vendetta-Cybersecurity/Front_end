@@ -273,7 +273,7 @@ include 'includes/header.php';
                 <h3>📞 Soporte</h3>
                 <p><strong>Documentación:</strong> <a href="#" onclick="alert('Función en desarrollo')">Manual de usuario</a></p>
                 <p><strong>Soporte técnico:</strong> soporte@figgerenergy.gov.co</p>
-                <p><strong>Emergencias:</strong> +57 (1) 987-6543</p>
+                <p><strong>Emergencias:</strong> +57 018000001</p>
                 <p><strong>Versión del sistema:</strong> 1.0.0</p>
             </div>
         </div>

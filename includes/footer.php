@@ -21,10 +21,13 @@
                     <ul>
                         <li><strong>NIT:</strong> 900.123.456-7</li>
                         <li><strong>Código DANE:</strong> 11001</li>
+                        <li><strong>Dirección:</strong><br>
+                            Calle 1, Carrera 1, Edificio 1<br>
+                            Macondo, Colombia</li>
                         <li><strong>Horario de Atención:</strong><br>
                             Lunes a Viernes: 8:00 AM - 5:00 PM</li>
                         <li><strong>Línea de Atención:</strong><br>
-                            +57 (1) 123-4567</li>
+                            +57 300 0000 000</li>
                     </ul>
                 </div>
                 

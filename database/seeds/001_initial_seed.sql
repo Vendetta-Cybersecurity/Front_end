@@ -20,7 +20,7 @@ INSERT INTO configuracion_sistema (clave, valor, tipo, categoria, descripcion, e
 -- Configuración de contacto
 ('contact_email', 'contacto@figgerenergy.gov.co', 'email', 'contacto', 'Email principal de contacto', true),
 ('contact_phone', '+57 (1) 234-5678', 'string', 'contacto', 'Teléfono principal', true),
-('contact_address', 'Carrera 7 #26-20, Bogotá, Colombia', 'string', 'contacto', 'Dirección física', true),
+('contact_address', 'Calle 1, Carrera 1, Edificio 1, Macondo, Colombia', 'string', 'contacto', 'Dirección física', true),
 
 -- Configuración de seguridad
 ('password_min_length', '8', 'integer', 'seguridad', 'Longitud mínima de contraseñas', false),
@@ -56,7 +56,7 @@ INSERT INTO usuarios (
     'Sistema', 
     'admin@figgerenergy.gov.co', 
     '1234567890', 
-    '+57 300 123 4567',
+    '+57 300 0000 000',
     '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', -- password: password123
     'admin', 
     'activo',

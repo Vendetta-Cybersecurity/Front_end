@@ -36,11 +36,11 @@
                         </div>
                         <h3>Líneas de Contacto</h3>
                         <p><strong>Línea Nacional:</strong><br>
-                        +57 0180000001</p>
+                        +57 300 0000 000</p>
                         <p><strong>Línea de Emergencias:</strong><br>
-                        +57 0180000002</p>
+                        +57 018000001</p>
                         <p><strong>WhatsApp Institucional:</strong><br>
-                        +57 300 000 0001</p>
+                        +57 300 0000 000</p>
                     </div>
 
                     <div class="info-card">
