@@ -27,7 +27,7 @@ if (session_status() == PHP_SESSION_NONE) {
             <div class="header-contenido">
                 <div class="logo-area">
                     <a href="index.php" class="logo-enlace">
-                        <img src="img/logo.png" alt="Logo Figger Energy SAS" class="logo" onerror="this.style.display='none';">
+                        <img src="images/logo.png" alt="Logo Figger Energy SAS" class="logo" onerror="this.style.display='none';">
                         <div class="logo-texto">
                             <h1>Figger Energy SAS</h1>
                             <p>Entidad Gubernamental Colombiana</p>

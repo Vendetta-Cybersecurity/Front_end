@@ -12,7 +12,7 @@
                         <li><a href="index.php">Página Principal</a></li>
                         <li><a href="contacto.php">Contacto Institucional</a></li>
                         <li><a href="#" onclick="alert('Portal en desarrollo')">Portal de Transparencia</a></li>
-                        <li><a href="#" onclick="alert('Documento en desarrollo')">Política de Privacidad</a></li>
+                        <li><a href="politica-privacidad.php">Política de Privacidad</a></li>
                     </ul>
                 </div>
                 
