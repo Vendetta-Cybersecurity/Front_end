@@ -108,7 +108,7 @@ include '../../includes/header.php';
             
             <?php echo mostrarMensaje($mensaje, $tipo_mensaje); ?>
             
-            <form method="POST" action="register.php" class="formulario">
+            <form method="POST" action="" class="formulario">
                 <div class="grupo-campo">
                     <label for="nombre">Nombre Completo:</label>
                     <input type="text" 

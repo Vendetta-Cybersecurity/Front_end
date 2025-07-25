@@ -112,7 +112,7 @@ include '../../includes/header.php';
             </div>
             
             <!-- Formulario de Contacto -->
-            <form method="POST" action="contact.php" class="formulario">
+            <form method="POST" action="" class="formulario">
                 <h2>📝 Formulario de Contacto</h2>
                 
                 <div class="grupo-campo">

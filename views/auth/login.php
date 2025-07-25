@@ -86,7 +86,7 @@ include '../../includes/header.php';
             
             <?php echo mostrarMensaje($mensaje, $tipo_mensaje); ?>
             
-            <form method="POST" action="login.php" class="formulario">
+            <form method="POST" action="" class="formulario">
                 <div class="grupo-campo">
                     <label for="email">Email:</label>
                     <input type="email" 
