@@ -25,7 +25,7 @@ if (strpos($directorio_actual, 'views') !== false) {
     <title><?php echo isset($titulo_pagina) ? $titulo_pagina . ' - ' : ''; ?>Figger Energy SAS</title>
     <meta name="description" content="Figger Energy SAS - Entidad gubernamental colombiana especializada en monitoreo y control de actividades de minería ilegal">
     <meta name="keywords" content="Figger Energy, Colombia, minería ilegal, energías renovables, monitoreo gubernamental">
-    <link rel="icon" type="image/x-icon" href="<?php echo $ruta_base; ?>favicon.ico">
+    <link rel="icon" type="image/x-icon" href="<?php echo $ruta_base; ?>assets/images/favicon.ico">
     <link rel="stylesheet" href="<?php echo $ruta_base; ?>assets/css/estilos.css">
     
     <?php if ($archivo_actual == 'index.php'): ?>
