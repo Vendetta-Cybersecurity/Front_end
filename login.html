@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Área Privada - Figger Energy SAS</title>
+    <meta name="description" content="Acceso al área privada de Figger Energy SAS para personal autorizado">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/estilos.css">
+    <link rel="stylesheet" href="assets/css/login.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+</head>
+<body class="login-body">
+    <div class="login-container">
+        <div class="login-header">
+            <div class="logo-area">
+                <img src="assets/images/logo.png" alt="Logo Figger Energy SAS" class="logo" onerror="this.style.display='none';">
+                <div class="logo-texto">
+                    <h1>Figger Energy SAS</h1>
+                    <p>Área Privada</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="login-card">
+            <h2>Acceso al Sistema</h2>
+            <p>Esta es una demostración del área privada. En la versión final tendría autenticación real.</p>
+            
+            <!-- Mensaje de información -->
+            <div class="mensaje mensaje-info">
+                <strong>Nota:</strong> Esta es una versión frontend-only. No hay autenticación real implementada.
+            </div>
+            
+            <form id="form-login" class="formulario-login" onsubmit="simularLogin(event)">
+                <div class="grupo-campo">
+                    <label for="email">Email Institucional:</label>
+                    <input type="email" 
+                           id="email" 
+                           name="email" 
+                           required 
+                           placeholder="usuario@figgerenergy.gov.co">
+                </div>
+                
+                <div class="grupo-campo">
+                    <label for="password">Contraseña:</label>
+                    <input type="password" 
+                           id="password" 
+                           name="password" 
+                           required 
+                           placeholder="Ingrese su contraseña">
+                </div>
+                
+                <div class="grupo-campo">
+                    <button type="submit" class="boton boton-primario" style="width: 100%;">
+                        Acceder al Sistema
+                    </button>
+                </div>
+                
+                <div class="texto-centro">
+                    <p><a href="index.html">← Volver a la página principal</a></p>
+                </div>
+            </form>
+            
+            <!-- Información de demostración -->
+            <div class="demo-info">
+                <h3>🔐 Información de Demostración</h3>
+                <p>En un sistema real, aquí estarían los diferentes roles de usuario:</p>
+                
+                <div class="grid-demo-usuarios">
+                    <div class="demo-usuario">
+                        <h4>👨‍💼 Administrador</h4>
+                        <p>Control total del sistema</p>
+                        <small>Gestión de usuarios, configuración, reportes completos</small>
+                    </div>
+                    
+                    <div class="demo-usuario">
+                        <h4>👨‍💻 Empleado</h4>
+                        <p>Operaciones de campo</p>
+                        <small>Gestión de alertas, reportes de campo, seguimiento</small>
+                    </div>
+                    
+                    <div class="demo-usuario">
+                        <h4>🔍 Auditor</h4>
+                        <p>Supervisión y control</p>
+                        <small>Auditoría de procesos, control de calidad, supervisión</small>
+                    </div>
+                </div>
+                
+                <div class="sistema-features">
+                    <h4>📋 Funcionalidades del Sistema Real</h4>
+                    <ul>
+                        <li>Dashboard personalizado por rol</li>
+                        <li>Gestión de alertas y casos</li>
+                        <li>Reportes y estadísticas</li>
+                        <li>Coordinación interinstitucional</li>
+                        <li>Seguimiento de operaciones</li>
+                        <li>Auditoría y control de calidad</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="login-footer">
+            <p>&copy; 2025 Figger Energy SAS - Gobierno de Colombia</p>
+            <p>Sistema de acceso restringido para personal autorizado</p>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="assets/js/scripts.js"></script>
+    <script>
+        function simularLogin(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Simulación de diferentes tipos de usuario
+            let tipoUsuario = 'empleado';
+            
+            if (email.includes('admin')) {
+                tipoUsuario = 'administrador';
+            } else if (email.includes('auditor')) {
+                tipoUsuario = 'auditor';
+            }
+            
+            // Mostrar mensaje de simulación
+            alert(`
+Simulación de Login Exitoso
+
+👤 Usuario: ${email}
+🔐 Rol: ${tipoUsuario}
+
+En un sistema real, aquí se:
+• Validaría credenciales con base de datos
+• Crearía sesión de usuario
+• Redirigiría al dashboard correspondiente
+• Registraría el acceso en logs de auditoría
+
+Para esta demostración frontend-only, 
+el sistema no tiene backend real.
+            `);
+            
+            // En un sistema real, aquí se redirigiría al dashboard
+            console.log(`Login simulado para: ${email} como ${tipoUsuario}`);
+        }
+        
+        // Efecto visual para la página de login
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animación de entrada
+            const loginCard = document.querySelector('.login-card');
+            loginCard.style.opacity = '0';
+            loginCard.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                loginCard.style.transition = 'all 0.5s ease';
+                loginCard.style.opacity = '1';
+                loginCard.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
+</body>
+</html>

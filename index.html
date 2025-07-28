@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio - Figger Energy SAS</title>
+    <meta name="description" content="Figger Energy SAS - Entidad Gubernamental Colombiana para el monitoreo y control de actividades de minería ilegal">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/estilos.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+    
+    <!-- Scripts para estadísticas dinámicas -->
+    <script src="assets/js/config-estadisticas.js"></script>
+    <script src="assets/js/estadisticas-dinamicas.js" defer></script>
+</head>
+<body>
+    <header class="header-principal">
+        <div class="contenedor">
+            <div class="header-contenido">
+                <div class="logo-area">
+                    <a href="index.html" class="logo-enlace">
+                        <img src="assets/images/logo.png" alt="Logo Figger Energy SAS" class="logo" onerror="this.style.display='none';">
+                        <div class="logo-texto">
+                            <h1>Figger Energy SAS</h1>
+                            <p>Entidad Gubernamental Colombiana</p>
+                        </div>
+                    </a>
+                </div>
+                
+                <nav class="navegacion-principal">
+                    <ul>
+                        <li><a href="index.html" class="activo">Inicio</a></li>
+                        <li><a href="about.html">Acerca de</a></li>
+                        <li><a href="services.html">Servicios</a></li>
+                        <li><a href="reports.html">Reportes</a></li>
+                        <li><a href="contact.html">Contacto</a></li>
+                        <li><a href="login.html" class="btn-login">Área Privada</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="contenido-principal">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="contenedor">
+                <h1>Figger Energy SAS</h1>
+                <p class="hero-descripcion">
+                    Entidad Gubernamental Colombiana especializada en el monitoreo, control y prevención 
+                    de actividades de minería ilegal que afectan los recursos críticos para energías renovables.
+                </p>
+                <div class="hero-botones">
+                    <a href="about.html" class="boton boton-primario">Conocer más</a>
+                    <a href="contact.html" class="boton boton-secundario">Reportar actividad</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Información Principal -->
+        <section class="seccion">
+            <div class="contenedor">
+                <div class="texto-centro mb-2">
+                    <h2>Nuestra Misión</h2>
+                    <p>Protegemos los recursos naturales de Colombia mediante tecnología avanzada y acción coordinada</p>
+                </div>
+                
+                <div class="grid-caracteristicas">
+                    <div class="caracteristica">
+                        <h3>🛰️ Monitoreo Satelital</h3>
+                        <p>Vigilancia continua del territorio nacional usando tecnología de punta para detectar actividades irregulares en tiempo real.</p>
+                        <ul style="text-align: center; margin-top: 1rem;">
+                            <li>Imágenes satelitales en alta resolución</li>
+                            <li>Análisis de cambios territoriales</li>
+                            <li>Detección automática de anomalías</li>
+                            <li>Cobertura nacional 24/7</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="caracteristica">
+                        <h3>🚨 Sistema de Alertas</h3>
+                        <p>Red de detección temprana que permite respuesta rápida ante actividades sospechosas de minería ilegal.</p>
+                        <ul style="text-align: center; margin-top: 1rem;">
+                            <li>Alertas en tiempo real</li>
+                            <li>Clasificación por nivel de riesgo</li>
+                            <li>Coordinación interinstitucional</li>
+                            <li>Seguimiento de casos</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="caracteristica">
+                        <h3>📊 Inteligencia de Datos</h3>
+                        <p>Análisis avanzado de información para generar estrategias efectivas de prevención y control.</p>
+                        <ul style="text-align: center; margin-top: 1rem;">
+                            <li>Análisis predictivo</li>
+                            <li>Identificación de patrones</li>
+                            <li>Reportes especializados</li>
+                            <li>Inteligencia estratégica</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Estadísticas Dinámicas -->
+        <section class="seccion" id="estadisticas-seccion">
+            <div class="contenedor">
+                <div class="texto-centro mb-2">
+                    <h2>Resultados e Impacto</h2>
+                    <p>Nuestro trabajo genera resultados medibles en la protección del territorio nacional</p>
+                    <div class="ultima-actualizacion">
+                        <small>🔄 Última actualización: <span id="ultima-actualizacion">Cargando...</span></small>
+                    </div>
+                </div>
+                
+                <div class="grid-triangular">
+                    <div class="caracteristica triangular-item-1">
+                        <div class="numero-grande" id="areas-monitoreadas">0</div>
+                        <h3>Áreas Monitoreadas</h3>
+                        <p>Km² bajo vigilancia satelital continua</p>
+                    </div>
+                    
+                    <div class="caracteristica triangular-item-2">
+                        <div class="numero-grande" id="alertas-procesadas">0</div>
+                        <h3>Alertas Procesadas</h3>
+                        <p>Casos investigados y resueltos este año</p>
+                    </div>
+                    
+                    <div class="caracteristica triangular-item-3">
+                        <div class="numero-grande" id="instituciones-coordinadas">0</div>
+                        <h3>Instituciones Coordinadas</h3>
+                        <p>Entidades trabajando en red</p>
+                    </div>
+                    
+                    <div class="caracteristica triangular-item-4">
+                        <div class="numero-grande" id="recursos-protegidos">0</div>
+                        <h3>Recursos Protegidos</h3>
+                        <p>Toneladas de materiales protegidos</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Servicios -->
+        <section class="seccion fondo-alternativo">
+            <div class="contenedor">
+                <div class="texto-centro mb-2">
+                    <h2>Nuestros Servicios</h2>
+                    <p>Ofrecemos soluciones integrales para la protección de recursos naturales</p>
+                </div>
+                
+                <div class="grid-servicios">
+                    <div class="servicio">
+                        <div class="servicio-icono">🔍</div>
+                        <h3>Investigación y Análisis</h3>
+                        <p>Investigación detallada de actividades sospechosas con análisis forense digital y territorial.</p>
+                    </div>
+                    
+                    <div class="servicio">
+                        <div class="servicio-icono">🤝</div>
+                        <h3>Coordinación Interinstitucional</h3>
+                        <p>Articulación con fuerzas militares, policía, fiscalía y entidades ambientales.</p>
+                    </div>
+                    
+                    <div class="servicio">
+                        <div class="servicio-icono">📋</div>
+                        <h3>Reportes Especializados</h3>
+                        <p>Informes técnicos y estratégicos para la toma de decisiones gubernamentales.</p>
+                    </div>
+                    
+                    <div class="servicio">
+                        <div class="servicio-icono">🎯</div>
+                        <h3>Operaciones Dirigidas</h3>
+                        <p>Apoyo en la planificación y ejecución de operativos de control territorial.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="seccion cta-seccion">
+            <div class="contenedor">
+                <div class="cta-contenido">
+                    <h2>¿Conoce de actividades sospechosas?</h2>
+                    <p>Su reporte puede ayudar a proteger los recursos naturales de Colombia</p>
+                    <div class="cta-botones">
+                        <a href="contact.html" class="boton boton-primario">Reportar ahora</a>
+                        <a href="about.html" class="boton boton-outline">Más información</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer-principal">
+        <div class="contenedor">
+            <div class="footer-contenido">
+                <div class="footer-seccion">
+                    <h3>Figger Energy SAS</h3>
+                    <p>Entidad Gubernamental Colombiana dedicada a la protección de recursos naturales estratégicos.</p>
+                </div>
+                
+                <div class="footer-seccion">
+                    <h4>Enlaces Rápidos</h4>
+                    <ul>
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="about.html">Acerca de</a></li>
+                        <li><a href="services.html">Servicios</a></li>
+                        <li><a href="contact.html">Contacto</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-seccion">
+                    <h4>Contacto</h4>
+                    <p>📧 contacto@figgerenergy.gov.co</p>
+                    <p>📞 +57 (1) 234-5678</p>
+                    <p>📍 Bogotá D.C., Colombia</p>
+                </div>
+                
+                <div class="footer-seccion">
+                    <h4>Gobierno de Colombia</h4>
+                    <p>Esta es una entidad oficial del Estado Colombiano</p>
+                    <div class="footer-redes">
+                        <a href="#" aria-label="Twitter">🐦</a>
+                        <a href="#" aria-label="Facebook">📘</a>
+                        <a href="#" aria-label="LinkedIn">💼</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Figger Energy SAS - Gobierno de Colombia. Todos los derechos reservados.</p>
+                <div class="footer-links">
+                    <a href="privacy.html">Política de Privacidad</a>
+                    <a href="terms.html">Términos de Uso</a>
+                    <a href="accessibility.html">Accesibilidad</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="assets/js/scripts.js"></script>
+</body>
+</html>

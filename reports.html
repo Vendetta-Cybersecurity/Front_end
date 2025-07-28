@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes Públicos - Figger Energy SAS</title>
+    <meta name="description" content="Accede a los reportes públicos y estadísticas sobre la protección de recursos naturales en Colombia">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/estilos.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+    
+    <!-- Scripts para estadísticas dinámicas -->
+    <script src="assets/js/config-estadisticas.js"></script>
+    <script src="assets/js/estadisticas-dinamicas.js" defer></script>
+</head>
+<body>
+    <header class="header-principal">
+        <div class="contenedor">
+            <div class="header-contenido">
+                <div class="logo-area">
+                    <a href="index.html" class="logo-enlace">
+                        <img src="assets/images/logo.png" alt="Logo Figger Energy SAS" class="logo" onerror="this.style.display='none';">
+                        <div class="logo-texto">
+                            <h1>Figger Energy SAS</h1>
+                            <p>Entidad Gubernamental Colombiana</p>
+                        </div>
+                    </a>
+                </div>
+                
+                <nav class="navegacion-principal">
+                    <ul>
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="about.html">Acerca de</a></li>
+                        <li><a href="services.html">Servicios</a></li>
+                        <li><a href="reports.html" class="activo">Reportes</a></li>
+                        <li><a href="contact.html">Contacto</a></li>
+                        <li><a href="login.html" class="btn-login">Área Privada</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="contenido-principal">
+        <!-- Header de la página -->
+        <section class="hero-interno">
+            <div class="contenedor">
+                <h1>Reportes y Estadísticas Públicas</h1>
+                <p class="hero-descripcion">
+                    Información transparente sobre nuestras actividades y resultados en la protección de recursos naturales
+                </p>
+            </div>
+        </section>
+
+        <!-- Estadísticas en Tiempo Real -->
+        <section class="seccion">
+            <div class="contenedor">
+                <div class="texto-centro mb-2">
+                    <h2>Estadísticas en Tiempo Real</h2>
+                    <p>Datos actualizados sobre nuestras operaciones y resultados</p>
+                    <div class="ultima-actualizacion">
+                        <small>🔄 Última actualización: <span id="ultima-actualizacion">Cargando...</span></small>
+                    </div>
+                </div>
+                
+                <div class="grid-estadisticas-principales">
+                    <div class="estadistica-principal">
+                        <div class="estadistica-icono">🛰️</div>
+                        <div class="estadistica-numero" id="areas-monitoreadas">0</div>
+                        <h3>Km² Monitoreados</h3>
+                        <p>Territorio bajo vigilancia satelital</p>
+                        <div class="estadistica-cambio positivo">
+                            <span>↗ +12.5%</span> vs mes anterior
+                        </div>
+                    </div>
+                    
+                    <div class="estadistica-principal">
+                        <div class="estadistica-icono">🚨</div>
+                        <div class="estadistica-numero" id="alertas-procesadas">0</div>
+                        <h3>Alertas Este Mes</h3>
+                        <p>Casos detectados y procesados</p>
+                        <div class="estadistica-cambio neutro">
+                            <span>→ -2.1%</span> vs mes anterior
+                        </div>
+                    </div>
+                    
+                    <div class="estadistica-principal">
+                        <div class="estadistica-icono">✅</div>
+                        <div class="estadistica-numero" id="casos-resueltos">847</div>
+                        <h3>Casos Resueltos</h3>
+                        <p>Investigaciones completadas</p>
+                        <div class="estadistica-cambio positivo">
+                            <span>↗ +8.3%</span> vs mes anterior
+                        </div>
+                    </div>
+                    
+                    <div class="estadistica-principal">
+                        <div class="estadistica-icono">🏛️</div>
+                        <div class="estadistica-numero" id="instituciones-coordinadas">0</div>
+                        <h3>Entidades Coordinadas</h3>
+                        <p>Instituciones trabajando en red</p>
+                        <div class="estadistica-cambio positivo">
+                            <span>↗ +1</span> nueva entidad
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reportes Mensuales -->
+        <section class="seccion fondo-alternativo">
+            <div class="contenedor">
+                <div class="texto-centro mb-2">
+                    <h2>Reportes Mensuales</h2>
+                    <p>Informes detallados de nuestras actividades y resultados</p>
+                </div>
+                
+                <div class="grid-reportes">
+                    <div class="reporte-item">
+                        <div class="reporte-fecha">ENE 2025</div>
+                        <div class="reporte-contenido">
+                            <h3>Reporte Mensual - Enero 2025</h3>
+                            <p>Resultados de monitoreo y operaciones durante el primer mes del año.</p>
+                            <div class="reporte-stats">
+                                <span>📊 127 alertas procesadas</span>
+                                <span>✅ 89% tasa de resolución</span>
+                                <span>🎯 15 operativos coordinados</span>
+                            </div>
+                            <a href="#" class="boton boton-secundario" onclick="descargarReporte('enero-2025')">Descargar PDF</a>
+                        </div>
+                    </div>
+                    
+                    <div class="reporte-item">
+                        <div class="reporte-fecha">DIC 2024</div>
+                        <div class="reporte-contenido">
+                            <h3>Reporte Anual - 2024</h3>
+                            <p>Resumen completo de actividades y logros obtenidos durante 2024.</p>
+                            <div class="reporte-stats">
+                                <span>📊 1,547 alertas procesadas</span>
+                                <span>✅ 92% tasa de resolución</span>
+                                <span>🎯 186 operativos coordinados</span>
+                            </div>
+                            <a href="#" class="boton boton-secundario" onclick="descargarReporte('anual-2024')">Descargar PDF</a>
+                        </div>
+                    </div>
+                    
+                    <div class="reporte-item">
+                        <div class="reporte-fecha">NOV 2024</div>
+                        <div class="reporte-contenido">
+                            <h3>Reporte Mensual - Noviembre 2024</h3>
+                            <p>Análisis de actividades de noviembre con enfoque en operativos especiales.</p>
+                            <div class="reporte-stats">
+                                <span>📊 143 alertas procesadas</span>
+                                <span>✅ 88% tasa de resolución</span>
+                                <span>🎯 12 operativos coordinados</span>
+                            </div>
+                            <a href="#" class="boton boton-secundario" onclick="descargarReporte('noviembre-2024')">Descargar PDF</a>
+                        </div>
+                    </div>
+                    
+                    <div class="reporte-item">
+                        <div class="reporte-fecha">OCT 2024</div>
+                        <div class="reporte-contenido">
+                            <h3>Reporte Mensual - Octubre 2024</h3>
+                            <p>Resultados destacados en la región Amazónica y nuevas tecnologías implementadas.</p>
+                            <div class="reporte-stats">
+                                <span>📊 156 alertas procesadas</span>
+                                <span>✅ 91% tasa de resolución</span>
+                                <span>🎯 18 operativos coordinados</span>
+                            </div>
+                            <a href="#" class="boton boton-secundario" onclick="descargarReporte('octubre-2024')">Descargar PDF</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="texto-centro mt-2">
+                    <a href="#" class="boton boton-outline" onclick="verMasReportes()">Ver reportes anteriores</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Análisis por Regiones -->
+        <section class="seccion">
+            <div class="contenedor">
+                <div class="texto-centro mb-2">
+                    <h2>Análisis Regional</h2>
+                    <p>Distribución de actividades por regiones de Colombia</p>
+                </div>
+                
+                <div class="mapa-interactivo">
+                    <div class="mapa-placeholder">
+                        <div class="mapa-region" data-region="amazonia">
+                            <h3>🌳 Amazonía</h3>
+                            <div class="region-stats">
+                                <p><strong>234 alertas</strong> este año</p>
+                                <p><strong>87%</strong> resueltas</p>
+                                <p><strong>Alto riesgo</strong></p>
+                            </div>
+                        </div>
+                        
+                        <div class="mapa-region" data-region="pacifico">
+                            <h3>🌊 Pacífico</h3>
+                            <div class="region-stats">
+                                <p><strong>156 alertas</strong> este año</p>
+                                <p><strong>92%</strong> resueltas</p>
+                                <p><strong>Medio riesgo</strong></p>
+                            </div>
+                        </div>
+                        
+                        <div class="mapa-region" data-region="andina">
+                            <h3>⛰️ Región Andina</h3>
+                            <div class="region-stats">
+                                <p><strong>89 alertas</strong> este año</p>
+                                <p><strong>95%</strong> resueltas</p>
+                                <p><strong>Bajo riesgo</strong></p>
+                            </div>
+                        </div>
+                        
+                        <div class="mapa-region" data-region="caribe">
+                            <h3>🏖️ Caribe</h3>
+                            <div class="region-stats">
+                                <p><strong>67 alertas</strong> este año</p>
+                                <p><strong>94%</strong> resueltas</p>
+                                <p><strong>Bajo riesgo</strong></p>
+                            </div>
+                        </div>
+                        
+                        <div class="mapa-region" data-region="orinoquia">
+                            <h3>🌾 Orinoquía</h3>
+                            <div class="region-stats">
+                                <p><strong>123 alertas</strong> este año</p>
+                                <p><strong>89%</strong> resueltas</p>
+                                <p><strong>Medio riesgo</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tipos de Actividades Detectadas -->
+        <section class="seccion fondo-alternativo">
+            <div class="contenedor">
+                <div class="texto-centro mb-2">
+                    <h2>Tipos de Actividades Detectadas</h2>
+                    <p>Clasificación de actividades irregulares identificadas</p>
+                </div>
+                
+                <div class="grid-tipos-actividades">
+                    <div class="tipo-actividad">
+                        <div class="tipo-icono">⛏️</div>
+                        <h3>Minería Ilegal de Oro</h3>
+                        <div class="tipo-porcentaje">45%</div>
+                        <p>Principal actividad detectada, especialmente en región Amazónica</p>
+                        <div class="tipo-stats">
+                            <span>278 casos</span>
+                            <span>Alto impacto</span>
+                        </div>
+                    </div>
+                    
+                    <div class="tipo-actividad">
+                        <div class="tipo-icono">💎</div>
+                        <h3>Extracción de Minerales Raros</h3>
+                        <div class="tipo-porcentaje">28%</div>
+                        <p>Extracción no autorizada de tierras raras y minerales críticos</p>
+                        <div class="tipo-stats">
+                            <span>173 casos</span>
+                            <span>Medio impacto</span>
+                        </div>
+                    </div>
+                    
+                    <div class="tipo-actividad">
+                        <div class="tipo-icono">🔥</div>
+                        <h3>Deforestación Asociada</h3>
+                        <div class="tipo-porcentaje">15%</div>
+                        <p>Tala ilegal vinculada a actividades mineras</p>
+                        <div class="tipo-stats">
+                            <span>93 casos</span>
+                            <span>Alto impacto</span>
+                        </div>
+                    </div>
+                    
+                    <div class="tipo-actividad">
+                        <div class="tipo-icono">🚛</div>
+                        <h3>Transporte Irregular</h3>
+                        <div class="tipo-porcentaje">12%</div>
+                        <p>Movilización no autorizada de materiales extraídos</p>
+                        <div class="tipo-stats">
+                            <span>74 casos</span>
+                            <span>Medio impacto</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Impacto y Resultados -->
+        <section class="seccion">
+            <div class="contenedor">
+                <div class="texto-centro mb-2">
+                    <h2>Impacto y Resultados</h2>
+                    <p>Medición del impacto de nuestras acciones en la protección ambiental</p>
+                </div>
+                
+                <div class="grid-impacto">
+                    <div class="impacto-item">
+                        <div class="impacto-numero">2.8M</div>
+                        <h3>Hectáreas Protegidas</h3>
+                        <p>Área total preservada gracias a nuestras intervenciones</p>
+                        <div class="impacto-meta">
+                            <div class="barra-progreso">
+                                <div class="progreso" style="width: 78%"></div>
+                            </div>
+                            <span>78% de meta anual</span>
+                        </div>
+                    </div>
+                    
+                    <div class="impacto-item">
+                        <div class="impacto-numero">1,247</div>
+                        <h3>Toneladas Recuperadas</h3>
+                        <p>Material mineral devuelto al Estado colombiano</p>
+                        <div class="impacto-meta">
+                            <div class="barra-progreso">
+                                <div class="progreso" style="width: 85%"></div>
+                            </div>
+                            <span>85% de meta anual</span>
+                        </div>
+                    </div>
+                    
+                    <div class="impacto-item">
+                        <div class="impacto-numero">156</div>
+                        <h3>Operativos Exitosos</h3>
+                        <p>Intervenciones coordinadas con resultados positivos</p>
+                        <div class="impacto-meta">
+                            <div class="barra-progreso">
+                                <div class="progreso" style="width: 92%"></div>
+                            </div>
+                            <span>92% tasa de éxito</span>
+                        </div>
+                    </div>
+                    
+                    <div class="impacto-item">
+                        <div class="impacto-numero">$2.4B</div>
+                        <h3>Valor Recuperado</h3>
+                        <p>Valor estimado de recursos protegidos (COP)</p>
+                        <div class="impacto-meta">
+                            <div class="barra-progreso">
+                                <div class="progreso" style="width: 67%"></div>
+                            </div>
+                            <span>67% de meta anual</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Transparencia y Acceso a la Información -->
+        <section class="seccion fondo-alternativo">
+            <div class="contenedor">
+                <div class="texto-centro mb-2">
+                    <h2>Transparencia y Acceso a la Información</h2>
+                    <p>Cumplimiento de la Ley 1712 de 2014 - Transparencia y Acceso a la Información</p>
+                </div>
+                
+                <div class="grid-transparencia">
+                    <div class="transparencia-item">
+                        <div class="transparencia-icono">📊</div>
+                        <h3>Datos Abiertos</h3>
+                        <p>Acceso a datasets públicos sobre nuestras actividades</p>
+                        <a href="#" class="boton boton-outline">Explorar datos</a>
+                    </div>
+                    
+                    <div class="transparencia-item">
+                        <div class="transparencia-icono">💰</div>
+                        <h3>Información Presupuestal</h3>
+                        <p>Transparencia en el uso de recursos públicos</p>
+                        <a href="#" class="boton boton-outline">Ver presupuesto</a>
+                    </div>
+                    
+                    <div class="transparencia-item">
+                        <div class="transparencia-icono">📋</div>
+                        <h3>Planes y Programas</h3>
+                        <p>Planificación estratégica y operativa</p>
+                        <a href="#" class="boton boton-outline">Ver planes</a>
+                    </div>
+                    
+                    <div class="transparencia-item">
+                        <div class="transparencia-icono">🏛️</div>
+                        <h3>Estructura Organizacional</h3>
+                        <p>Organigrama y funcionarios públicos</p>
+                        <a href="#" class="boton boton-outline">Ver estructura</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="seccion cta-seccion">
+            <div class="contenedor">
+                <div class="cta-contenido">
+                    <h2>¿Necesita Información Específica?</h2>
+                    <p>Solicite información adicional o datos específicos no publicados</p>
+                    <div class="cta-botones">
+                        <a href="contact.html" class="boton boton-primario">Solicitar información</a>
+                        <a href="#" class="boton boton-outline" onclick="suscribirseReportes()">Suscribirse a reportes</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer-principal">
+        <div class="contenedor">
+            <div class="footer-contenido">
+                <div class="footer-seccion">
+                    <h3>Figger Energy SAS</h3>
+                    <p>Entidad Gubernamental Colombiana dedicada a la protección de recursos naturales estratégicos.</p>
+                </div>
+                
+                <div class="footer-seccion">
+                    <h4>Enlaces Rápidos</h4>
+                    <ul>
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="about.html">Acerca de</a></li>
+                        <li><a href="services.html">Servicios</a></li>
+                        <li><a href="contact.html">Contacto</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-seccion">
+                    <h4>Contacto</h4>
+                    <p>📧 contacto@figgerenergy.gov.co</p>
+                    <p>📞 +57 (1) 234-5678</p>
+                    <p>📍 Bogotá D.C., Colombia</p>
+                </div>
+                
+                <div class="footer-seccion">
+                    <h4>Gobierno de Colombia</h4>
+                    <p>Esta es una entidad oficial del Estado Colombiano</p>
+                    <div class="footer-redes">
+                        <a href="#" aria-label="Twitter">🐦</a>
+                        <a href="#" aria-label="Facebook">📘</a>
+                        <a href="#" aria-label="LinkedIn">💼</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Figger Energy SAS - Gobierno de Colombia. Todos los derechos reservados.</p>
+                <div class="footer-links">
+                    <a href="privacy.html">Política de Privacidad</a>
+                    <a href="terms.html">Términos de Uso</a>
+                    <a href="accessibility.html">Accesibilidad</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="assets/js/scripts.js"></script>
+    <script>
+        // Funciones específicas para la página de reportes
+        function descargarReporte(reporte) {
+            alert(`Descargando reporte: ${reporte}.pdf\n\nEn un sistema real, esto iniciaría la descarga del archivo PDF.`);
+        }
+        
+        function verMasReportes() {
+            alert('En un sistema real, esto mostraría un archivo o página con reportes históricos.');
+        }
+        
+        function suscribirseReportes() {
+            const email = prompt('Ingrese su email para recibir notificaciones de nuevos reportes:');
+            if (email && email.includes('@')) {
+                alert(`Suscripción exitosa para: ${email}\n\nRecibirá notificaciones de nuevos reportes públicos.`);
+            } else if (email) {
+                alert('Por favor ingrese un email válido.');
+            }
+        }
+    </script>
+</body>
+</html>

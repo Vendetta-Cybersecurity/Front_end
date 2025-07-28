@@ -1,11 +1,11 @@
 /**
- * JavaScript básico para Figger Energy SAS
+ * JavaScript básico para Figger Energy SAS - Frontend Only
  * Validaciones de formularios y funciones de interacción DOM
  */
 
 // Esperar a que el DOM esté completamente cargado
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Figger Energy SAS - Sistema cargado correctamente');
+    console.log('Figger Energy SAS - Sistema Frontend cargado correctamente');
     
     // Inicializar validaciones de formularios
     inicializarValidaciones();
@@ -15,36 +15,41 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Manejar mensajes temporales
     manejarMensajesTemporales();
+    
+    // Inicializar navegación móvil
+    inicializarNavegacionMovil();
 });
 
 /**
  * Inicializar todas las validaciones de formularios
  */
 function inicializarValidaciones() {
-    // Validación del formulario de login
+    // Validación del formulario de login (simulado)
     const formularioLogin = document.getElementById('form-login');
-    if (formularioLogin) {
-        formularioLogin.addEventListener('submit', validarLogin);
-    }
-    
-    // Validación del formulario de registro
-    const formularioRegistro = document.getElementById('form-registro');
-    if (formularioRegistro) {
-        formularioRegistro.addEventListener('submit', validarRegistro);
+    if (formularioLogin && !formularioLogin.hasAttribute('data-handled')) {
+        formularioLogin.setAttribute('data-handled', 'true');
+        // El manejador específico se define en login.html
     }
     
     // Validación del formulario de contacto
     const formularioContacto = document.getElementById('form-contacto');
-    if (formularioContacto) {
-        formularioContacto.addEventListener('submit', validarContacto);
+    if (formularioContacto && !formularioContacto.hasAttribute('data-handled')) {
+        formularioContacto.setAttribute('data-handled', 'true');
+        // El manejador específico se define en contact.html
     }
     
     // Validación en tiempo real para todos los campos
-    const campos = document.querySelectorAll('input, textarea');
+    const campos = document.querySelectorAll('input, textarea, select');
     campos.forEach(campo => {
-        campo.addEventListener('input', function() {
-            validarCampoEnTiempoReal(this);
-        });
+        if (!campo.hasAttribute('data-validation-added')) {
+            campo.setAttribute('data-validation-added', 'true');
+            campo.addEventListener('input', function() {
+                validarCampoEnTiempoReal(this);
+            });
+            campo.addEventListener('blur', function() {
+                validarCampoEnTiempoReal(this);
+            });
+        }
     });
 }
 

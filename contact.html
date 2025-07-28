@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto - Figger Energy SAS</title>
+    <meta name="description" content="Comuníquese con Figger Energy SAS para reportar actividades irregulares, solicitar información o colaborar con nosotros">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/estilos.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <header class="header-principal">
+        <div class="contenedor">
+            <div class="header-contenido">
+                <div class="logo-area">
+                    <a href="index.html" class="logo-enlace">
+                        <img src="assets/images/logo.png" alt="Logo Figger Energy SAS" class="logo" onerror="this.style.display='none';">
+                        <div class="logo-texto">
+                            <h1>Figger Energy SAS</h1>
+                            <p>Entidad Gubernamental Colombiana</p>
+                        </div>
+                    </a>
+                </div>
+                
+                <nav class="navegacion-principal">
+                    <ul>
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="about.html">Acerca de</a></li>
+                        <li><a href="services.html">Servicios</a></li>
+                        <li><a href="reports.html">Reportes</a></li>
+                        <li><a href="contact.html" class="activo">Contacto</a></li>
+                        <li><a href="login.html" class="btn-login">Área Privada</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="contenido-principal">
+        <!-- Header de la página -->
+        <section class="hero-interno">
+            <div class="contenedor">
+                <h1>Contacto Institucional</h1>
+                <p class="hero-descripcion">
+                    Comuníquese con Figger Energy SAS para consultas, denuncias y solicitudes de información
+                </p>
+            </div>
+        </section>
+
+        <div class="contenedor">
+            <!-- Mensaje de respuesta (será mostrado por JavaScript) -->
+            <div id="mensaje-respuesta" class="mensaje" style="display: none;"></div>
+            
+            <!-- Información de Contacto -->
+            <section class="seccion">
+                <div class="grid-contacto-info">
+                    <div class="tarjeta-contacto">
+                        <div class="contacto-icono">📞</div>
+                        <h3>Líneas Telefónicas</h3>
+                        <div class="contacto-detalles">
+                            <p><strong>Línea Nacional:</strong><br>+57 (1) 234-5678</p>
+                            <p><strong>Línea Gratuita:</strong><br>01 8000 123 456</p>
+                            <p><strong>Emergencias 24/7:</strong><br>112 (Opción 5)</p>
+                            <p><strong>WhatsApp:</strong><br>+57 300 123 4567</p>
+                        </div>
+                        <div class="horarios">
+                            <small><strong>Horarios:</strong> L-V 8:00-17:00<br>Emergencias: 24/7</small>
+                        </div>
+                    </div>
+                    
+                    <div class="tarjeta-contacto">
+                        <div class="contacto-icono">📧</div>
+                        <h3>Correos Electrónicos</h3>
+                        <div class="contacto-detalles">
+                            <p><strong>General:</strong><br>contacto@figgerenergy.gov.co</p>
+                            <p><strong>Denuncias:</strong><br>denuncias@figgerenergy.gov.co</p>
+                            <p><strong>Prensa:</strong><br>prensa@figgerenergy.gov.co</p>
+                            <p><strong>Cooperación:</strong><br>cooperacion@figgerenergy.gov.co</p>
+                        </div>
+                        <div class="horarios">
+                            <small><strong>Respuesta:</strong> Máximo 48 horas<br>Emergencias: Inmediata</small>
+                        </div>
+                    </div>
+                    
+                    <div class="tarjeta-contacto">
+                        <div class="contacto-icono">📍</div>
+                        <h3>Oficinas Principales</h3>
+                        <div class="contacto-detalles">
+                            <p><strong>Sede Principal:</strong><br>Carrera 7 #32-16, Piso 12<br>Bogotá D.C., Colombia</p>
+                            <p><strong>Oficina Amazonia:</strong><br>Leticia, Amazonas</p>
+                            <p><strong>Oficina Pacífico:</strong><br>Buenaventura, Valle del Cauca</p>
+                        </div>
+                        <div class="horarios">
+                            <small><strong>Atención:</strong> L-V 8:00-17:00<br>Cita previa requerida</small>
+                        </div>
+                    </div>
+                    
+                    <div class="tarjeta-contacto">
+                        <div class="contacto-icono">🌐</div>
+                        <h3>Canales Digitales</h3>
+                        <div class="contacto-detalles">
+                            <p><strong>Portal Web:</strong><br>www.figgerenergy.gov.co</p>
+                            <p><strong>PQRS:</strong><br>pqrs@figgerenergy.gov.co</p>
+                            <p><strong>Chat en línea:</strong><br>Disponible en sitio web</p>
+                            <p><strong>App móvil:</strong><br>FiggerEnergy (Play Store/App Store)</p>
+                        </div>
+                        <div class="horarios">
+                            <small><strong>Disponibilidad:</strong> 24/7<br>Respuesta: Tiempo real</small>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Formulario de Contacto -->
+            <section class="seccion fondo-alternativo">
+                <div class="texto-centro mb-2">
+                    <h2>Envíanos un Mensaje</h2>
+                    <p>Complete el formulario y nos pondremos en contacto con usted</p>
+                </div>
+                
+                <form id="form-contacto" class="formulario-contacto" onsubmit="enviarFormulario(event)">
+                    <div class="grid-formulario">
+                        <div class="grupo-campo">
+                            <label for="nombre">Nombre Completo *</label>
+                            <input type="text" 
+                                   id="nombre" 
+                                   name="nombre" 
+                                   required 
+                                   placeholder="Ingrese su nombre completo">
+                        </div>
+                        
+                        <div class="grupo-campo">
+                            <label for="email">Correo Electrónico *</label>
+                            <input type="email" 
+                                   id="email" 
+                                   name="email" 
+                                   required 
+                                   placeholder="ejemplo@correo.com">
+                        </div>
+                        
+                        <div class="grupo-campo">
+                            <label for="telefono">Teléfono</label>
+                            <input type="tel" 
+                                   id="telefono" 
+                                   name="telefono" 
+                                   placeholder="+57 300 123 4567">
+                        </div>
+                        
+                        <div class="grupo-campo">
+                            <label for="tipo_contacto">Tipo de Consulta *</label>
+                            <select id="tipo_contacto" name="tipo_contacto" required>
+                                <option value="">Seleccione el tipo de consulta</option>
+                                <option value="denuncia">🚨 Denuncia de Minería Ilegal</option>
+                                <option value="informacion">ℹ️ Solicitud de Información</option>
+                                <option value="colaboracion">🤝 Propuesta de Colaboración</option>
+                                <option value="prensa">📰 Consulta de Prensa</option>
+                                <option value="pqrs">📋 PQRS</option>
+                                <option value="otro">❓ Otro</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="grupo-campo">
+                        <label for="asunto">Asunto *</label>
+                        <input type="text" 
+                               id="asunto" 
+                               name="asunto" 
+                               required 
+                               placeholder="Resuma brevemente su consulta">
+                    </div>
+                    
+                    <div class="grupo-campo">
+                        <label for="mensaje">Mensaje *</label>
+                        <textarea id="mensaje" 
+                                  name="mensaje" 
+                                  required 
+                                  rows="6" 
+                                  placeholder="Describa detalladamente su consulta, denuncia o solicitud. Si es una denuncia, incluya ubicación, fechas y detalles específicos."></textarea>
+                        <small>Mínimo 20 caracteres</small>
+                    </div>
+                    
+                    <!-- Información adicional para denuncias -->
+                    <div id="info-denuncia" class="info-adicional" style="display: none;">
+                        <h4>📍 Información Adicional para Denuncias</h4>
+                        <div class="grid-formulario">
+                            <div class="grupo-campo">
+                                <label for="ubicacion">Ubicación Específica</label>
+                                <input type="text" 
+                                       id="ubicacion" 
+                                       name="ubicacion" 
+                                       placeholder="Municipio, vereda, coordenadas si las conoce">
+                            </div>
+                            
+                            <div class="grupo-campo">
+                                <label for="fecha_actividad">Fecha de la Actividad</label>
+                                <input type="date" 
+                                       id="fecha_actividad" 
+                                       name="fecha_actividad">
+                            </div>
+                        </div>
+                        
+                        <div class="grupo-campo">
+                            <label for="evidencias">¿Tiene evidencias? (fotos, videos, documentos)</label>
+                            <select id="evidencias" name="evidencias">
+                                <option value="">Seleccione</option>
+                                <option value="si">Sí, tengo evidencias</option>
+                                <option value="no">No tengo evidencias</option>
+                                <option value="parcial">Tengo algunas evidencias</option>
+                            </select>
+                        </div>
+                        
+                        <div class="alerta-seguridad">
+                            <h5>⚠️ Importante para su Seguridad</h5>
+                            <ul>
+                                <li>No se acerque a las actividades sospechosas</li>
+                                <li>No tome fotografías que lo pongan en riesgo</li>
+                                <li>Si es posible, haga el reporte de manera anónima</li>
+                                <li>En caso de peligro inmediato, contacte al 112</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="grupo-campo">
+                        <label class="checkbox-container">
+                            <input type="checkbox" required>
+                            <span class="checkmark"></span>
+                            Acepto el tratamiento de mis datos personales de acuerdo con la 
+                            <a href="privacy.html" target="_blank">Política de Privacidad</a> 
+                            y autorizo el uso de esta información para dar respuesta a mi solicitud.
+                        </label>
+                    </div>
+                    
+                    <div class="grupo-campo">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="anonimo">
+                            <span class="checkmark"></span>
+                            Deseo hacer este reporte de manera anónima (no se almacenarán mis datos de contacto)
+                        </label>
+                    </div>
+                    
+                    <div class="grupo-campo texto-centro">
+                        <button type="submit" class="boton boton-primario btn-submit">
+                            Enviar Mensaje
+                        </button>
+                        <button type="reset" class="boton boton-secundario" onclick="limpiarFormulario()">
+                            Limpiar Formulario
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Canales de Emergencia -->
+            <section class="seccion">
+                <div class="tarjeta-emergencia">
+                    <div class="emergencia-header">
+                        <div class="emergencia-icono">🚨</div>
+                        <h2>¿Es una Emergencia?</h2>
+                    </div>
+                    <div class="emergencia-contenido">
+                        <p>Si está reportando una actividad en curso que requiere intervención inmediata:</p>
+                        <div class="emergencia-acciones">
+                            <a href="tel:112" class="boton boton-emergencia">📞 Llamar 112</a>
+                            <a href="https://wa.me/573001234567" class="boton boton-emergencia">💬 WhatsApp</a>
+                            <a href="mailto:emergencias@figgerenergy.gov.co" class="boton boton-emergencia">📧 Email</a>
+                        </div>
+                        <div class="emergencia-nota">
+                            <small>⏰ Disponibles 24 horas, 7 días a la semana</small>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Preguntas Frecuentes -->
+            <section class="seccion fondo-alternativo">
+                <div class="texto-centro mb-2">
+                    <h2>Preguntas Frecuentes</h2>
+                    <p>Respuestas a las consultas más comunes</p>
+                </div>
+                
+                <div class="faq-container">
+                    <div class="faq-item">
+                        <button class="faq-pregunta" onclick="toggleFAQ(this)">
+                            ❓ ¿Cómo puedo reportar actividad minera sospechosa?
+                        </button>
+                        <div class="faq-respuesta">
+                            <p>Puede reportar a través de nuestros canales oficiales: teléfono, email, formulario web o WhatsApp. Proporcione la mayor cantidad de detalles posibles sobre ubicación, fecha y tipo de actividad observada.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <button class="faq-pregunta" onclick="toggleFAQ(this)">
+                            ❓ ¿Los reportes son anónimos?
+                        </button>
+                        <div class="faq-respuesta">
+                            <p>Sí, puede hacer reportes anónimos si lo desea. Marque la opción correspondiente en el formulario o indíquelo al contactarnos por otros medios. Su seguridad es nuestra prioridad.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <button class="faq-pregunta" onclick="toggleFAQ(this)">
+                            ❓ ¿Cuánto tiempo toma la respuesta?
+                        </button>
+                        <div class="faq-respuesta">
+                            <p>Emergencias: Inmediata. Denuncias críticas: Máximo 2 horas. Consultas generales: 24-48 horas. PQRS: Máximo 15 días hábiles según la ley 1755 de 2015.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <button class="faq-pregunta" onclick="toggleFAQ(this)">
+                            ❓ ¿Qué información debo incluir en una denuncia?
+                        </button>
+                        <div class="faq-respuesta">
+                            <p>Incluya: ubicación específica, fecha y hora, tipo de actividad, número de personas/vehículos involucrados, descripción del daño ambiental observado, y cualquier evidencia disponible.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <button class="faq-pregunta" onclick="toggleFAQ(this)">
+                            ❓ ¿Colaboran con otras instituciones?
+                        </button>
+                        <div class="faq-respuesta">
+                            <p>Sí, trabajamos coordinadamente con Fuerzas Militares, Policía Nacional, Fiscalía General, entidades ambientales y otras instituciones gubernamentales.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Mapa de Ubicación -->
+            <section class="seccion">
+                <div class="texto-centro mb-2">
+                    <h2>Ubicación de Nuestras Oficinas</h2>
+                    <p>Encuentre la oficina más cercana a su ubicación</p>
+                </div>
+                
+                <div class="mapa-placeholder">
+                    <div class="mapa-info">
+                        <h3>🏢 Sede Principal - Bogotá</h3>
+                        <p><strong>Dirección:</strong> Carrera 7 #32-16, Piso 12</p>
+                        <p><strong>Barrio:</strong> La Merced, Bogotá D.C.</p>
+                        <p><strong>Transporte:</strong> TransMilenio Estación Universidades</p>
+                        <p><strong>Horario:</strong> Lunes a Viernes 8:00-17:00</p>
+                        <a href="#" class="boton boton-outline">Ver en Google Maps</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer-principal">
+        <div class="contenedor">
+            <div class="footer-contenido">
+                <div class="footer-seccion">
+                    <h3>Figger Energy SAS</h3>
+                    <p>Entidad Gubernamental Colombiana dedicada a la protección de recursos naturales estratégicos.</p>
+                </div>
+                
+                <div class="footer-seccion">
+                    <h4>Enlaces Rápidos</h4>
+                    <ul>
+                        <li><a href="index.html">Inicio</a></li>
+                        <li><a href="about.html">Acerca de</a></li>
+                        <li><a href="services.html">Servicios</a></li>
+                        <li><a href="contact.html">Contacto</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-seccion">
+                    <h4>Contacto</h4>
+                    <p>📧 contacto@figgerenergy.gov.co</p>
+                    <p>📞 +57 (1) 234-5678</p>
+                    <p>📍 Bogotá D.C., Colombia</p>
+                </div>
+                
+                <div class="footer-seccion">
+                    <h4>Gobierno de Colombia</h4>
+                    <p>Esta es una entidad oficial del Estado Colombiano</p>
+                    <div class="footer-redes">
+                        <a href="#" aria-label="Twitter">🐦</a>
+                        <a href="#" aria-label="Facebook">📘</a>
+                        <a href="#" aria-label="LinkedIn">💼</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Figger Energy SAS - Gobierno de Colombia. Todos los derechos reservados.</p>
+                <div class="footer-links">
+                    <a href="privacy.html">Política de Privacidad</a>
+                    <a href="terms.html">Términos de Uso</a>
+                    <a href="accessibility.html">Accesibilidad</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="assets/js/scripts.js"></script>
+    <script>
+        // Funciones específicas para la página de contacto
+        function enviarFormulario(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const datos = Object.fromEntries(formData);
+            
+            // Simular envío del formulario
+            mostrarMensaje('Mensaje enviado exitosamente. Nos pondremos en contacto con usted pronto.', 'exito');
+            
+            // Limpiar formulario
+            event.target.reset();
+            
+            // Ocultar información adicional de denuncia
+            document.getElementById('info-denuncia').style.display = 'none';
+            
+            console.log('Datos del formulario:', datos);
+        }
+        
+        function limpiarFormulario() {
+            document.getElementById('info-denuncia').style.display = 'none';
+            ocultarMensaje();
+        }
+        
+        function mostrarMensaje(texto, tipo) {
+            const mensaje = document.getElementById('mensaje-respuesta');
+            mensaje.textContent = texto;
+            mensaje.className = `mensaje mensaje-${tipo}`;
+            mensaje.style.display = 'block';
+            
+            // Scroll hacia el mensaje
+            mensaje.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Auto-ocultar después de 10 segundos si es éxito
+            if (tipo === 'exito') {
+                setTimeout(() => {
+                    ocultarMensaje();
+                }, 10000);
+            }
+        }
+        
+        function ocultarMensaje() {
+            const mensaje = document.getElementById('mensaje-respuesta');
+            mensaje.style.display = 'none';
+        }
+        
+        function toggleFAQ(elemento) {
+            const faqItem = elemento.parentElement;
+            const respuesta = faqItem.querySelector('.faq-respuesta');
+            const esActivo = faqItem.classList.contains('activo');
+            
+            // Cerrar todas las FAQs
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('activo');
+                item.querySelector('.faq-respuesta').style.display = 'none';
+            });
+            
+            // Abrir la seleccionada si no estaba activa
+            if (!esActivo) {
+                faqItem.classList.add('activo');
+                respuesta.style.display = 'block';
+            }
+        }
+        
+        // Mostrar campos adicionales para denuncias
+        document.getElementById('tipo_contacto').addEventListener('change', function() {
+            const infoDenuncia = document.getElementById('info-denuncia');
+            if (this.value === 'denuncia') {
+                infoDenuncia.style.display = 'block';
+            } else {
+                infoDenuncia.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
