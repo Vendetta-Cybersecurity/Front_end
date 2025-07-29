@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios - Figger Energy SAS</title>
+    <meta name="description" content="Gestión de usuarios del sistema - Figger Energy SAS">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/estilos.css">
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="../assets/images/favicon.ico" type="image/x-icon">
+    
+    <!-- Scripts API -->
+    <script src="../assets/js/config/api-config.js"></script>
+    <script src="../assets/js/api/api-client.js"></script>
+    <script src="../assets/js/auth/auth-service.js"></script>
+    <script src="../assets/js/auth/auth-middleware.js"></script>
+    <script src="../assets/js/auth/init-auth.js"></script>
+    <script src="../assets/js/services/usuarios-service.js"></script>
+    <script src="../assets/js/services/empleados-service.js"></script>
+    <script src="../assets/js/services/roles-service.js"></script>
+</head>
+<body class="dashboard-body">
+    <!-- Header del Dashboard -->
+    <header class="dashboard-header">
+        <div class="contenedor">
+            <div class="header-content">
+                <div class="logo-area">
+                    <a href="../index.html" class="logo-enlace">
+                        <img src="../assets/images/logo.png" alt="Logo Figger Energy SAS" class="logo" onerror="this.style.display='none';">
+                        <div class="logo-texto">
+                            <h1>Figger Energy SAS</h1>
+                            <p>Gestión de Usuarios</p>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="header-actions">
+                    <div id="user-info" class="user-info"></div>
+                    <div class="header-buttons">
+                        <button id="logout-btn" class="btn-logout" onclick="window.authMiddleware.logout()">
+                            Cerrar Sesión
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navegación del Dashboard -->
+    <nav class="dashboard-nav">
+        <div class="contenedor">
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">📊 Dashboard</a></li>
+                <li><a href="empleados.html" class="nav-link">👥 Empleados</a></li>
+                <li><a href="departamentos.html" class="nav-link" data-permission="manage_departments">🏢 Departamentos</a></li>
+                <li><a href="usuarios.html" class="nav-link active" data-permission="manage_users">🔐 Usuarios</a></li>
+                <li><a href="reportes.html" class="nav-link">📈 Reportes</a></li>
+                <li><a href="configuracion.html" class="nav-link" data-role="admin">⚙️ Configuración</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <main class="dashboard-main">
+        <div class="contenedor">
+            <!-- Header de sección -->
+            <div class="section-header">
+                <h2>Gestión de Usuarios del Sistema</h2>
+                <p>Administre los usuarios y sus permisos de acceso al sistema</p>
+            </div>
+
+            <!-- Controles superiores -->
+            <div class="page-controls">
+                <div class="controls-left">
+                    <div class="search-box">
+                        <input type="text" id="search-usuarios" placeholder="Buscar usuarios..." class="search-input">
+                        <button id="search-btn" class="btn-icon">🔍</button>
+                    </div>
+                    <div class="filter-controls">
+                        <select id="filter-rol" class="filter-select">
+                            <option value="">Todos los roles</option>
+                        </select>
+                        <select id="filter-estado" class="filter-select">
+                            <option value="">Todos los estados</option>
+                            <option value="activo">Activos</option>
+                            <option value="inactivo">Inactivos</option>
+                            <option value="bloqueado">Bloqueados</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="controls-right">
+                    <button id="refresh-btn" class="btn-secondary">🔄 Actualizar</button>
+                    <button id="new-usuario-btn" class="btn-primary">➕ Nuevo Usuario</button>
+                </div>
+            </div>
+
+            <!-- Tabla de usuarios -->
+            <div class="data-table-container">
+                <div id="loading-indicator" class="loading-indicator">
+                    <div class="loading-spinner"></div>
+                    <p>Cargando usuarios...</p>
+                </div>
+                
+                <table id="usuarios-table" class="data-table" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Empleado</th>
+                            <th>Email</th>
+                            <th>Rol</th>
+                            <th>Estado</th>
+                            <th>Último Acceso</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usuarios-tbody">
+                        <!-- Los datos se cargarán dinámicamente -->
+                    </tbody>
+                </table>
+                
+                <div id="no-data-message" class="no-data-message" style="display: none;">
+                    <div class="no-data-icon">🔐</div>
+                    <h3>No se encontraron usuarios</h3>
+                    <p>No hay usuarios que coincidan con los criterios de búsqueda.</p>
+                </div>
+            </div>
+
+            <!-- Paginación -->
+            <div id="pagination" class="pagination" style="display: none;">
+                <button id="prev-page" class="pagination-btn">← Anterior</button>
+                <div id="page-info" class="page-info">Página 1 de 1</div>
+                <button id="next-page" class="pagination-btn">Siguiente →</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal para usuario -->
+    <div id="usuario-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Nuevo Usuario</h3>
+                <button id="close-modal" class="btn-close">✕</button>
+            </div>
+            <div class="modal-body">
+                <form id="usuario-form" class="form-grid">
+                    <div class="form-group">
+                        <label for="id_empleado">Empleado *</label>
+                        <select id="id_empleado" name="id_empleado" required>
+                            <option value="">Seleccionar empleado...</option>
+                        </select>
+                        <div class="field-error" id="id_empleado-error"></div>
+                        <small class="field-help">Seleccione el empleado asociado a este usuario</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="username">Nombre de Usuario *</label>
+                        <input type="text" id="username" name="username" required placeholder="usuario123">
+                        <div class="field-error" id="username-error"></div>
+                        <small class="field-help">Solo letras, números y guiones bajos</small>
+                    </div>
+                    
+                    <div class="form-group" id="password-group">
+                        <label for="password">Contraseña *</label>
+                        <div class="password-input-container">
+                            <input type="password" id="password" name="password" required>
+                            <button type="button" id="toggle-password" class="btn-toggle-password">👁️</button>
+                        </div>
+                        <div class="field-error" id="password-error"></div>
+                        <small class="field-help">Mínimo 8 caracteres, incluya mayúsculas, minúsculas y números</small>
+                    </div>
+                    
+                    <div class="form-group" id="confirm-password-group">
+                        <label for="confirm_password">Confirmar Contraseña *</label>
+                        <div class="password-input-container">
+                            <input type="password" id="confirm_password" name="confirm_password" required>
+                            <button type="button" id="toggle-confirm-password" class="btn-toggle-password">👁️</button>
+                        </div>
+                        <div class="field-error" id="confirm_password-error"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_rol">Rol del Sistema *</label>
+                        <select id="id_rol" name="id_rol" required>
+                            <option value="">Seleccionar rol...</option>
+                        </select>
+                        <div class="field-error" id="id_rol-error"></div>
+                        <small class="field-help">Define los permisos de acceso del usuario</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email de Acceso</label>
+                        <input type="email" id="email" name="email" placeholder="usuario@figgereergy.com">
+                        <div class="field-error" id="email-error"></div>
+                        <small class="field-help">Email alternativo para el acceso (opcional)</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="estado">Estado</label>
+                        <select id="estado" name="estado">
+                            <option value="activo">Activo</option>
+                            <option value="inactivo">Inactivo</option>
+                            <option value="bloqueado">Bloqueado</option>
+                        </select>
+                    </div>
+
+                    <!-- Sección de permisos -->
+                    <div class="form-section full-width">
+                        <h4>Permisos Especiales</h4>
+                        <div class="permissions-grid">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="puede_cambiar_password" name="puede_cambiar_password" checked>
+                                <span class="checkmark"></span>
+                                Puede cambiar su contraseña
+                            </label>
+                            
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="forzar_cambio_password" name="forzar_cambio_password">
+                                <span class="checkmark"></span>
+                                Forzar cambio de contraseña en el próximo acceso
+                            </label>
+                            
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="acceso_multiple" name="acceso_multiple">
+                                <span class="checkmark"></span>
+                                Permitir múltiples sesiones simultáneas
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel-btn" class="btn-secondary">Cancelar</button>
+                <button id="save-btn" class="btn-primary">
+                    <span class="btn-text">Guardar</span>
+                    <span class="btn-loading" style="display: none;">🔄 Guardando...</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para resetear contraseña -->
+    <div id="reset-password-modal" class="modal" style="display: none;">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h3>Resetear Contraseña</h3>
+                <button id="close-reset-modal" class="btn-close">✕</button>
+            </div>
+            <div class="modal-body">
+                <p>¿Está seguro de que desea resetear la contraseña de este usuario?</p>
+                <p><strong id="reset-username"></strong></p>
+                <div class="form-group">
+                    <label for="new-password">Nueva Contraseña *</label>
+                    <div class="password-input-container">
+                        <input type="password" id="new-password" required>
+                        <button type="button" id="toggle-new-password" class="btn-toggle-password">👁️</button>
+                    </div>
+                    <small class="field-help">La nueva contraseña será enviada al empleado</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel-reset-btn" class="btn-secondary">Cancelar</button>
+                <button id="confirm-reset-btn" class="btn-danger">Resetear Contraseña</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer del Dashboard -->
+    <footer class="dashboard-footer">
+        <div class="contenedor">
+            <p>&copy; 2025 Figger Energy SAS - Sistema de Gestión de Usuarios</p>
+            <div class="footer-links">
+                <span id="total-usuarios">Total usuarios: --</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        /**
+         * JavaScript para gestión de usuarios
+         */
+        let currentPage = 1;
+        let totalPages = 1;
+        let currentFilters = {};
+        let allUsuarios = [];
+        let isEditing = false;
+        let editingId = null;
+        let resetUserId = null;
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('Inicializando gestión de usuarios...');
+
+            // Verificar autenticación y permisos
+            if (!window.authService?.isUserAuthenticated()) {
+                window.location.href = '../login.html';
+                return;
+            }
+
+            // Verificar permisos para gestionar usuarios
+            if (!window.authService.hasPermission('manage_users')) {
+                showMessage('No tiene permisos para gestionar usuarios', 'error');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Inicializar página
+            await initializeUsuariosPage();
+        });
+
+        /**
+         * Inicializar página de usuarios
+         */
+        async function initializeUsuariosPage() {
+            try {
+                // Cargar datos iniciales
+                await loadEmpleados();
+                await loadRoles();
+                await loadUsuarios();
+                
+                // Configurar eventos
+                setupEventListeners();
+                
+                console.log('Página de usuarios inicializada correctamente');
+            } catch (error) {
+                console.error('Error inicializando página de usuarios:', error);
+                showMessage('Error al cargar la página', 'error');
+            }
+        }
+
+        /**
+         * Cargar lista de usuarios
+         */
+        async function loadUsuarios() {
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const table = document.getElementById('usuarios-table');
+            const noDataMessage = document.getElementById('no-data-message');
+            
+            try {
+                loadingIndicator.style.display = 'flex';
+                table.style.display = 'none';
+                noDataMessage.style.display = 'none';
+
+                const response = await window.usuariosService.getAll(currentFilters);
+                
+                if (response.success) {
+                    allUsuarios = response.data;
+                    renderUsuarios(allUsuarios);
+                    updateTotalCount(response.count);
+                    
+                    if (allUsuarios.length === 0) {
+                        noDataMessage.style.display = 'block';
+                    } else {
+                        table.style.display = 'table';
+                    }
+                } else {
+                    throw new Error(response.message);
+                }
+            } catch (error) {
+                console.error('Error cargando usuarios:', error);
+                showMessage('Error al cargar usuarios', 'error');
+                noDataMessage.style.display = 'block';
+            } finally {
+                loadingIndicator.style.display = 'none';
+            }
+        }
+
+        /**
+         * Renderizar tabla de usuarios
+         */
+        function renderUsuarios(usuarios) {
+            const tbody = document.getElementById('usuarios-tbody');
+            
+            if (usuarios.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center">No se encontraron usuarios</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = usuarios.map(usuario => {
+                const empleadoInfo = usuario.empleado_nombre ? 
+                    `${usuario.empleado_nombre} (${usuario.empleado_documento})` : 
+                    'Sin empleado asignado';
+                    
+                const lastAccess = usuario.ultimo_acceso ? 
+                    new Date(usuario.ultimo_acceso).toLocaleDateString('es-ES') : 
+                    'Nunca';
+                
+                return `
+                    <tr data-id="${usuario.id_usuario}">
+                        <td>
+                            <div class="user-info">
+                                <strong>${usuario.username}</strong>
+                                <small>ID: ${usuario.id_usuario}</small>
+                            </div>
+                        </td>
+                        <td>${empleadoInfo}</td>
+                        <td>
+                            ${usuario.email ? 
+                                `<a href="mailto:${usuario.email}">${usuario.email}</a>` : 
+                                '<span class="text-muted">Sin email</span>'
+                            }
+                        </td>
+                        <td>
+                            <span class="role-badge role-${usuario.rol_nombre?.toLowerCase()}">${usuario.rol_nombre || 'Sin rol'}</span>
+                        </td>
+                        <td><span class="status-badge status-${usuario.estado}">${usuario.estado}</span></td>
+                        <td>${lastAccess}</td>
+                        <td class="actions-cell">
+                            <div class="action-buttons">
+                                <button class="btn-action btn-view" onclick="viewUsuario(${usuario.id_usuario})" title="Ver detalles">👁️</button>
+                                <button class="btn-action btn-edit" onclick="editUsuario(${usuario.id_usuario})" title="Editar">✏️</button>
+                                <button class="btn-action btn-reset" onclick="showResetPasswordModal(${usuario.id_usuario}, '${usuario.username}')" title="Resetear contraseña">🔑</button>
+                                <button class="btn-action btn-delete" onclick="deleteUsuario(${usuario.id_usuario})" title="Eliminar">🗑️</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        /**
+         * Cargar empleados para el formulario
+         */
+        async function loadEmpleados() {
+            try {
+                const response = await window.empleadosService.getForSelect();
+                
+                if (response.success) {
+                    const formSelect = document.getElementById('id_empleado');
+                    formSelect.innerHTML = '<option value="">Seleccionar empleado...</option>' +
+                        response.data.map(emp => `<option value="${emp.value}">${emp.label}</option>`).join('');
+                }
+            } catch (error) {
+                console.error('Error cargando empleados:', error);
+            }
+        }
+
+        /**
+         * Cargar roles para filtros y formulario
+         */
+        async function loadRoles() {
+            try {
+                const response = await window.rolesService.getForSelect();
+                
+                if (response.success) {
+                    const filterSelect = document.getElementById('filter-rol');
+                    const formSelect = document.getElementById('id_rol');
+                    
+                    // Llenar filtro
+                    filterSelect.innerHTML = '<option value="">Todos los roles</option>' +
+                        response.data.map(rol => `<option value="${rol.value}">${rol.label}</option>`).join('');
+                    
+                    // Llenar formulario
+                    formSelect.innerHTML = '<option value="">Seleccionar rol...</option>' +
+                        response.data.map(rol => `<option value="${rol.value}">${rol.label}</option>`).join('');
+                }
+            } catch (error) {
+                console.error('Error cargando roles:', error);
+            }
+        }
+
+        /**
+         * Configurar event listeners
+         */
+        function setupEventListeners() {
+            // Búsqueda
+            document.getElementById('search-usuarios').addEventListener('input', debounce(handleSearch, 300));
+            document.getElementById('search-btn').addEventListener('click', handleSearch);
+            
+            // Filtros
+            document.getElementById('filter-rol').addEventListener('change', handleFilterChange);
+            document.getElementById('filter-estado').addEventListener('change', handleFilterChange);
+            
+            // Botones principales
+            document.getElementById('refresh-btn').addEventListener('click', loadUsuarios);
+            document.getElementById('new-usuario-btn').addEventListener('click', showNewUsuarioModal);
+            
+            // Modal principal
+            document.getElementById('close-modal').addEventListener('click', closeModal);
+            document.getElementById('cancel-btn').addEventListener('click', closeModal);
+            document.getElementById('save-btn').addEventListener('click', saveUsuario);
+            document.getElementById('usuario-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveUsuario();
+            });
+            
+            // Modal de reset
+            document.getElementById('close-reset-modal').addEventListener('click', closeResetModal);
+            document.getElementById('cancel-reset-btn').addEventListener('click', closeResetModal);
+            document.getElementById('confirm-reset-btn').addEventListener('click', resetPassword);
+            
+            // Toggle contraseñas
+            document.getElementById('toggle-password').addEventListener('click', () => togglePasswordVisibility('password'));
+            document.getElementById('toggle-confirm-password').addEventListener('click', () => togglePasswordVisibility('confirm_password'));
+            document.getElementById('toggle-new-password').addEventListener('click', () => togglePasswordVisibility('new-password'));
+            
+            // Cerrar modales al hacer clic fuera
+            document.getElementById('usuario-modal').addEventListener('click', function(e) {
+                if (e.target === this) closeModal();
+            });
+            
+            document.getElementById('reset-password-modal').addEventListener('click', function(e) {
+                if (e.target === this) closeResetModal();
+            });
+        }
+
+        /**
+         * Manejar búsqueda
+         */
+        async function handleSearch() {
+            const query = document.getElementById('search-usuarios').value.trim();
+            
+            if (query.length === 0) {
+                await loadUsuarios();
+                return;
+            }
+            
+            try {
+                const response = await window.usuariosService.search(query);
+                
+                if (response.success) {
+                    renderUsuarios(response.data);
+                    updateTotalCount(response.count);
+                } else {
+                    throw new Error(response.message);
+                }
+            } catch (error) {
+                console.error('Error en búsqueda:', error);
+                showMessage('Error en la búsqueda', 'error');
+            }
+        }
+
+        /**
+         * Manejar cambios de filtro
+         */
+        function handleFilterChange() {
+            currentFilters = {
+                rol: document.getElementById('filter-rol').value,
+                estado: document.getElementById('filter-estado').value
+            };
+            
+            // Limpiar filtros vacíos
+            Object.keys(currentFilters).forEach(key => {
+                if (!currentFilters[key]) {
+                    delete currentFilters[key];
+                }
+            });
+            
+            loadUsuarios();
+        }
+
+        /**
+         * Mostrar modal para nuevo usuario
+         */
+        function showNewUsuarioModal() {
+            isEditing = false;
+            editingId = null;
+            
+            document.getElementById('modal-title').textContent = 'Nuevo Usuario';
+            document.getElementById('usuario-form').reset();
+            clearFormErrors();
+            
+            // Mostrar campos de contraseña
+            document.getElementById('password-group').style.display = 'block';
+            document.getElementById('confirm-password-group').style.display = 'block';
+            
+            // Estado activo por defecto
+            document.getElementById('estado').value = 'activo';
+            document.getElementById('puede_cambiar_password').checked = true;
+            
+            document.getElementById('usuario-modal').style.display = 'flex';
+            document.getElementById('id_empleado').focus();
+        }
+
+        /**
+         * Editar usuario
+         */
+        async function editUsuario(id) {
+            try {
+                const response = await window.usuariosService.getById(id);
+                
+                if (response.success) {
+                    isEditing = true;
+                    editingId = id;
+                    
+                    document.getElementById('modal-title').textContent = 'Editar Usuario';
+                    fillForm(response.data);
+                    clearFormErrors();
+                    
+                    // Ocultar campos de contraseña en edición
+                    document.getElementById('password-group').style.display = 'none';
+                    document.getElementById('confirm-password-group').style.display = 'none';
+                    
+                    document.getElementById('usuario-modal').style.display = 'flex';
+                    document.getElementById('username').focus();
+                } else {
+                    throw new Error(response.message);
+                }
+            } catch (error) {
+                console.error('Error cargando usuario:', error);
+                showMessage('Error al cargar usuario', 'error');
+            }
+        }
+
+        /**
+         * Ver detalles del usuario
+         */
+        function viewUsuario(id) {
+            editUsuario(id);
+            
+            // Deshabilitar campos
+            const inputs = document.querySelectorAll('#usuario-form input, #usuario-form select');
+            inputs.forEach(input => input.disabled = true);
+            
+            // Cambiar botones
+            document.getElementById('save-btn').style.display = 'none';
+            document.getElementById('cancel-btn').textContent = 'Cerrar';
+        }
+
+        /**
+         * Mostrar modal de reset de contraseña
+         */
+        function showResetPasswordModal(id, username) {
+            resetUserId = id;
+            document.getElementById('reset-username').textContent = username;
+            document.getElementById('new-password').value = '';
+            document.getElementById('reset-password-modal').style.display = 'flex';
+            document.getElementById('new-password').focus();
+        }
+
+        /**
+         * Resetear contraseña
+         */
+        async function resetPassword() {
+            const newPassword = document.getElementById('new-password').value;
+            
+            if (!newPassword || newPassword.length < 8) {
+                showMessage('La contraseña debe tener al menos 8 caracteres', 'error');
+                return;
+            }
+            
+            try {
+                const response = await window.usuariosService.resetPassword(resetUserId, newPassword);
+                
+                if (response.success) {
+                    showMessage('Contraseña reseteada exitosamente', 'success');
+                    closeResetModal();
+                    await loadUsuarios();
+                } else {
+                    showMessage(response.message || 'Error al resetear contraseña', 'error');
+                }
+            } catch (error) {
+                console.error('Error reseteando contraseña:', error);
+                showMessage('Error de conexión', 'error');
+            }
+        }
+
+        /**
+         * Eliminar usuario
+         */
+        async function deleteUsuario(id) {
+            const usuario = allUsuarios.find(u => u.id_usuario === id);
+            const username = usuario ? usuario.username : 'este usuario';
+            
+            if (!confirm(`¿Está seguro de que desea eliminar al usuario "${username}"?\n\nEsta acción no se puede deshacer.`)) {
+                return;
+            }
+            
+            try {
+                const response = await window.usuariosService.delete(id);
+                
+                if (response.success) {
+                    showMessage('Usuario eliminado exitosamente', 'success');
+                    await loadUsuarios();
+                } else {
+                    throw new Error(response.message);
+                }
+            } catch (error) {
+                console.error('Error eliminando usuario:', error);
+                showMessage('Error al eliminar usuario', 'error');
+            }
+        }
+
+        /**
+         * Guardar usuario
+         */
+        async function saveUsuario() {
+            const form = document.getElementById('usuario-form');
+            const formData = new FormData(form);
+            const usuarioData = Object.fromEntries(formData.entries());
+            
+            // Procesar checkboxes
+            usuarioData.puede_cambiar_password = document.getElementById('puede_cambiar_password').checked;
+            usuarioData.forzar_cambio_password = document.getElementById('forzar_cambio_password').checked;
+            usuarioData.acceso_multiple = document.getElementById('acceso_multiple').checked;
+            
+            // Validaciones del lado cliente
+            if (!isEditing) {
+                if (usuarioData.password !== usuarioData.confirm_password) {
+                    showFormErrors({ confirm_password: 'Las contraseñas no coinciden' });
+                    return;
+                }
+            }
+            
+            // Limpiar errores anteriores
+            clearFormErrors();
+            
+            // Mostrar estado de carga
+            setFormLoadingState(true);
+            
+            try {
+                let response;
+                
+                if (isEditing) {
+                    // Remover campos de contraseña si están vacíos
+                    delete usuarioData.password;
+                    delete usuarioData.confirm_password;
+                    response = await window.usuariosService.update(editingId, usuarioData);
+                } else {
+                    response = await window.usuariosService.create(usuarioData);
+                }
+                
+                if (response.success) {
+                    showMessage(
+                        isEditing ? 'Usuario actualizado exitosamente' : 'Usuario creado exitosamente', 
+                        'success'
+                    );
+                    closeModal();
+                    await loadUsuarios();
+                } else {
+                    if (response.errors) {
+                        showFormErrors(response.errors);
+                    } else {
+                        showMessage(response.message || 'Error al guardar usuario', 'error');
+                    }
+                }
+            } catch (error) {
+                console.error('Error guardando usuario:', error);
+                showMessage('Error de conexión', 'error');
+            } finally {
+                setFormLoadingState(false);
+            }
+        }
+
+        /**
+         * Llenar formulario con datos
+         */
+        function fillForm(usuario) {
+            Object.keys(usuario).forEach(key => {
+                const field = document.getElementById(key);
+                if (field) {
+                    if (field.type === 'checkbox') {
+                        field.checked = usuario[key];
+                    } else {
+                        field.value = usuario[key] || '';
+                    }
+                }
+            });
+        }
+
+        /**
+         * Toggle visibilidad de contraseña
+         */
+        function togglePasswordVisibility(fieldId) {
+            const field = document.getElementById(fieldId);
+            const button = document.getElementById(`toggle-${fieldId.replace('-', '_')}`);
+            
+            if (field.type === 'password') {
+                field.type = 'text';
+                button.textContent = '🙈';
+            } else {
+                field.type = 'password';
+                button.textContent = '👁️';
+            }
+        }
+
+        /**
+         * Cerrar modal principal
+         */
+        function closeModal() {
+            document.getElementById('usuario-modal').style.display = 'none';
+            
+            // Rehabilitar campos si estaban deshabilitados
+            const inputs = document.querySelectorAll('#usuario-form input, #usuario-form select');
+            inputs.forEach(input => input.disabled = false);
+            
+            // Restaurar botones
+            document.getElementById('save-btn').style.display = 'inline-block';
+            document.getElementById('cancel-btn').textContent = 'Cancelar';
+            
+            clearFormErrors();
+        }
+
+        /**
+         * Cerrar modal de reset
+         */
+        function closeResetModal() {
+            document.getElementById('reset-password-modal').style.display = 'none';
+            resetUserId = null;
+        }
+
+        /**
+         * Limpiar errores del formulario
+         */
+        function clearFormErrors() {
+            const errorElements = document.querySelectorAll('.field-error');
+            errorElements.forEach(el => {
+                el.textContent = '';
+                el.style.display = 'none';
+            });
+            
+            const inputs = document.querySelectorAll('#usuario-form input, #usuario-form select');
+            inputs.forEach(input => input.classList.remove('error'));
+        }
+
+        /**
+         * Mostrar errores del formulario
+         */
+        function showFormErrors(errors) {
+            Object.keys(errors).forEach(fieldName => {
+                const errorElement = document.getElementById(`${fieldName}-error`);
+                const fieldElement = document.getElementById(fieldName);
+                
+                if (errorElement && fieldElement) {
+                    errorElement.textContent = errors[fieldName];
+                    errorElement.style.display = 'block';
+                    fieldElement.classList.add('error');
+                }
+            });
+        }
+
+        /**
+         * Controlar estado de carga del formulario
+         */
+        function setFormLoadingState(loading) {
+            const saveBtn = document.getElementById('save-btn');
+            const btnText = saveBtn.querySelector('.btn-text');
+            const btnLoading = saveBtn.querySelector('.btn-loading');
+            
+            if (loading) {
+                saveBtn.disabled = true;
+                btnText.style.display = 'none';
+                btnLoading.style.display = 'inline';
+            } else {
+                saveBtn.disabled = false;
+                btnText.style.display = 'inline';
+                btnLoading.style.display = 'none';
+            }
+        }
+
+        /**
+         * Actualizar conteo total
+         */
+        function updateTotalCount(count) {
+            document.getElementById('total-usuarios').textContent = `Total usuarios: ${count}`;
+        }
+
+        /**
+         * Debounce function
+         */
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        /**
+         * Mostrar mensaje temporal
+         */
+        function showMessage(message, type = 'info') {
+            // Crear elemento de mensaje si no existe
+            let messageContainer = document.getElementById('temp-message');
+            if (!messageContainer) {
+                messageContainer = document.createElement('div');
+                messageContainer.id = 'temp-message';
+                messageContainer.className = 'temp-message';
+                document.body.appendChild(messageContainer);
+            }
+
+            // Configurar mensaje
+            messageContainer.textContent = message;
+            messageContainer.className = `temp-message temp-message-${type} show`;
+
+            // Ocultar después de 3 segundos
+            setTimeout(() => {
+                messageContainer.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+
+    <style>
+        /* Estilos específicos para la página de usuarios */
+        .user-info strong {
+            display: block;
+            color: #00488a;
+        }
+
+        .user-info small {
+            color: #666;
+            font-size: 0.8em;
+        }
+
+        .role-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .role-admin {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .role-empleado {
+            background: #4ecdc4;
+            color: white;
+        }
+
+        .role-auditor {
+            background: #ffe66d;
+            color: #333;
+        }
+
+        .password-input-container {
+            position: relative;
+            display: flex;
+        }
+
+        .password-input-container input {
+            flex: 1;
+            padding-right: 45px;
+        }
+
+        .btn-toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2em;
+            z-index: 2;
+        }
+
+        .btn-toggle-password:hover {
+            opacity: 0.7;
+        }
+
+        .form-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e1e5e9;
+        }
+
+        .form-section.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-section h4 {
+            margin: 0 0 15px 0;
+            color: #00488a;
+            font-size: 1.1em;
+        }
+
+        .permissions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .field-help {
+            display: block;
+            margin-top: 5px;
+            font-size: 0.8em;
+            color: #666;
+            font-style: italic;
+        }
+
+        .modal-small .modal-content {
+            max-width: 400px;
+        }
+
+        .btn-reset {
+            background: #ff9500;
+            color: white;
+        }
+
+        .btn-reset:hover {
+            background: #e68a00;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        @media (max-width: 768px) {
+            .permissions-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</body>
+</html>

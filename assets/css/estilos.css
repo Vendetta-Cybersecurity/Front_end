@@ -127,6 +127,31 @@ body {
     background-color: #c82333 !important;
 }
 
+/* Estilos para usuario autenticado */
+.user-authenticated {
+    background-color: var(--color-acento) !important;
+    color: var(--color-texto) !important;
+    font-weight: bold;
+}
+
+.user-authenticated:hover {
+    background-color: #8bb03f !important;
+}
+
+.btn-logout-nav {
+    background-color: var(--color-error) !important;
+    color: var(--color-blanco) !important;
+    text-decoration: none;
+    padding: 0.3rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn-logout-nav:hover {
+    background-color: #c82333 !important;
+}
+
 .usuario-info {
     display: flex;
     flex-direction: column;

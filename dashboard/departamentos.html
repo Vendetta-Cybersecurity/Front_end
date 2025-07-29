@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Departamentos - Figger Energy SAS</title>
+    <meta name="description" content="Gestión de departamentos - Sistema interno Figger Energy SAS">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/estilos.css">
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="../assets/images/favicon.ico" type="image/x-icon">
+    
+    <!-- Scripts API -->
+    <script src="../assets/js/config/api-config.js"></script>
+    <script src="../assets/js/api/api-client.js"></script>
+    <script src="../assets/js/auth/auth-service.js"></script>
+    <script src="../assets/js/auth/auth-middleware.js"></script>
+    <script src="../assets/js/auth/init-auth.js"></script>
+    <script src="../assets/js/services/departamentos-service.js"></script>
+</head>
+<body class="dashboard-body">
+    <!-- Header del Dashboard -->
+    <header class="dashboard-header">
+        <div class="contenedor">
+            <div class="header-content">
+                <div class="logo-area">
+                    <a href="../index.html" class="logo-enlace">
+                        <img src="../assets/images/logo.png" alt="Logo Figger Energy SAS" class="logo" onerror="this.style.display='none';">
+                        <div class="logo-texto">
+                            <h1>Figger Energy SAS</h1>
+                            <p>Gestión de Departamentos</p>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="header-actions">
+                    <div id="user-info" class="user-info"></div>
+                    <div class="header-buttons">
+                        <button id="logout-btn" class="btn-logout" onclick="window.authMiddleware.logout()">
+                            Cerrar Sesión
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navegación del Dashboard -->
+    <nav class="dashboard-nav">
+        <div class="contenedor">
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">📊 Dashboard</a></li>
+                <li><a href="empleados.html" class="nav-link">👥 Empleados</a></li>
+                <li><a href="departamentos.html" class="nav-link active" data-permission="manage_departments">🏢 Departamentos</a></li>
+                <li><a href="usuarios.html" class="nav-link" data-permission="manage_users">🔐 Usuarios</a></li>
+                <li><a href="reportes.html" class="nav-link">📈 Reportes</a></li>
+                <li><a href="configuracion.html" class="nav-link" data-role="admin">⚙️ Configuración</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <main class="dashboard-main">
+        <div class="contenedor">
+            <!-- Header de sección -->
+            <div class="section-header">
+                <h2>Gestión de Departamentos</h2>
+                <p>Administre los departamentos organizacionales</p>
+            </div>
+
+            <!-- Controles superiores -->
+            <div class="page-controls">
+                <div class="controls-left">
+                    <div class="search-box">
+                        <input type="text" id="search-departamentos" placeholder="Buscar departamentos..." class="search-input">
+                        <button id="search-btn" class="btn-icon">🔍</button>
+                    </div>
+                </div>
+                <div class="controls-right">
+                    <button id="refresh-btn" class="btn-secondary">🔄 Actualizar</button>
+                    <button id="new-departamento-btn" class="btn-primary" data-permission="write">➕ Nuevo Departamento</button>
+                </div>
+            </div>
+
+            <!-- Cards de departamentos -->
+            <div id="loading-indicator" class="loading-indicator">
+                <div class="loading-spinner"></div>
+                <p>Cargando departamentos...</p>
+            </div>
+            
+            <div id="departamentos-grid" class="department-grid" style="display: none;">
+                <!-- Los cards se cargarán dinámicamente -->
+            </div>
+            
+            <div id="no-data-message" class="no-data-message" style="display: none;">
+                <div class="no-data-icon">🏢</div>
+                <h3>No se encontraron departamentos</h3>
+                <p>No hay departamentos registrados en el sistema.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal para departamento -->
+    <div id="departamento-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Nuevo Departamento</h3>
+                <button id="close-modal" class="btn-close">✕</button>
+            </div>
+            <div class="modal-body">
+                <form id="departamento-form">
+                    <div class="form-group">
+                        <label for="nombre">Nombre del Departamento *</label>
+                        <input type="text" id="nombre" name="nombre" required placeholder="Ej: Recursos Humanos">
+                        <div class="field-error" id="nombre-error"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="descripcion">Descripción</label>
+                        <textarea id="descripcion" name="descripcion" rows="3" placeholder="Descripción del departamento y sus funciones..."></textarea>
+                        <div class="field-error" id="descripcion-error"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ubicacion">Ubicación</label>
+                        <input type="text" id="ubicacion" name="ubicacion" placeholder="Ej: Piso 2, Oficina 201">
+                        <div class="field-error" id="ubicacion-error"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="telefono_extension">Extensión Telefónica</label>
+                        <input type="text" id="telefono_extension" name="telefono_extension" placeholder="Ej: 2201">
+                        <div class="field-error" id="telefono_extension-error"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email_contacto">Email de Contacto</label>
+                        <input type="email" id="email_contacto" name="email_contacto" placeholder="departamento@figgereergy.com">
+                        <div class="field-error" id="email_contacto-error"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="estado">Estado</label>
+                        <select id="estado" name="estado">
+                            <option value="activo">Activo</option>
+                            <option value="inactivo">Inactivo</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel-btn" class="btn-secondary">Cancelar</button>
+                <button id="save-btn" class="btn-primary">
+                    <span class="btn-text">Guardar</span>
+                    <span class="btn-loading" style="display: none;">🔄 Guardando...</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer del Dashboard -->
+    <footer class="dashboard-footer">
+        <div class="contenedor">
+            <p>&copy; 2025 Figger Energy SAS - Sistema de Gestión de Departamentos</p>
+            <div class="footer-links">
+                <span id="total-departamentos">Total departamentos: --</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        /**
+         * JavaScript para gestión de departamentos
+         */
+        let allDepartamentos = [];
+        let isEditing = false;
+        let editingId = null;
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('Inicializando gestión de departamentos...');
+
+            // Verificar autenticación y permisos
+            if (!window.authService?.isUserAuthenticated()) {
+                window.location.href = '../login.html';
+                return;
+            }
+
+            // Verificar permisos para gestionar departamentos
+            if (!window.authService.hasPermission('manage_departments')) {
+                showMessage('No tiene permisos para gestionar departamentos', 'error');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Inicializar página
+            await initializeDepartamentosPage();
+        });
+
+        /**
+         * Inicializar página de departamentos
+         */
+        async function initializeDepartamentosPage() {
+            try {
+                // Cargar datos
+                await loadDepartamentos();
+                
+                // Configurar eventos
+                setupEventListeners();
+                
+                console.log('Página de departamentos inicializada correctamente');
+            } catch (error) {
+                console.error('Error inicializando página de departamentos:', error);
+                showMessage('Error al cargar la página', 'error');
+            }
+        }
+
+        /**
+         * Cargar departamentos
+         */
+        async function loadDepartamentos() {
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const grid = document.getElementById('departamentos-grid');
+            const noDataMessage = document.getElementById('no-data-message');
+            
+            try {
+                loadingIndicator.style.display = 'flex';
+                grid.style.display = 'none';
+                noDataMessage.style.display = 'none';
+
+                const response = await window.departamentosService.getAll();
+                
+                if (response.success) {
+                    allDepartamentos = response.data;
+                    renderDepartamentos(allDepartamentos);
+                    updateTotalCount(response.count);
+                    
+                    if (allDepartamentos.length === 0) {
+                        noDataMessage.style.display = 'block';
+                    } else {
+                        grid.style.display = 'grid';
+                    }
+                } else {
+                    throw new Error(response.message);
+                }
+            } catch (error) {
+                console.error('Error cargando departamentos:', error);
+                showMessage('Error al cargar departamentos', 'error');
+                noDataMessage.style.display = 'block';
+            } finally {
+                loadingIndicator.style.display = 'none';
+            }
+        }
+
+        /**
+         * Renderizar grid de departamentos
+         */
+        function renderDepartamentos(departamentos) {
+            const grid = document.getElementById('departamentos-grid');
+            
+            if (departamentos.length === 0) {
+                grid.innerHTML = '';
+                return;
+            }
+
+            grid.innerHTML = departamentos.map(dept => {
+                return `
+                    <div class="department-card" data-id="${dept.id_departamento}">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <h3>${dept.nombre}</h3>
+                                <span class="status-badge status-${dept.estado}">${dept.estado}</span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn-action btn-edit" onclick="editDepartamento(${dept.id_departamento})" title="Editar">✏️</button>
+                                <button class="btn-action btn-delete" onclick="deleteDepartamento(${dept.id_departamento})" title="Eliminar">🗑️</button>
+                            </div>
+                        </div>
+                        
+                        <div class="card-body">
+                            <div class="card-info">
+                                ${dept.descripcion ? `<p class="description">${dept.descripcion}</p>` : ''}
+                                
+                                <div class="info-grid">
+                                    ${dept.ubicacion ? `
+                                        <div class="info-item">
+                                            <span class="info-icon">📍</span>
+                                            <span class="info-text">${dept.ubicacion}</span>
+                                        </div>
+                                    ` : ''}
+                                    
+                                    ${dept.telefono_extension ? `
+                                        <div class="info-item">
+                                            <span class="info-icon">📞</span>
+                                            <span class="info-text">Ext. ${dept.telefono_extension}</span>
+                                        </div>
+                                    ` : ''}
+                                    
+                                    ${dept.email_contacto ? `
+                                        <div class="info-item">
+                                            <span class="info-icon">📧</span>
+                                            <span class="info-text">${dept.email_contacto}</span>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                            
+                            <div class="card-stats">
+                                <div class="stat-item">
+                                    <span class="stat-number">${dept.total_empleados || 0}</span>
+                                    <span class="stat-label">Empleados</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-number">${dept.empleados_activos || 0}</span>
+                                    <span class="stat-label">Activos</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card-footer">
+                            <small class="text-muted">
+                                Creado: ${new Date(dept.fecha_creacion).toLocaleDateString('es-ES')}
+                                ${dept.fecha_actualizacion ? ` | Actualizado: ${new Date(dept.fecha_actualizacion).toLocaleDateString('es-ES')}` : ''}
+                            </small>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        /**
+         * Configurar event listeners
+         */
+        function setupEventListeners() {
+            // Búsqueda
+            document.getElementById('search-departamentos').addEventListener('input', debounce(handleSearch, 300));
+            document.getElementById('search-btn').addEventListener('click', handleSearch);
+            
+            // Botones principales
+            document.getElementById('refresh-btn').addEventListener('click', loadDepartamentos);
+            document.getElementById('new-departamento-btn').addEventListener('click', showNewDepartamentoModal);
+            
+            // Modal
+            document.getElementById('close-modal').addEventListener('click', closeModal);
+            document.getElementById('cancel-btn').addEventListener('click', closeModal);
+            document.getElementById('save-btn').addEventListener('click', saveDepartamento);
+            document.getElementById('departamento-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveDepartamento();
+            });
+            
+            // Cerrar modal al hacer clic fuera
+            document.getElementById('departamento-modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+        }
+
+        /**
+         * Manejar búsqueda
+         */
+        async function handleSearch() {
+            const query = document.getElementById('search-departamentos').value.trim().toLowerCase();
+            
+            if (query.length === 0) {
+                renderDepartamentos(allDepartamentos);
+                return;
+            }
+            
+            const filteredDepartamentos = allDepartamentos.filter(dept => 
+                dept.nombre.toLowerCase().includes(query) ||
+                (dept.descripcion && dept.descripcion.toLowerCase().includes(query)) ||
+                (dept.ubicacion && dept.ubicacion.toLowerCase().includes(query))
+            );
+            
+            renderDepartamentos(filteredDepartamentos);
+            updateTotalCount(filteredDepartamentos.length);
+        }
+
+        /**
+         * Mostrar modal para nuevo departamento
+         */
+        function showNewDepartamentoModal() {
+            isEditing = false;
+            editingId = null;
+            
+            document.getElementById('modal-title').textContent = 'Nuevo Departamento';
+            document.getElementById('departamento-form').reset();
+            clearFormErrors();
+            
+            // Estado activo por defecto
+            document.getElementById('estado').value = 'activo';
+            
+            document.getElementById('departamento-modal').style.display = 'flex';
+            document.getElementById('nombre').focus();
+        }
+
+        /**
+         * Editar departamento
+         */
+        async function editDepartamento(id) {
+            try {
+                const response = await window.departamentosService.getById(id);
+                
+                if (response.success) {
+                    isEditing = true;
+                    editingId = id;
+                    
+                    document.getElementById('modal-title').textContent = 'Editar Departamento';
+                    fillForm(response.data);
+                    clearFormErrors();
+                    
+                    document.getElementById('departamento-modal').style.display = 'flex';
+                    document.getElementById('nombre').focus();
+                } else {
+                    throw new Error(response.message);
+                }
+            } catch (error) {
+                console.error('Error cargando departamento:', error);
+                showMessage('Error al cargar departamento', 'error');
+            }
+        }
+
+        /**
+         * Eliminar departamento
+         */
+        async function deleteDepartamento(id) {
+            // Encontrar el departamento para mostrar su nombre
+            const departamento = allDepartamentos.find(d => d.id_departamento === id);
+            const nombreDept = departamento ? departamento.nombre : 'este departamento';
+            
+            if (!confirm(`¿Está seguro de que desea eliminar el departamento "${nombreDept}"?\n\nEsta acción no se puede deshacer.`)) {
+                return;
+            }
+            
+            try {
+                const response = await window.departamentosService.delete(id);
+                
+                if (response.success) {
+                    showMessage('Departamento eliminado exitosamente', 'success');
+                    await loadDepartamentos();
+                } else {
+                    throw new Error(response.message);
+                }
+            } catch (error) {
+                console.error('Error eliminando departamento:', error);
+                showMessage('Error al eliminar departamento', 'error');
+            }
+        }
+
+        /**
+         * Guardar departamento
+         */
+        async function saveDepartamento() {
+            const form = document.getElementById('departamento-form');
+            const formData = new FormData(form);
+            const departamentoData = Object.fromEntries(formData.entries());
+            
+            // Limpiar errores anteriores
+            clearFormErrors();
+            
+            // Validación básica del lado cliente
+            if (!departamentoData.nombre?.trim()) {
+                showFormErrors({ nombre: 'El nombre es requerido' });
+                return;
+            }
+            
+            // Mostrar estado de carga
+            setFormLoadingState(true);
+            
+            try {
+                let response;
+                
+                if (isEditing) {
+                    response = await window.departamentosService.update(editingId, departamentoData);
+                } else {
+                    response = await window.departamentosService.create(departamentoData);
+                }
+                
+                if (response.success) {
+                    showMessage(
+                        isEditing ? 'Departamento actualizado exitosamente' : 'Departamento creado exitosamente', 
+                        'success'
+                    );
+                    closeModal();
+                    await loadDepartamentos();
+                } else {
+                    if (response.errors) {
+                        showFormErrors(response.errors);
+                    } else {
+                        showMessage(response.message || 'Error al guardar departamento', 'error');
+                    }
+                }
+            } catch (error) {
+                console.error('Error guardando departamento:', error);
+                showMessage('Error de conexión', 'error');
+            } finally {
+                setFormLoadingState(false);
+            }
+        }
+
+        /**
+         * Llenar formulario con datos
+         */
+        function fillForm(departamento) {
+            Object.keys(departamento).forEach(key => {
+                const field = document.getElementById(key);
+                if (field) {
+                    field.value = departamento[key] || '';
+                }
+            });
+        }
+
+        /**
+         * Cerrar modal
+         */
+        function closeModal() {
+            document.getElementById('departamento-modal').style.display = 'none';
+            clearFormErrors();
+        }
+
+        /**
+         * Limpiar errores del formulario
+         */
+        function clearFormErrors() {
+            const errorElements = document.querySelectorAll('.field-error');
+            errorElements.forEach(el => {
+                el.textContent = '';
+                el.style.display = 'none';
+            });
+            
+            const inputs = document.querySelectorAll('#departamento-form input, #departamento-form select, #departamento-form textarea');
+            inputs.forEach(input => input.classList.remove('error'));
+        }
+
+        /**
+         * Mostrar errores del formulario
+         */
+        function showFormErrors(errors) {
+            Object.keys(errors).forEach(fieldName => {
+                const errorElement = document.getElementById(`${fieldName}-error`);
+                const fieldElement = document.getElementById(fieldName);
+                
+                if (errorElement && fieldElement) {
+                    errorElement.textContent = errors[fieldName];
+                    errorElement.style.display = 'block';
+                    fieldElement.classList.add('error');
+                }
+            });
+        }
+
+        /**
+         * Controlar estado de carga del formulario
+         */
+        function setFormLoadingState(loading) {
+            const saveBtn = document.getElementById('save-btn');
+            const btnText = saveBtn.querySelector('.btn-text');
+            const btnLoading = saveBtn.querySelector('.btn-loading');
+            const formInputs = document.querySelectorAll('#departamento-form input, #departamento-form select, #departamento-form textarea');
+            
+            if (loading) {
+                saveBtn.disabled = true;
+                btnText.style.display = 'none';
+                btnLoading.style.display = 'inline';
+                formInputs.forEach(input => input.disabled = true);
+            } else {
+                saveBtn.disabled = false;
+                btnText.style.display = 'inline';
+                btnLoading.style.display = 'none';
+                formInputs.forEach(input => input.disabled = false);
+            }
+        }
+
+        /**
+         * Actualizar conteo total
+         */
+        function updateTotalCount(count) {
+            document.getElementById('total-departamentos').textContent = `Total departamentos: ${count}`;
+        }
+
+        /**
+         * Debounce function
+         */
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        /**
+         * Mostrar mensaje temporal
+         */
+        function showMessage(message, type = 'info') {
+            // Crear elemento de mensaje si no existe
+            let messageContainer = document.getElementById('temp-message');
+            if (!messageContainer) {
+                messageContainer = document.createElement('div');
+                messageContainer.id = 'temp-message';
+                messageContainer.className = 'temp-message';
+                document.body.appendChild(messageContainer);
+            }
+
+            // Configurar mensaje
+            messageContainer.textContent = message;
+            messageContainer.className = `temp-message temp-message-${type} show`;
+
+            // Ocultar después de 3 segundos
+            setTimeout(() => {
+                messageContainer.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+
+    <style>
+        /* Estilos específicos para la página de departamentos */
+        .department-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .department-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 72, 138, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid #e1e5e9;
+        }
+
+        .department-card:hover {
+            box-shadow: 0 4px 16px rgba(0, 72, 138, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            padding: 20px 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .card-title h3 {
+            margin: 0 0 8px 0;
+            color: #00488a;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .card-body {
+            padding: 15px 20px;
+        }
+
+        .description {
+            color: #666;
+            font-size: 0.9em;
+            line-height: 1.4;
+            margin: 0 0 15px 0;
+        }
+
+        .info-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+        }
+
+        .info-icon {
+            font-size: 1em;
+            width: 16px;
+            text-align: center;
+        }
+
+        .info-text {
+            color: #666;
+        }
+
+        .card-stats {
+            display: flex;
+            gap: 20px;
+            padding: 15px 0;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #00488a;
+        }
+
+        .stat-label {
+            font-size: 0.8em;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        .card-footer {
+            padding: 0 20px 20px;
+            border-top: 1px solid #f0f0f0;
+            padding-top: 15px;
+        }
+
+        .text-muted {
+            color: #999;
+            font-size: 0.8em;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .department-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .card-actions {
+                align-self: flex-end;
+            }
+        }
+    </style>
+</body>
+</html>

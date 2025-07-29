@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Figger Energy SAS</title>
+    <meta name="description" content="Dashboard interno de Figger Energy SAS">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/estilos.css">
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="../assets/images/favicon.ico" type="image/x-icon">
+    
+    <!-- Scripts API -->
+    <script src="../assets/js/config/api-config.js"></script>
+    <script src="../assets/js/api/api-client.js"></script>
+    <script src="../assets/js/auth/auth-service.js"></script>
+    <script src="../assets/js/auth/auth-middleware.js"></script>
+    <script src="../assets/js/auth/init-auth.js"></script>
+    <script src="../assets/js/services/empleados-service.js"></script>
+    <script src="../assets/js/services/departamentos-service.js"></script>
+    <script src="../assets/js/services/estadisticas-service.js"></script>
+    <script src="../assets/js/services/notificaciones-service.js"></script>
+</head>
+<body class="dashboard-body">
+    <!-- Header del Dashboard -->
+    <header class="dashboard-header">
+        <div class="contenedor">
+            <div class="header-content">
+                <div class="logo-area">
+                    <a href="../index.html" class="logo-enlace">
+                        <img src="../assets/images/logo.png" alt="Logo Figger Energy SAS" class="logo" onerror="this.style.display='none';">
+                        <div class="logo-texto">
+                            <h1>Figger Energy SAS</h1>
+                            <p>Sistema de Gestión Interno</p>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="header-actions">
+                    <div id="user-info" class="user-info"></div>
+                    <div class="header-buttons">
+                        <button id="notifications-btn" class="btn-icon" title="Notificaciones">
+                            🔔 <span id="notification-count" class="notification-badge">0</span>
+                        </button>
+                        <button id="logout-btn" class="btn-logout" onclick="window.authMiddleware.logout()">
+                            Cerrar Sesión
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Dropdown de notificaciones -->
+        <div id="notifications-dropdown" class="notifications-dropdown" style="display: none;">
+            <div class="notifications-header">
+                <h4>Notificaciones</h4>
+                <button id="mark-all-read" class="btn-text">Marcar todas leídas</button>
+            </div>
+            <div id="notifications-list" class="notifications-list">
+                <p>Cargando notificaciones...</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navegación del Dashboard -->
+    <nav class="dashboard-nav">
+        <div class="contenedor">
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link active">📊 Dashboard</a></li>
+                <li><a href="empleados.html" class="nav-link" data-permission="read">👥 Empleados</a></li>
+                <li><a href="departamentos.html" class="nav-link" data-permission="manage_departments">🏢 Departamentos</a></li>
+                <li><a href="usuarios.html" class="nav-link" data-permission="manage_users">🔐 Usuarios</a></li>
+                <li><a href="reportes.html" class="nav-link" data-permission="view_reports">📈 Reportes</a></li>
+                <li><a href="configuracion.html" class="nav-link" data-role="admin">⚙️ Configuración</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <main class="dashboard-main">
+        <div class="contenedor">
+            <!-- Header de sección -->
+            <div class="section-header">
+                <h2>Panel de Control</h2>
+                <p>Resumen general del sistema Figger Energy SAS</p>
+            </div>
+
+            <!-- Estadísticas principales -->
+            <section class="stats-section">
+                <div class="stats-grid" id="stats-grid">
+                    <div class="stat-card loading">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-content">
+                            <h3>Cargando...</h3>
+                            <p>Estadísticas</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Gráficos y reportes -->
+            <section class="charts-section">
+                <div class="grid-2">
+                    <!-- Gráfico de departamentos -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>📈 Empleados por Departamento</h3>
+                            <button id="refresh-dept-chart" class="btn-icon" title="Actualizar">🔄</button>
+                        </div>
+                        <div class="card-content">
+                            <canvas id="departamentos-chart" width="400" height="300"></canvas>
+                            <div id="departamentos-chart-loading" class="chart-loading">Cargando datos...</div>
+                        </div>
+                    </div>
+
+                    <!-- Actividad reciente -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>📋 Actividad Reciente</h3>
+                            <button id="refresh-activity" class="btn-icon" title="Actualizar">🔄</button>
+                        </div>
+                        <div class="card-content">
+                            <div id="recent-activity" class="activity-list">
+                                <div class="activity-item">
+                                    <div class="activity-icon">🔄</div>
+                                    <div class="activity-content">
+                                        <p>Cargando actividad reciente...</p>
+                                        <small>Sistema</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Enlaces rápidos -->
+            <section class="quick-actions">
+                <h3>Acciones Rápidas</h3>
+                <div class="actions-grid">
+                    <a href="empleados.html?action=create" class="action-card" data-permission="write">
+                        <div class="action-icon">➕</div>
+                        <div class="action-content">
+                            <h4>Nuevo Empleado</h4>
+                            <p>Registrar nuevo empleado en el sistema</p>
+                        </div>
+                    </a>
+                    
+                    <a href="departamentos.html?action=create" class="action-card" data-permission="manage_departments">
+                        <div class="action-icon">🏢</div>
+                        <div class="action-content">
+                            <h4>Nuevo Departamento</h4>
+                            <p>Crear departamento organizacional</p>
+                        </div>
+                    </a>
+                    
+                    <a href="reportes.html" class="action-card" data-permission="view_reports">
+                        <div class="action-icon">📊</div>
+                        <div class="action-content">
+                            <h4>Generar Reporte</h4>
+                            <p>Crear reportes personalizados</p>
+                        </div>
+                    </a>
+                    
+                    <a href="../reports.html" class="action-card">
+                        <div class="action-icon">🌐</div>
+                        <div class="action-content">
+                            <h4>Sitio Público</h4>
+                            <p>Ver página pública del sitio</p>
+                        </div>
+                    </a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer del Dashboard -->
+    <footer class="dashboard-footer">
+        <div class="contenedor">
+            <p>&copy; 2025 Figger Energy SAS - Sistema de Gestión Interno</p>
+            <div class="footer-links">
+                <span id="last-update">Última actualización: --</span>
+                <span id="connection-status" class="status-indicator">🟢 Conectado</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        /**
+         * JavaScript específico del Dashboard
+         */
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('Inicializando dashboard...');
+
+            // Verificar autenticación
+            if (!window.authService?.isUserAuthenticated()) {
+                console.warn('Usuario no autenticado, redirigiendo...');
+                window.location.href = '../login.html';
+                return;
+            }
+
+            // Inicializar dashboard
+            await initializeDashboard();
+        });
+
+        /**
+         * Inicializar el dashboard
+         */
+        async function initializeDashboard() {
+            try {
+                // Cargar estadísticas
+                await loadStats();
+                
+                // Cargar gráficos
+                await loadCharts();
+                
+                // Cargar actividad reciente
+                await loadRecentActivity();
+                
+                // Configurar eventos
+                setupEventListeners();
+                
+                // Configurar actualización automática
+                setupAutoRefresh();
+                
+                console.log('Dashboard inicializado correctamente');
+            } catch (error) {
+                console.error('Error inicializando dashboard:', error);
+                showMessage('Error al cargar el dashboard', 'error');
+            }
+        }
+
+        /**
+         * Cargar estadísticas principales
+         */
+        async function loadStats() {
+            const statsGrid = document.getElementById('stats-grid');
+            
+            try {
+                const response = await window.estadisticasService.getGenerales();
+                
+                if (response.success) {
+                    const formattedStats = window.estadisticasService.formatStatsForDashboard(response.data);
+                    
+                    statsGrid.innerHTML = formattedStats.map(stat => `
+                        <div class="stat-card" style="border-left-color: var(--color-${stat.color})">
+                            <div class="stat-icon">${stat.icon}</div>
+                            <div class="stat-content">
+                                <h3>${stat.value}</h3>
+                                <p>${stat.title}</p>
+                                <small>${stat.description}</small>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    throw new Error(response.message);
+                }
+            } catch (error) {
+                console.error('Error cargando estadísticas:', error);
+                statsGrid.innerHTML = `
+                    <div class="stat-card error">
+                        <div class="stat-icon">❌</div>
+                        <div class="stat-content">
+                            <h3>Error</h3>
+                            <p>No se pudieron cargar las estadísticas</p>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        /**
+         * Cargar gráficos
+         */
+        async function loadCharts() {
+            const chartContainer = document.getElementById('departamentos-chart');
+            const loadingIndicator = document.getElementById('departamentos-chart-loading');
+            
+            try {
+                const response = await window.estadisticasService.getDepartamentos();
+                
+                if (response.success && response.data.length > 0) {
+                    // Simular gráfico con datos textuales (sin usar librerías de gráficos)
+                    const maxValue = Math.max(...response.data.map(d => d.total_empleados || 0));
+                    
+                    chartContainer.style.display = 'none';
+                    loadingIndicator.innerHTML = `
+                        <div class="simple-chart">
+                            ${response.data.map(dept => `
+                                <div class="chart-bar">
+                                    <div class="bar-label">${dept.nombre}</div>
+                                    <div class="bar-container">
+                                        <div class="bar-fill" style="width: ${((dept.total_empleados || 0) / maxValue) * 100}%">
+                                            <span class="bar-value">${dept.total_empleados || 0}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                } else {
+                    throw new Error('No hay datos de departamentos');
+                }
+            } catch (error) {
+                console.error('Error cargando gráfico:', error);
+                loadingIndicator.innerHTML = '<p class="error-message">❌ Error cargando gráfico</p>';
+            }
+        }
+
+        /**
+         * Cargar actividad reciente
+         */
+        async function loadRecentActivity() {
+            const activityContainer = document.getElementById('recent-activity');
+            
+            try {
+                // Simular actividad reciente
+                const activities = [
+                    {
+                        icon: '👤',
+                        message: 'Nuevo empleado registrado',
+                        time: 'Hace 15 minutos',
+                        user: 'Sistema'
+                    },
+                    {
+                        icon: '📊',
+                        message: 'Reporte mensual generado',
+                        time: 'Hace 1 hora',
+                        user: 'Admin'
+                    },
+                    {
+                        icon: '🔐',
+                        message: 'Usuario iniciado sesión',
+                        time: 'Hace 2 horas',
+                        user: window.authService.getCurrentUser()?.username || 'Usuario'
+                    },
+                    {
+                        icon: '⚙️',
+                        message: 'Configuración actualizada',
+                        time: 'Hace 3 horas',
+                        user: 'Admin'
+                    }
+                ];
+
+                activityContainer.innerHTML = activities.map(activity => `
+                    <div class="activity-item">
+                        <div class="activity-icon">${activity.icon}</div>
+                        <div class="activity-content">
+                            <p>${activity.message}</p>
+                            <small>${activity.time} • ${activity.user}</small>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error cargando actividad:', error);
+                activityContainer.innerHTML = '<p class="error-message">❌ Error cargando actividad</p>';
+            }
+        }
+
+        /**
+         * Configurar event listeners
+         */
+        function setupEventListeners() {
+            // Botón de actualizar gráfico de departamentos
+            document.getElementById('refresh-dept-chart')?.addEventListener('click', loadCharts);
+            
+            // Botón de actualizar actividad
+            document.getElementById('refresh-activity')?.addEventListener('click', loadRecentActivity);
+            
+            // Botón de notificaciones
+            document.getElementById('notifications-btn')?.addEventListener('click', function() {
+                window.authMiddleware?.toggleNotifications();
+            });
+            
+            // Marcar todas las notificaciones como leídas
+            document.getElementById('mark-all-read')?.addEventListener('click', function() {
+                window.authMiddleware?.markAllNotificationsRead();
+            });
+            
+            // Cerrar dropdown de notificaciones al hacer clic fuera
+            document.addEventListener('click', function(event) {
+                const dropdown = document.getElementById('notifications-dropdown');
+                const btn = document.getElementById('notifications-btn');
+                
+                if (dropdown && !dropdown.contains(event.target) && !btn.contains(event.target)) {
+                    dropdown.style.display = 'none';
+                }
+            });
+        }
+
+        /**
+         * Configurar actualización automática
+         */
+        function setupAutoRefresh() {
+            // Actualizar cada 5 minutos
+            setInterval(async () => {
+                console.log('Actualizando datos automáticamente...');
+                await loadStats();
+                updateLastUpdateTime();
+            }, 5 * 60 * 1000);
+            
+            // Actualizar tiempo inicial
+            updateLastUpdateTime();
+        }
+
+        /**
+         * Actualizar tiempo de última actualización
+         */
+        function updateLastUpdateTime() {
+            const lastUpdateElement = document.getElementById('last-update');
+            if (lastUpdateElement) {
+                const now = new Date();
+                lastUpdateElement.textContent = `Última actualización: ${now.toLocaleTimeString('es-CO')}`;
+            }
+        }
+
+        /**
+         * Mostrar mensaje temporal
+         */
+        function showMessage(message, type = 'info') {
+            // Implementar sistema de mensajes si es necesario
+            console.log(`${type.toUpperCase()}: ${message}`);
+        }
+    </script>
+</body>
+</html>

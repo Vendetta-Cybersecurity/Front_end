@@ -9,6 +9,7 @@
     --success-green: #16a34a;
     --background-light: #f8fafc;
     --text-dark: #1e293b;
+    --error-red: #dc2626;
 }
 
 /* Body Styles */
@@ -786,4 +787,89 @@
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   ESTILOS ESPECÍFICOS PARA NUEVA FUNCIONALIDAD API
+   ========================================================================== */
+
+/* Campos de error */
+.campo-error {
+    display: none;
+    color: #dc2626;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    padding: 0.25rem 0;
+    font-weight: 500;
+}
+
+.campo-error:not(:empty) {
+    display: block;
+}
+
+.grupo-campo input.error {
+    border-color: #dc2626 !important;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+}
+
+/* Mensajes de estado del login */
+.login-messages {
+    margin-bottom: 1.5rem;
+}
+
+.mensaje {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.mensaje-success {
+    background: #f0fdf4;
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
+}
+
+.mensaje-error {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fca5a5;
+}
+
+.mensaje-info {
+    background: #f0f9ff;
+    color: #0369a1;
+    border: 1px solid #7dd3fc;
+}
+
+/* Estados del botón de login */
+.btn-text, .btn-loading {
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-loading {
+    display: none;
+}
+
+#login-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    background-color: #9ca3af;
+}
+
+/* Mejorar interactividad de usuarios demo */
+.demo-usuario {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.demo-usuario:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: #f9fafb;
+}
+
+.demo-usuario:active {
+    transform: translateY(0);
 }

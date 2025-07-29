@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración del Sistema - Figger Energy SAS</title>
+    <meta name="description" content="Configuración y administración del sistema - Figger Energy SAS">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/estilos.css">
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="../assets/images/favicon.ico" type="image/x-icon">
+    
+    <!-- Scripts API -->
+    <script src="../assets/js/config/api-config.js"></script>
+    <script src="../assets/js/api/api-client.js"></script>
+    <script src="../assets/js/auth/auth-service.js"></script>
+    <script src="../assets/js/auth/auth-middleware.js"></script>
+    <script src="../assets/js/auth/init-auth.js"></script>
+</head>
+<body class="dashboard-body">
+    <!-- Header del Dashboard -->
+    <header class="dashboard-header">
+        <div class="contenedor">
+            <div class="header-content">
+                <div class="logo-area">
+                    <a href="../index.html" class="logo-enlace">
+                        <img src="../assets/images/logo.png" alt="Logo Figger Energy SAS" class="logo" onerror="this.style.display='none';">
+                        <div class="logo-texto">
+                            <h1>Figger Energy SAS</h1>
+                            <p>Configuración del Sistema</p>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="header-actions">
+                    <div id="user-info" class="user-info"></div>
+                    <div class="header-buttons">
+                        <button id="logout-btn" class="btn-logout" onclick="window.authMiddleware.logout()">
+                            Cerrar Sesión
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navegación del Dashboard -->
+    <nav class="dashboard-nav">
+        <div class="contenedor">
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">📊 Dashboard</a></li>
+                <li><a href="empleados.html" class="nav-link">👥 Empleados</a></li>
+                <li><a href="departamentos.html" class="nav-link" data-permission="manage_departments">🏢 Departamentos</a></li>
+                <li><a href="usuarios.html" class="nav-link" data-permission="manage_users">🔐 Usuarios</a></li>
+                <li><a href="reportes.html" class="nav-link">📈 Reportes</a></li>
+                <li><a href="configuracion.html" class="nav-link active" data-role="admin">⚙️ Configuración</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <main class="dashboard-main">
+        <div class="contenedor">
+            <!-- Header de sección -->
+            <div class="section-header">
+                <h2>Configuración del Sistema</h2>
+                <p>Administre las configuraciones generales y parámetros del sistema</p>
+            </div>
+
+            <!-- Navegación de configuración -->
+            <div class="config-nav">
+                <button class="config-tab active" data-tab="general">🔧 General</button>
+                <button class="config-tab" data-tab="security">🔒 Seguridad</button>
+                <button class="config-tab" data-tab="notifications">🔔 Notificaciones</button>
+                <button class="config-tab" data-tab="backup">💾 Respaldos</button>
+                <button class="config-tab" data-tab="system">⚙️ Sistema</button>
+                <button class="config-tab" data-tab="logs">📋 Logs</button>
+            </div>
+
+            <!-- Contenido de las pestañas -->
+            <div class="config-content">
+                <!-- Configuración General -->
+                <div id="general-tab" class="config-section active">
+                    <div class="config-card">
+                        <div class="config-header">
+                            <h3>Información de la Empresa</h3>
+                            <p>Configuración básica de la organización</p>
+                        </div>
+                        <div class="config-body">
+                            <form id="company-form" class="config-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="company-name">Nombre de la Empresa</label>
+                                        <input type="text" id="company-name" value="Figger Energy SAS" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="company-nit">NIT</label>
+                                        <input type="text" id="company-nit" value="900.123.456-7" required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="company-address">Dirección</label>
+                                        <input type="text" id="company-address" value="Calle 123 #45-67, Bogotá D.C." required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="company-phone">Teléfono</label>
+                                        <input type="tel" id="company-phone" value="+57 1 234-5678" required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="company-email">Email Corporativo</label>
+                                        <input type="email" id="company-email" value="info@figgereergy.com" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="company-website">Sitio Web</label>
+                                        <input type="url" id="company-website" value="https://www.figgereergy.com">
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn-primary">Guardar Cambios</button>
+                                    <button type="button" class="btn-secondary" onclick="resetCompanyForm()">Restaurar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="config-card">
+                        <div class="config-header">
+                            <h3>Configuración Regional</h3>
+                            <p>Formato de fechas, moneda y zona horaria</p>
+                        </div>
+                        <div class="config-body">
+                            <form id="regional-form" class="config-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="timezone">Zona Horaria</label>
+                                        <select id="timezone">
+                                            <option value="America/Bogota" selected>América/Bogotá (UTC-5)</option>
+                                            <option value="America/New_York">América/Nueva_York (UTC-5/-4)</option>
+                                            <option value="Europe/Madrid">Europa/Madrid (UTC+1/+2)</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="currency">Moneda</label>
+                                        <select id="currency">
+                                            <option value="COP" selected>Peso Colombiano (COP)</option>
+                                            <option value="USD">Dólar Estadounidense (USD)</option>
+                                            <option value="EUR">Euro (EUR)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="date-format">Formato de Fecha</label>
+                                        <select id="date-format">
+                                            <option value="DD/MM/YYYY" selected>DD/MM/YYYY</option>
+                                            <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                                            <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="language">Idioma del Sistema</label>
+                                        <select id="language">
+                                            <option value="es" selected>Español</option>
+                                            <option value="en">English</option>
+                                            <option value="pt">Português</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn-primary">Guardar Configuración</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Configuración de Seguridad -->
+                <div id="security-tab" class="config-section">
+                    <div class="config-card">
+                        <div class="config-header">
+                            <h3>Políticas de Contraseñas</h3>
+                            <p>Configuración de seguridad para contraseñas de usuario</p>
+                        </div>
+                        <div class="config-body">
+                            <form id="password-policy-form" class="config-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="min-password-length">Longitud Mínima</label>
+                                        <input type="number" id="min-password-length" value="8" min="6" max="32">
+                                        <small>Entre 6 y 32 caracteres</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="password-expiry">Expiración (días)</label>
+                                        <input type="number" id="password-expiry" value="90" min="30">
+                                        <small>0 = nunca expira</small>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Requisitos de Contraseña</label>
+                                    <div class="checkbox-group">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="require-uppercase" checked>
+                                            Mayúsculas requeridas
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="require-lowercase" checked>
+                                            Minúsculas requeridas
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="require-numbers" checked>
+                                            Números requeridos
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="require-symbols">
+                                            Símbolos especiales requeridos
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn-primary">Aplicar Políticas</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="config-card">
+                        <div class="config-header">
+                            <h3>Sesiones y Acceso</h3>
+                            <p>Configuración de sesiones de usuario y control de acceso</p>
+                        </div>
+                        <div class="config-body">
+                            <form id="session-form" class="config-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="session-timeout">Tiempo de Sesión (minutos)</label>
+                                        <input type="number" id="session-timeout" value="480" min="30">
+                                        <small>Inactividad máxima antes de cerrar sesión</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="max-login-attempts">Intentos de Login Máximos</label>
+                                        <input type="number" id="max-login-attempts" value="5" min="3" max="10">
+                                        <small>Antes de bloquear la cuenta</small>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="checkbox-group">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="enable-2fa">
+                                            Habilitar autenticación de dos factores (2FA)
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="force-https" checked>
+                                            Forzar conexiones HTTPS
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="log-failed-attempts" checked>
+                                            Registrar intentos de acceso fallidos
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn-primary">Guardar Configuración</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Configuración de Notificaciones -->
+                <div id="notifications-tab" class="config-section">
+                    <div class="config-card">
+                        <div class="config-header">
+                            <h3>Notificaciones del Sistema</h3>
+                            <p>Configure qué notificaciones enviar y cuándo</p>
+                        </div>
+                        <div class="config-body">
+                            <form id="notifications-form" class="config-form">
+                                <div class="notification-group">
+                                    <h4>Notificaciones de Empleados</h4>
+                                    <div class="checkbox-group">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="notify-new-employee" checked>
+                                            Nuevo empleado registrado
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="notify-employee-update" checked>
+                                            Actualización de datos de empleado
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="notify-employee-birthday">
+                                            Cumpleaños de empleados
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="notify-contract-expiry" checked>
+                                            Vencimiento de contratos
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="notification-group">
+                                    <h4>Notificaciones de Sistema</h4>
+                                    <div class="checkbox-group">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="notify-system-errors" checked>
+                                            Errores del sistema
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="notify-backups" checked>
+                                            Estado de respaldos
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="notify-updates">
+                                            Actualizaciones disponibles
+                                        </label>
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="notify-maintenance">
+                                            Mantenimiento programado
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="notification-email">Email para Notificaciones</label>
+                                        <input type="email" id="notification-email" value="admin@figgereergy.com">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="notification-frequency">Frecuencia de Resumen</label>
+                                        <select id="notification-frequency">
+                                            <option value="immediate">Inmediato</option>
+                                            <option value="daily" selected>Diario</option>
+                                            <option value="weekly">Semanal</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-actions">
+                                    <button type="submit" class="btn-primary">Guardar Preferencias</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Configuración de Respaldos -->
+                <div id="backup-tab" class="config-section">
+                    <div class="config-card">
+                        <div class="config-header">
+                            <h3>Configuración de Respaldos</h3>
+                            <p>Programa y administra los respaldos automáticos del sistema</p>
+                        </div>
+                        <div class="config-body">
+                            <form id="backup-form" class="config-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="backup-frequency">Frecuencia de Respaldo</label>
+                                        <select id="backup-frequency">
+                                            <option value="daily" selected>Diario</option>
+                                            <option value="weekly">Semanal</option>
+                                            <option value="monthly">Mensual</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="backup-time">Hora de Respaldo</label>
+                                        <input type="time" id="backup-time" value="02:00">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="backup-retention">Retención (días)</label>
+                                        <input type="number" id="backup-retention" value="30" min="7">
+                                        <small>Tiempo de conservación de respaldos</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="backup-location">Ubicación de Respaldos</label>
+                                        <input type="text" id="backup-location" value="/backups/" readonly>
+                                        <small>Directorio de almacenamiento</small>
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn-primary">Guardar Configuración</button>
+                                    <button type="button" class="btn-secondary" onclick="createBackupNow()">Crear Respaldo Ahora</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="config-card">
+                        <div class="config-header">
+                            <h3>Historial de Respaldos</h3>
+                            <p>Respaldos recientes del sistema</p>
+                        </div>
+                        <div class="config-body">
+                            <div class="backup-list" id="backup-list">
+                                <div class="backup-item">
+                                    <div class="backup-info">
+                                        <div class="backup-name">backup_2025_01_15_02_00.sql</div>
+                                        <div class="backup-details">15/01/2025 02:00 - 125.5 MB</div>
+                                    </div>
+                                    <div class="backup-actions">
+                                        <button class="btn-action btn-download" title="Descargar">⬇️</button>
+                                        <button class="btn-action btn-restore" title="Restaurar">↻</button>
+                                        <button class="btn-action btn-delete" title="Eliminar">🗑️</button>
+                                    </div>
+                                </div>
+                                <div class="backup-item">
+                                    <div class="backup-info">
+                                        <div class="backup-name">backup_2025_01_14_02_00.sql</div>
+                                        <div class="backup-details">14/01/2025 02:00 - 124.8 MB</div>
+                                    </div>
+                                    <div class="backup-actions">
+                                        <button class="btn-action btn-download" title="Descargar">⬇️</button>
+                                        <button class="btn-action btn-restore" title="Restaurar">↻</button>
+                                        <button class="btn-action btn-delete" title="Eliminar">🗑️</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Configuración del Sistema -->
+                <div id="system-tab" class="config-section">
+                    <div class="config-card">
+                        <div class="config-header">
+                            <h3>Información del Sistema</h3>
+                            <p>Detalles técnicos y estado del sistema</p>
+                        </div>
+                        <div class="config-body">
+                            <div class="system-info">
+                                <div class="info-grid">
+                                    <div class="info-item">
+                                        <label>Versión del Sistema:</label>
+                                        <span>v2.1.0</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <label>Base de Datos:</label>
+                                        <span>MariaDB 10.5.8</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <label>Servidor Web:</label>
+                                        <span>Apache 2.4.46</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <label>PHP Version:</label>
+                                        <span>8.0.3</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <label>Espacio en Disco:</label>
+                                        <span>15.6 GB / 50 GB (31%)</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <label>Memoria RAM:</label>
+                                        <span>2.1 GB / 8 GB (26%)</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <label>Última Actualización:</label>
+                                        <span>10/01/2025 14:30</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <label>Tiempo de Actividad:</label>
+                                        <span>15 días, 8 horas</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="config-card">
+                        <div class="config-header">
+                            <h3>Mantenimiento del Sistema</h3>
+                            <p>Herramientas de optimización y limpieza</p>
+                        </div>
+                        <div class="config-body">
+                            <div class="maintenance-tools">
+                                <div class="tool-item">
+                                    <div class="tool-info">
+                                        <h4>Limpiar Cache</h4>
+                                        <p>Elimina archivos temporales y cache del sistema</p>
+                                    </div>
+                                    <button class="btn-secondary" onclick="clearCache()">Limpiar</button>
+                                </div>
+                                <div class="tool-item">
+                                    <div class="tool-info">
+                                        <h4>Optimizar Base de Datos</h4>
+                                        <p>Reorganiza y optimiza las tablas de la base de datos</p>
+                                    </div>
+                                    <button class="btn-secondary" onclick="optimizeDatabase()">Optimizar</button>
+                                </div>
+                                <div class="tool-item">
+                                    <div class="tool-info">
+                                        <h4>Verificar Integridad</h4>
+                                        <p>Comprueba la integridad de los datos del sistema</p>
+                                    </div>
+                                    <button class="btn-secondary" onclick="checkIntegrity()">Verificar</button>
+                                </div>
+                                <div class="tool-item">
+                                    <div class="tool-info">
+                                        <h4>Reiniciar Servicios</h4>
+                                        <p>Reinicia los servicios del sistema para mejorar el rendimiento</p>
+                                    </div>
+                                    <button class="btn-warning" onclick="restartServices()">Reiniciar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Logs del Sistema -->
+                <div id="logs-tab" class="config-section">
+                    <div class="config-card">
+                        <div class="config-header">
+                            <h3>Registros del Sistema</h3>
+                            <p>Visualice y gestione los logs de actividad</p>
+                        </div>
+                        <div class="config-body">
+                            <div class="logs-controls">
+                                <div class="filter-group">
+                                    <label for="log-level">Nivel:</label>
+                                    <select id="log-level">
+                                        <option value="">Todos</option>
+                                        <option value="error">Error</option>
+                                        <option value="warning">Advertencia</option>
+                                        <option value="info">Información</option>
+                                        <option value="debug">Debug</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label for="log-date">Fecha:</label>
+                                    <input type="date" id="log-date">
+                                </div>
+                                <button class="btn-secondary" onclick="refreshLogs()">🔄 Actualizar</button>
+                                <button class="btn-secondary" onclick="clearLogs()">🗑️ Limpiar Logs</button>
+                            </div>
+                            
+                            <div class="logs-container" id="logs-container">
+                                <div class="log-entry log-info">
+                                    <div class="log-timestamp">2025-01-15 14:30:25</div>
+                                    <div class="log-level">INFO</div>
+                                    <div class="log-message">Usuario admin inició sesión desde IP 192.168.1.100</div>
+                                </div>
+                                <div class="log-entry log-warning">
+                                    <div class="log-timestamp">2025-01-15 14:25:10</div>
+                                    <div class="log-level">WARNING</div>
+                                    <div class="log-message">Intento de acceso fallido para usuario: testuser</div>
+                                </div>
+                                <div class="log-entry log-info">
+                                    <div class="log-timestamp">2025-01-15 14:20:45</div>
+                                    <div class="log-level">INFO</div>
+                                    <div class="log-message">Respaldo automático completado exitosamente</div>
+                                </div>
+                                <div class="log-entry log-error">
+                                    <div class="log-timestamp">2025-01-15 14:15:30</div>
+                                    <div class="log-level">ERROR</div>
+                                    <div class="log-message">Error de conexión a la base de datos - Reintento automático exitoso</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer del Dashboard -->
+    <footer class="dashboard-footer">
+        <div class="contenedor">
+            <p>&copy; 2025 Figger Energy SAS - Configuración del Sistema</p>
+            <div class="footer-links">
+                <span>Sistema v2.1.0</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('Inicializando configuración del sistema...');
+
+            // Verificar autenticación y permisos
+            if (!window.authService?.isUserAuthenticated()) {
+                window.location.href = '../login.html';
+                return;
+            }
+
+            // Verificar permisos de administrador
+            const currentUser = window.authService.getCurrentUser();
+            if (currentUser.role !== 'admin') {
+                showMessage('Solo los administradores pueden acceder a la configuración', 'error');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Inicializar página
+            initializeConfigPage();
+        });
+
+        /**
+         * Inicializar página de configuración
+         */
+        function initializeConfigPage() {
+            setupEventListeners();
+            loadInitialData();
+            console.log('Página de configuración inicializada correctamente');
+        }
+
+        /**
+         * Configurar event listeners
+         */
+        function setupEventListeners() {
+            // Navegación entre pestañas
+            document.querySelectorAll('.config-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const targetTab = this.dataset.tab;
+                    switchTab(targetTab);
+                });
+            });
+
+            // Formularios
+            document.getElementById('company-form').addEventListener('submit', saveCompanyInfo);
+            document.getElementById('regional-form').addEventListener('submit', saveRegionalConfig);
+            document.getElementById('password-policy-form').addEventListener('submit', savePasswordPolicy);
+            document.getElementById('session-form').addEventListener('submit', saveSessionConfig);
+            document.getElementById('notifications-form').addEventListener('submit', saveNotificationConfig);
+            document.getElementById('backup-form').addEventListener('submit', saveBackupConfig);
+        }
+
+        /**
+         * Cambiar entre pestañas
+         */
+        function switchTab(tabName) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.config-section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Desactivar todas las pestañas
+            document.querySelectorAll('.config-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Mostrar la sección seleccionada
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+        }
+
+        /**
+         * Cargar datos iniciales
+         */
+        function loadInitialData() {
+            // Simular carga de configuración existente
+            // En una implementación real, esto vendría de la API
+            console.log('Cargando configuración existente...');
+        }
+
+        /**
+         * Guardar información de la empresa
+         */
+        async function saveCompanyInfo(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('company-name').value,
+                nit: document.getElementById('company-nit').value,
+                address: document.getElementById('company-address').value,
+                phone: document.getElementById('company-phone').value,
+                email: document.getElementById('company-email').value,
+                website: document.getElementById('company-website').value
+            };
+
+            try {
+                // Simular guardado
+                await simulateApiCall();
+                showMessage('Información de la empresa guardada correctamente', 'success');
+            } catch (error) {
+                console.error('Error guardando información:', error);
+                showMessage('Error al guardar la información', 'error');
+            }
+        }
+
+        /**
+         * Guardar configuración regional
+         */
+        async function saveRegionalConfig(e) {
+            e.preventDefault();
+            
+            const formData = {
+                timezone: document.getElementById('timezone').value,
+                currency: document.getElementById('currency').value,
+                dateFormat: document.getElementById('date-format').value,
+                language: document.getElementById('language').value
+            };
+
+            try {
+                await simulateApiCall();
+                showMessage('Configuración regional guardada correctamente', 'success');
+            } catch (error) {
+                console.error('Error guardando configuración:', error);
+                showMessage('Error al guardar la configuración', 'error');
+            }
+        }
+
+        /**
+         * Guardar políticas de contraseña
+         */
+        async function savePasswordPolicy(e) {
+            e.preventDefault();
+            
+            const formData = {
+                minLength: document.getElementById('min-password-length').value,
+                expiry: document.getElementById('password-expiry').value,
+                requireUppercase: document.getElementById('require-uppercase').checked,
+                requireLowercase: document.getElementById('require-lowercase').checked,
+                requireNumbers: document.getElementById('require-numbers').checked,
+                requireSymbols: document.getElementById('require-symbols').checked
+            };
+
+            try {
+                await simulateApiCall();
+                showMessage('Políticas de contraseña aplicadas correctamente', 'success');
+            } catch (error) {
+                console.error('Error aplicando políticas:', error);
+                showMessage('Error al aplicar las políticas', 'error');
+            }
+        }
+
+        /**
+         * Guardar configuración de sesiones
+         */
+        async function saveSessionConfig(e) {
+            e.preventDefault();
+            
+            const formData = {
+                timeout: document.getElementById('session-timeout').value,
+                maxAttempts: document.getElementById('max-login-attempts').value,
+                enable2FA: document.getElementById('enable-2fa').checked,
+                forceHttps: document.getElementById('force-https').checked,
+                logFailedAttempts: document.getElementById('log-failed-attempts').checked
+            };
+
+            try {
+                await simulateApiCall();
+                showMessage('Configuración de sesiones guardada correctamente', 'success');
+            } catch (error) {
+                console.error('Error guardando configuración:', error);
+                showMessage('Error al guardar la configuración', 'error');
+            }
+        }
+
+        /**
+         * Guardar configuración de notificaciones
+         */
+        async function saveNotificationConfig(e) {
+            e.preventDefault();
+            
+            try {
+                await simulateApiCall();
+                showMessage('Preferencias de notificación guardadas correctamente', 'success');
+            } catch (error) {
+                console.error('Error guardando preferencias:', error);
+                showMessage('Error al guardar las preferencias', 'error');
+            }
+        }
+
+        /**
+         * Guardar configuración de respaldos
+         */
+        async function saveBackupConfig(e) {
+            e.preventDefault();
+            
+            const formData = {
+                frequency: document.getElementById('backup-frequency').value,
+                time: document.getElementById('backup-time').value,
+                retention: document.getElementById('backup-retention').value
+            };
+
+            try {
+                await simulateApiCall();
+                showMessage('Configuración de respaldos guardada correctamente', 'success');
+            } catch (error) {
+                console.error('Error guardando configuración:', error);
+                showMessage('Error al guardar la configuración', 'error');
+            }
+        }
+
+        /**
+         * Funciones de mantenimiento
+         */
+        async function createBackupNow() {
+            if (!confirm('¿Desea crear un respaldo completo del sistema ahora?')) {
+                return;
+            }
+            
+            showMessage('Creando respaldo...', 'info');
+            
+            try {
+                await simulateApiCall(3000); // Simular proceso más largo
+                showMessage('Respaldo creado exitosamente', 'success');
+                // Actualizar lista de respaldos
+            } catch (error) {
+                showMessage('Error al crear el respaldo', 'error');
+            }
+        }
+
+        async function clearCache() {
+            if (!confirm('¿Desea limpiar todo el cache del sistema?')) {
+                return;
+            }
+            
+            try {
+                await simulateApiCall();
+                showMessage('Cache limpiado correctamente', 'success');
+            } catch (error) {
+                showMessage('Error al limpiar el cache', 'error');
+            }
+        }
+
+        async function optimizeDatabase() {
+            if (!confirm('La optimización puede tomar varios minutos. ¿Continuar?')) {
+                return;
+            }
+            
+            showMessage('Optimizando base de datos...', 'info');
+            
+            try {
+                await simulateApiCall(5000);
+                showMessage('Base de datos optimizada correctamente', 'success');
+            } catch (error) {
+                showMessage('Error al optimizar la base de datos', 'error');
+            }
+        }
+
+        async function checkIntegrity() {
+            showMessage('Verificando integridad del sistema...', 'info');
+            
+            try {
+                await simulateApiCall(2000);
+                showMessage('Verificación completada - No se encontraron problemas', 'success');
+            } catch (error) {
+                showMessage('Error durante la verificación', 'error');
+            }
+        }
+
+        async function restartServices() {
+            if (!confirm('¿Desea reiniciar los servicios del sistema? Esto puede afectar a usuarios conectados.')) {
+                return;
+            }
+            
+            showMessage('Reiniciando servicios...', 'info');
+            
+            try {
+                await simulateApiCall(3000);
+                showMessage('Servicios reiniciados correctamente', 'success');
+            } catch (error) {
+                showMessage('Error al reiniciar los servicios', 'error');
+            }
+        }
+
+        /**
+         * Funciones de logs
+         */
+        function refreshLogs() {
+            showMessage('Actualizando logs...', 'info');
+            // Simular actualización de logs
+            setTimeout(() => {
+                showMessage('Logs actualizados', 'success');
+            }, 1000);
+        }
+
+        async function clearLogs() {
+            if (!confirm('¿Desea eliminar todos los logs del sistema?')) {
+                return;
+            }
+            
+            try {
+                await simulateApiCall();
+                document.getElementById('logs-container').innerHTML = '<p class="text-center">No hay logs disponibles</p>';
+                showMessage('Logs eliminados correctamente', 'success');
+            } catch (error) {
+                showMessage('Error al eliminar los logs', 'error');
+            }
+        }
+
+        /**
+         * Restaurar formulario de empresa
+         */
+        function resetCompanyForm() {
+            if (!confirm('¿Desea restaurar los valores originales?')) {
+                return;
+            }
+            
+            document.getElementById('company-name').value = 'Figger Energy SAS';
+            document.getElementById('company-nit').value = '900.123.456-7';
+            document.getElementById('company-address').value = 'Calle 123 #45-67, Bogotá D.C.';
+            document.getElementById('company-phone').value = '+57 1 234-5678';
+            document.getElementById('company-email').value = 'info@figgereergy.com';
+            document.getElementById('company-website').value = 'https://www.figgereergy.com';
+            
+            showMessage('Valores restaurados', 'info');
+        }
+
+        /**
+         * Simular llamada a API
+         */
+        function simulateApiCall(delay = 1000) {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    // 90% de éxito, 10% de fallo para simular errores
+                    if (Math.random() < 0.9) {
+                        resolve({ success: true });
+                    } else {
+                        reject(new Error('Error simulado'));
+                    }
+                }, delay);
+            });
+        }
+
+        /**
+         * Mostrar mensaje temporal
+         */
+        function showMessage(message, type = 'info') {
+            // Crear elemento de mensaje si no existe
+            let messageContainer = document.getElementById('temp-message');
+            if (!messageContainer) {
+                messageContainer = document.createElement('div');
+                messageContainer.id = 'temp-message';
+                messageContainer.className = 'temp-message';
+                document.body.appendChild(messageContainer);
+            }
+
+            // Configurar mensaje
+            messageContainer.textContent = message;
+            messageContainer.className = `temp-message temp-message-${type} show`;
+
+            // Ocultar después de 3 segundos
+            setTimeout(() => {
+                messageContainer.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+
+    <style>
+        /* Estilos específicos para la página de configuración */
+        .config-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e1e5e9;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .config-tab {
+            background: none;
+            border: none;
+            padding: 12px 20px;
+            cursor: pointer;
+            border-radius: 8px 8px 0 0;
+            font-weight: 500;
+            color: #666;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .config-tab:hover {
+            background: #f8f9fa;
+            color: #00488a;
+        }
+
+        .config-tab.active {
+            background: #00488a;
+            color: white;
+            border-bottom: 3px solid #00488a;
+        }
+
+        .config-content {
+            min-height: 600px;
+        }
+
+        .config-section {
+            display: none;
+        }
+
+        .config-section.active {
+            display: block;
+        }
+
+        .config-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 72, 138, 0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .config-header {
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e1e5e9;
+        }
+
+        .config-header h3 {
+            margin: 0 0 5px 0;
+            color: #00488a;
+            font-size: 1.2em;
+        }
+
+        .config-header p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .config-body {
+            padding: 20px;
+        }
+
+        .config-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-group label {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .form-group small {
+            color: #666;
+            font-size: 0.8em;
+            font-style: italic;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            transform: scale(1.2);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            padding-top: 20px;
+            border-top: 1px solid #e1e5e9;
+        }
+
+        .notification-group {
+            margin-bottom: 25px;
+        }
+
+        .notification-group h4 {
+            margin: 0 0 15px 0;
+            color: #00488a;
+            font-size: 1em;
+        }
+
+        .system-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 6px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #e1e5e9;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-item label {
+            font-weight: 500;
+            color: #666;
+        }
+
+        .info-item span {
+            color: #333;
+            font-weight: 500;
+        }
+
+        .maintenance-tools {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .tool-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #e1e5e9;
+            border-radius: 6px;
+        }
+
+        .tool-info h4 {
+            margin: 0 0 5px 0;
+            color: #00488a;
+        }
+
+        .tool-info p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .btn-warning {
+            background: #ff9500;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        .btn-warning:hover {
+            background: #e68a00;
+        }
+
+        .backup-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .backup-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #e1e5e9;
+        }
+
+        .backup-item:last-child {
+            border-bottom: none;
+        }
+
+        .backup-info {
+            flex: 1;
+        }
+
+        .backup-name {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .backup-details {
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        .backup-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .logs-controls {
+            display: flex;
+            gap: 20px;
+            align-items: end;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+
+        .logs-container {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #e1e5e9;
+            border-radius: 6px;
+        }
+
+        .log-entry {
+            display: grid;
+            grid-template-columns: 150px 80px 1fr;
+            gap: 15px;
+            padding: 10px 15px;
+            border-bottom: 1px solid #f0f0f0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+
+        .log-timestamp {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .log-level {
+            font-weight: bold;
+            text-align: center;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+        }
+
+        .log-info .log-level {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .log-warning .log-level {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .log-error .log-level {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+
+        .log-message {
+            color: #333;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .config-nav {
+                flex-wrap: wrap;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tool-item {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+            
+            .logs-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .log-entry {
+                grid-template-columns: 1fr;
+                gap: 5px;
+            }
+        }
+    </style>
+</body>
+</html>

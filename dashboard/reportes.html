@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes - Figger Energy SAS</title>
+    <meta name="description" content="Reportes y estadísticas - Sistema interno Figger Energy SAS">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../assets/css/estilos.css">
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="../assets/images/favicon.ico" type="image/x-icon">
+    
+    <!-- Scripts API -->
+    <script src="../assets/js/config/api-config.js"></script>
+    <script src="../assets/js/api/api-client.js"></script>
+    <script src="../assets/js/auth/auth-service.js"></script>
+    <script src="../assets/js/auth/auth-middleware.js"></script>
+    <script src="../assets/js/auth/init-auth.js"></script>
+    <script src="../assets/js/services/estadisticas-service.js"></script>
+    <script src="../assets/js/services/empleados-service.js"></script>
+    <script src="../assets/js/services/departamentos-service.js"></script>
+</head>
+<body class="dashboard-body">
+    <!-- Header del Dashboard -->
+    <header class="dashboard-header">
+        <div class="contenedor">
+            <div class="header-content">
+                <div class="logo-area">
+                    <a href="../index.html" class="logo-enlace">
+                        <img src="../assets/images/logo.png" alt="Logo Figger Energy SAS" class="logo" onerror="this.style.display='none';">
+                        <div class="logo-texto">
+                            <h1>Figger Energy SAS</h1>
+                            <p>Reportes y Estadísticas</p>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="header-actions">
+                    <div id="user-info" class="user-info"></div>
+                    <div class="header-buttons">
+                        <button id="logout-btn" class="btn-logout" onclick="window.authMiddleware.logout()">
+                            Cerrar Sesión
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navegación del Dashboard -->
+    <nav class="dashboard-nav">
+        <div class="contenedor">
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">📊 Dashboard</a></li>
+                <li><a href="empleados.html" class="nav-link">👥 Empleados</a></li>
+                <li><a href="departamentos.html" class="nav-link" data-permission="manage_departments">🏢 Departamentos</a></li>
+                <li><a href="usuarios.html" class="nav-link" data-permission="manage_users">🔐 Usuarios</a></li>
+                <li><a href="reportes.html" class="nav-link active">📈 Reportes</a></li>
+                <li><a href="configuracion.html" class="nav-link" data-role="admin">⚙️ Configuración</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <main class="dashboard-main">
+        <div class="contenedor">
+            <!-- Header de sección -->
+            <div class="section-header">
+                <h2>Reportes y Estadísticas</h2>
+                <p>Análisis detallado de la información organizacional</p>
+            </div>
+
+            <!-- Filtros de reportes -->
+            <div class="report-filters">
+                <div class="filter-group">
+                    <label for="date-range">Período:</label>
+                    <select id="date-range" class="filter-select">
+                        <option value="7">Últimos 7 días</option>
+                        <option value="30" selected>Últimos 30 días</option>
+                        <option value="90">Últimos 3 meses</option>
+                        <option value="365">Último año</option>
+                        <option value="custom">Personalizado</option>
+                    </select>
+                </div>
+                <div class="filter-group" id="custom-dates" style="display: none;">
+                    <label for="start-date">Desde:</label>
+                    <input type="date" id="start-date" class="filter-input">
+                    <label for="end-date">Hasta:</label>
+                    <input type="date" id="end-date" class="filter-input">
+                </div>
+                <div class="filter-group">
+                    <label for="department-filter">Departamento:</label>
+                    <select id="department-filter" class="filter-select">
+                        <option value="">Todos los departamentos</option>
+                    </select>
+                </div>
+                <button id="apply-filters" class="btn-primary">Aplicar Filtros</button>
+                <button id="export-report" class="btn-secondary">📄 Exportar</button>
+            </div>
+
+            <!-- Grid de reportes -->
+            <div class="reports-grid">
+                <!-- Estadísticas generales -->
+                <div class="report-section">
+                    <div class="section-title">
+                        <h3>📊 Estadísticas Generales</h3>
+                        <button class="btn-refresh" onclick="loadGeneralStats()">🔄</button>
+                    </div>
+                    <div class="stats-cards">
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <span class="stat-icon">👥</span>
+                                <span class="stat-title">Total Empleados</span>
+                            </div>
+                            <div class="stat-value" id="total-empleados">--</div>
+                            <div class="stat-change" id="empleados-change">--</div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <span class="stat-icon">🏢</span>
+                                <span class="stat-title">Departamentos</span>
+                            </div>
+                            <div class="stat-value" id="total-departamentos">--</div>
+                            <div class="stat-change" id="departamentos-change">--</div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <span class="stat-icon">✅</span>
+                                <span class="stat-title">Empleados Activos</span>
+                            </div>
+                            <div class="stat-value" id="empleados-activos">--</div>
+                            <div class="stat-change" id="activos-change">--</div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <span class="stat-icon">📈</span>
+                                <span class="stat-title">Tasa de Rotación</span>
+                            </div>
+                            <div class="stat-value" id="tasa-rotacion">--</div>
+                            <div class="stat-change" id="rotacion-change">--</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gráfico de empleados por departamento -->
+                <div class="report-section chart-section">
+                    <div class="section-title">
+                        <h3>🏢 Empleados por Departamento</h3>
+                        <button class="btn-refresh" onclick="loadDepartmentChart()">🔄</button>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="department-chart"></canvas>
+                        <div id="department-loading" class="chart-loading">
+                            <div class="loading-spinner"></div>
+                            <p>Cargando gráfico...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gráfico de tendencias -->
+                <div class="report-section chart-section">
+                    <div class="section-title">
+                        <h3>📈 Tendencia de Contrataciones</h3>
+                        <button class="btn-refresh" onclick="loadTrendChart()">🔄</button>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="trend-chart"></canvas>
+                        <div id="trend-loading" class="chart-loading">
+                            <div class="loading-spinner"></div>
+                            <p>Cargando tendencias...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabla de empleados recientes -->
+                <div class="report-section table-section">
+                    <div class="section-title">
+                        <h3>👤 Empleados Recientes</h3>
+                        <button class="btn-refresh" onclick="loadRecentEmployees()">🔄</button>
+                    </div>
+                    <div class="table-container">
+                        <table id="recent-employees-table" class="report-table">
+                            <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Departamento</th>
+                                    <th>Fecha Ingreso</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-employees-tbody">
+                                <tr>
+                                    <td colspan="4" class="text-center">Cargando...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Resumen de actividad -->
+                <div class="report-section">
+                    <div class="section-title">
+                        <h3>🔄 Resumen de Actividad</h3>
+                        <button class="btn-refresh" onclick="loadActivitySummary()">🔄</button>
+                    </div>
+                    <div class="activity-summary">
+                        <div class="activity-item">
+                            <div class="activity-icon">➕</div>
+                            <div class="activity-content">
+                                <div class="activity-title">Nuevos Empleados</div>
+                                <div class="activity-value" id="nuevos-empleados">--</div>
+                                <div class="activity-period">En los últimos 30 días</div>
+                            </div>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-icon">📤</div>
+                            <div class="activity-content">
+                                <div class="activity-title">Empleados Retirados</div>
+                                <div class="activity-value" id="empleados-retirados">--</div>
+                                <div class="activity-period">En los últimos 30 días</div>
+                            </div>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-icon">🔄</div>
+                            <div class="activity-content">
+                                <div class="activity-title">Cambios de Departamento</div>
+                                <div class="activity-value" id="cambios-departamento">--</div>
+                                <div class="activity-period">En los últimos 30 días</div>
+                            </div>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-icon">📊</div>
+                            <div class="activity-content">
+                                <div class="activity-title">Actualizaciones de Datos</div>
+                                <div class="activity-value" id="actualizaciones-datos">--</div>
+                                <div class="activity-period">En los últimos 7 días</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alertas y notificaciones -->
+                <div class="report-section">
+                    <div class="section-title">
+                        <h3>⚠️ Alertas y Notificaciones</h3>
+                        <button class="btn-refresh" onclick="loadAlerts()">🔄</button>
+                    </div>
+                    <div class="alerts-container" id="alerts-container">
+                        <div class="alert-item alert-info">
+                            <div class="alert-icon">ℹ️</div>
+                            <div class="alert-content">
+                                <div class="alert-title">Cargando alertas...</div>
+                                <div class="alert-message">Por favor espere...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer del Dashboard -->
+    <footer class="dashboard-footer">
+        <div class="contenedor">
+            <p>&copy; 2025 Figger Energy SAS - Sistema de Reportes</p>
+            <div class="footer-links">
+                <span>Última actualización: <span id="last-update">--</span></span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../assets/js/estadisticas-dinamicas.js"></script>
+    <script>
+        /**
+         * Configuración global de Chart.js
+         */
+        let departmentChart = null;
+        let trendChart = null;
+        let currentFilters = {
+            dateRange: '30',
+            department: '',
+            startDate: '',
+            endDate: ''
+        };
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('Inicializando página de reportes...');
+
+            // Verificar autenticación
+            if (!window.authService?.isUserAuthenticated()) {
+                window.location.href = '../login.html';
+                return;
+            }
+
+            // Inicializar página
+            await initializeReportsPage();
+        });
+
+        /**
+         * Inicializar página de reportes
+         */
+        async function initializeReportsPage() {
+            try {
+                // Cargar datos iniciales
+                await loadDepartments();
+                await loadAllReports();
+                
+                // Configurar eventos
+                setupEventListeners();
+                
+                // Actualizar timestamp
+                updateLastUpdateTime();
+                
+                console.log('Página de reportes inicializada correctamente');
+            } catch (error) {
+                console.error('Error inicializando página de reportes:', error);
+                showMessage('Error al cargar los reportes', 'error');
+            }
+        }
+
+        /**
+         * Cargar todos los reportes
+         */
+        async function loadAllReports() {
+            try {
+                await Promise.all([
+                    loadGeneralStats(),
+                    loadDepartmentChart(),
+                    loadTrendChart(),
+                    loadRecentEmployees(),
+                    loadActivitySummary(),
+                    loadAlerts()
+                ]);
+            } catch (error) {
+                console.error('Error cargando reportes:', error);
+            }
+        }
+
+        /**
+         * Cargar estadísticas generales
+         */
+        async function loadGeneralStats() {
+            try {
+                const response = await window.estadisticasService.getGeneral(currentFilters);
+                
+                if (response.success) {
+                    const stats = response.data;
+                    
+                    document.getElementById('total-empleados').textContent = stats.total_empleados || 0;
+                    document.getElementById('total-departamentos').textContent = stats.total_departamentos || 0;
+                    document.getElementById('empleados-activos').textContent = stats.empleados_activos || 0;
+                    document.getElementById('tasa-rotacion').textContent = `${stats.tasa_rotacion || 0}%`;
+                    
+                    // Mostrar cambios
+                    updateStatChange('empleados-change', stats.cambio_empleados);
+                    updateStatChange('departamentos-change', stats.cambio_departamentos);
+                    updateStatChange('activos-change', stats.cambio_activos);
+                    updateStatChange('rotacion-change', stats.cambio_rotacion);
+                }
+            } catch (error) {
+                console.error('Error cargando estadísticas generales:', error);
+                showMessage('Error al cargar estadísticas', 'error');
+            }
+        }
+
+        /**
+         * Cargar gráfico de departamentos
+         */
+        async function loadDepartmentChart() {
+            const loading = document.getElementById('department-loading');
+            const canvas = document.getElementById('department-chart');
+            
+            try {
+                loading.style.display = 'flex';
+                
+                const response = await window.estadisticasService.getEmpleadosPorDepartamento(currentFilters);
+                
+                if (response.success) {
+                    // Destruir gráfico anterior si existe
+                    if (departmentChart) {
+                        departmentChart.destroy();
+                    }
+                    
+                    const ctx = canvas.getContext('2d');
+                    const data = response.data;
+                    
+                    departmentChart = new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: data.map(item => item.departamento),
+                            datasets: [{
+                                data: data.map(item => item.total),
+                                backgroundColor: [
+                                    '#00488a',
+                                    '#1e88e5',
+                                    '#26a69a',
+                                    '#66bb6a',
+                                    '#ffa726',
+                                    '#ef5350',
+                                    '#ab47bc',
+                                    '#5c6bc0'
+                                ],
+                                borderWidth: 2,
+                                borderColor: '#fff'
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: {
+                                        padding: 15,
+                                        usePointStyle: true
+                                    }
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                            const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                            return `${context.label}: ${context.parsed} (${percentage}%)`;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error cargando gráfico de departamentos:', error);
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+
+        /**
+         * Cargar gráfico de tendencias
+         */
+        async function loadTrendChart() {
+            const loading = document.getElementById('trend-loading');
+            const canvas = document.getElementById('trend-chart');
+            
+            try {
+                loading.style.display = 'flex';
+                
+                const response = await window.estadisticasService.getTendenciaContrataciones(currentFilters);
+                
+                if (response.success) {
+                    // Destruir gráfico anterior si existe
+                    if (trendChart) {
+                        trendChart.destroy();
+                    }
+                    
+                    const ctx = canvas.getContext('2d');
+                    const data = response.data;
+                    
+                    trendChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: data.map(item => item.periodo),
+                            datasets: [{
+                                label: 'Nuevas Contrataciones',
+                                data: data.map(item => item.contrataciones),
+                                borderColor: '#00488a',
+                                backgroundColor: 'rgba(0, 72, 138, 0.1)',
+                                borderWidth: 3,
+                                fill: true,
+                                tension: 0.4,
+                                pointBackgroundColor: '#00488a',
+                                pointBorderColor: '#fff',
+                                pointBorderWidth: 2,
+                                pointRadius: 5
+                            }, {
+                                label: 'Retiros',
+                                data: data.map(item => item.retiros),
+                                borderColor: '#ef5350',
+                                backgroundColor: 'rgba(239, 83, 80, 0.1)',
+                                borderWidth: 3,
+                                fill: true,
+                                tension: 0.4,
+                                pointBackgroundColor: '#ef5350',
+                                pointBorderColor: '#fff',
+                                pointBorderWidth: 2,
+                                pointRadius: 5
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                    labels: {
+                                        padding: 20,
+                                        usePointStyle: true
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    grid: {
+                                        color: 'rgba(0, 0, 0, 0.1)'
+                                    }
+                                },
+                                x: {
+                                    grid: {
+                                        display: false
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error cargando gráfico de tendencias:', error);
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+
+        /**
+         * Cargar empleados recientes
+         */
+        async function loadRecentEmployees() {
+            const tbody = document.getElementById('recent-employees-tbody');
+            
+            try {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center">Cargando...</td></tr>';
+                
+                const response = await window.empleadosService.getRecent(10);
+                
+                if (response.success && response.data.length > 0) {
+                    tbody.innerHTML = response.data.map(emp => `
+                        <tr>
+                            <td>
+                                <strong>${emp.nombres} ${emp.apellidos}</strong>
+                                <br><small>${emp.numero_documento}</small>
+                            </td>
+                            <td>${emp.departamento_nombre || 'Sin departamento'}</td>
+                            <td>${new Date(emp.fecha_ingreso).toLocaleDateString('es-ES')}</td>
+                            <td><span class="status-badge status-${emp.estado}">${emp.estado}</span></td>
+                        </tr>
+                    `).join('');
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="4" class="text-center">No hay empleados recientes</td></tr>';
+                }
+            } catch (error) {
+                console.error('Error cargando empleados recientes:', error);
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center text-error">Error al cargar datos</td></tr>';
+            }
+        }
+
+        /**
+         * Cargar resumen de actividad
+         */
+        async function loadActivitySummary() {
+            try {
+                const response = await window.estadisticasService.getResumenActividad(currentFilters);
+                
+                if (response.success) {
+                    const data = response.data;
+                    
+                    document.getElementById('nuevos-empleados').textContent = data.nuevos_empleados || 0;
+                    document.getElementById('empleados-retirados').textContent = data.empleados_retirados || 0;
+                    document.getElementById('cambios-departamento').textContent = data.cambios_departamento || 0;
+                    document.getElementById('actualizaciones-datos').textContent = data.actualizaciones_datos || 0;
+                }
+            } catch (error) {
+                console.error('Error cargando resumen de actividad:', error);
+            }
+        }
+
+        /**
+         * Cargar alertas
+         */
+        async function loadAlerts() {
+            const container = document.getElementById('alerts-container');
+            
+            try {
+                const response = await window.estadisticasService.getAlertas();
+                
+                if (response.success && response.data.length > 0) {
+                    container.innerHTML = response.data.map(alert => `
+                        <div class="alert-item alert-${alert.tipo}">
+                            <div class="alert-icon">${getAlertIcon(alert.tipo)}</div>
+                            <div class="alert-content">
+                                <div class="alert-title">${alert.titulo}</div>
+                                <div class="alert-message">${alert.mensaje}</div>
+                                ${alert.fecha ? `<div class="alert-date">${new Date(alert.fecha).toLocaleDateString('es-ES')}</div>` : ''}
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    container.innerHTML = `
+                        <div class="alert-item alert-success">
+                            <div class="alert-icon">✅</div>
+                            <div class="alert-content">
+                                <div class="alert-title">Todo en orden</div>
+                                <div class="alert-message">No hay alertas pendientes en este momento</div>
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error cargando alertas:', error);
+                container.innerHTML = `
+                    <div class="alert-item alert-error">
+                        <div class="alert-icon">❌</div>
+                        <div class="alert-content">
+                            <div class="alert-title">Error</div>
+                            <div class="alert-message">No se pudieron cargar las alertas</div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        /**
+         * Cargar departamentos para filtros
+         */
+        async function loadDepartments() {
+            try {
+                const response = await window.departamentosService.getForSelect();
+                
+                if (response.success) {
+                    const select = document.getElementById('department-filter');
+                    select.innerHTML = '<option value="">Todos los departamentos</option>' +
+                        response.data.map(dept => `<option value="${dept.value}">${dept.label}</option>`).join('');
+                }
+            } catch (error) {
+                console.error('Error cargando departamentos:', error);
+            }
+        }
+
+        /**
+         * Configurar event listeners
+         */
+        function setupEventListeners() {
+            // Filtros
+            document.getElementById('date-range').addEventListener('change', function() {
+                const customDates = document.getElementById('custom-dates');
+                if (this.value === 'custom') {
+                    customDates.style.display = 'flex';
+                } else {
+                    customDates.style.display = 'none';
+                }
+            });
+            
+            document.getElementById('apply-filters').addEventListener('click', applyFilters);
+            document.getElementById('export-report').addEventListener('click', exportReport);
+        }
+
+        /**
+         * Aplicar filtros
+         */
+        async function applyFilters() {
+            const dateRange = document.getElementById('date-range').value;
+            const department = document.getElementById('department-filter').value;
+            const startDate = document.getElementById('start-date').value;
+            const endDate = document.getElementById('end-date').value;
+            
+            currentFilters = {
+                dateRange: dateRange,
+                department: department,
+                startDate: startDate,
+                endDate: endDate
+            };
+            
+            showMessage('Aplicando filtros...', 'info');
+            await loadAllReports();
+            updateLastUpdateTime();
+            showMessage('Filtros aplicados correctamente', 'success');
+        }
+
+        /**
+         * Exportar reporte
+         */
+        function exportReport() {
+            showMessage('Funcionalidad de exportación en desarrollo', 'info');
+            // Aquí se implementaría la exportación a PDF/Excel
+        }
+
+        /**
+         * Obtener icono de alerta
+         */
+        function getAlertIcon(tipo) {
+            const icons = {
+                'info': 'ℹ️',
+                'warning': '⚠️',
+                'error': '❌',
+                'success': '✅'
+            };
+            return icons[tipo] || 'ℹ️';
+        }
+
+        /**
+         * Actualizar cambio de estadística
+         */
+        function updateStatChange(elementId, change) {
+            const element = document.getElementById(elementId);
+            if (!element || change === null || change === undefined) {
+                element.textContent = '--';
+                return;
+            }
+            
+            const isPositive = change > 0;
+            const prefix = isPositive ? '+' : '';
+            const className = isPositive ? 'stat-change-positive' : 'stat-change-negative';
+            
+            element.textContent = `${prefix}${change}%`;
+            element.className = `stat-change ${className}`;
+        }
+
+        /**
+         * Actualizar hora de última actualización
+         */
+        function updateLastUpdateTime() {
+            document.getElementById('last-update').textContent = new Date().toLocaleString('es-ES');
+        }
+
+        /**
+         * Mostrar mensaje temporal
+         */
+        function showMessage(message, type = 'info') {
+            // Crear elemento de mensaje si no existe
+            let messageContainer = document.getElementById('temp-message');
+            if (!messageContainer) {
+                messageContainer = document.createElement('div');
+                messageContainer.id = 'temp-message';
+                messageContainer.className = 'temp-message';
+                document.body.appendChild(messageContainer);
+            }
+
+            // Configurar mensaje
+            messageContainer.textContent = message;
+            messageContainer.className = `temp-message temp-message-${type} show`;
+
+            // Ocultar después de 3 segundos
+            setTimeout(() => {
+                messageContainer.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+
+    <!-- Script para Chart.js (CDN simulado) -->
+    <script>
+        // Simulación de Chart.js para el ejemplo
+        if (!window.Chart) {
+            window.Chart = class {
+                constructor(ctx, config) {
+                    this.ctx = ctx;
+                    this.config = config;
+                    this.render();
+                }
+                
+                render() {
+                    // Simulación de renderizado
+                    this.ctx.fillStyle = '#f0f0f0';
+                    this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+                    this.ctx.fillStyle = '#00488a';
+                    this.ctx.font = '16px Arial';
+                    this.ctx.textAlign = 'center';
+                    this.ctx.fillText('Gráfico de ' + this.config.type, this.ctx.canvas.width / 2, this.ctx.canvas.height / 2);
+                }
+                
+                destroy() {
+                    // Limpiar canvas
+                    this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+                }
+            };
+        }
+    </script>
+
+    <style>
+        /* Estilos específicos para la página de reportes */
+        .report-filters {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 72, 138, 0.1);
+            margin-bottom: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: end;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .filter-group label {
+            font-weight: 500;
+            color: #333;
+            font-size: 0.9em;
+        }
+
+        .filter-select, .filter-input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+        }
+
+        .report-section {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 72, 138, 0.1);
+            overflow: hidden;
+        }
+
+        .section-title {
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e1e5e9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-title h3 {
+            margin: 0;
+            color: #00488a;
+            font-size: 1.1em;
+        }
+
+        .btn-refresh {
+            background: none;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 1.2em;
+        }
+
+        .btn-refresh:hover {
+            background: #e9ecef;
+        }
+
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            padding: 20px;
+        }
+
+        .stat-card {
+            padding: 15px;
+            border: 1px solid #e1e5e9;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .stat-icon {
+            font-size: 1.2em;
+        }
+
+        .stat-title {
+            font-size: 0.85em;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #00488a;
+            margin: 10px 0;
+        }
+
+        .stat-change {
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+
+        .stat-change-positive {
+            color: #28a745;
+        }
+
+        .stat-change-negative {
+            color: #dc3545;
+        }
+
+        .chart-section {
+            grid-column: span 2;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            padding: 20px;
+        }
+
+        .chart-loading {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 10;
+        }
+
+        .table-section {
+            grid-column: span 2;
+        }
+
+        .table-container {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .report-table th,
+        .report-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e1e5e9;
+        }
+
+        .report-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #00488a;
+        }
+
+        .activity-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            padding: 20px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border: 1px solid #e1e5e9;
+            border-radius: 6px;
+        }
+
+        .activity-icon {
+            font-size: 1.5em;
+            width: 40px;
+            height: 40px;
+            background: #f8f9fa;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .activity-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #00488a;
+        }
+
+        .activity-period {
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        .alerts-container {
+            padding: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .alert-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        .alert-info {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+        }
+
+        .alert-warning {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+        }
+
+        .alert-error {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+        }
+
+        .alert-success {
+            background: #e8f5e8;
+            border-left: 4px solid #4caf50;
+        }
+
+        .alert-icon {
+            font-size: 1.2em;
+            margin-top: 2px;
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .alert-message {
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .alert-date {
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-error {
+            color: #dc3545;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .chart-section {
+                grid-column: span 1;
+            }
+            
+            .table-section {
+                grid-column: span 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .reports-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .report-filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-group {
+                width: 100%;
+            }
+            
+            .stats-cards {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+            
+            .activity-summary {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</body>
+</html>

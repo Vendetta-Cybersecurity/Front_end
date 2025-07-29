@@ -13,6 +13,9 @@
     <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
     
     <!-- Scripts para estadísticas dinámicas -->
+    <script src="assets/js/config/api-config.js"></script>
+    <script src="assets/js/api/api-client.js"></script>
+    <script src="assets/js/services/estadisticas-service.js"></script>
     <script src="assets/js/config-estadisticas.js"></script>
     <script src="assets/js/estadisticas-dinamicas.js" defer></script>
 </head>
@@ -193,7 +196,9 @@
                 </div>
             </div>
         </section>
+
     </main>
+
 
     <footer class="footer-principal">
         <div class="contenedor">
@@ -244,5 +249,72 @@
 
     <!-- JavaScript -->
     <script src="assets/js/scripts.js"></script>
+    
+    <!-- Script opcional para mostrar estado de usuario logueado -->
+    <script>
+        // Cargar servicios de autenticación de manera opcional
+        function loadAuthOptional() {
+            // Cargar scripts de autenticación dinámicamente solo si existen
+            const authScripts = [
+                'assets/js/auth/auth-service.js',
+                'assets/js/auth/auth-middleware.js'
+            ];
+            
+            let scriptsLoaded = 0;
+            
+            function checkAuthStatus() {
+                scriptsLoaded++;
+                if (scriptsLoaded === authScripts.length) {
+                    // Solo verificar si hay un usuario logueado, sin redirigir
+                    if (window.authService && window.authService.isUserAuthenticated()) {
+                        updateNavigationForLoggedUser();
+                    }
+                }
+            }
+            
+            authScripts.forEach(src => {
+                const script = document.createElement('script');
+                script.src = src;
+                script.onload = checkAuthStatus;
+                script.onerror = () => {
+                    console.log('Auth script not found:', src);
+                    scriptsLoaded++;
+                };
+                document.head.appendChild(script);
+            });
+        }
+        
+        function updateNavigationForLoggedUser() {
+            const loginBtn = document.querySelector('a[href*="login.html"]');
+            if (loginBtn && window.authService) {
+                const user = window.authService.getCurrentUser();
+                if (user) {
+                    loginBtn.textContent = `Dashboard (${user.empleado?.nombre_completo || user.username})`;
+                    loginBtn.href = 'dashboard/index.html';
+                    loginBtn.classList.add('user-authenticated');
+                    
+                    // Agregar botón de logout opcional
+                    const logoutBtn = document.createElement('a');
+                    logoutBtn.href = '#';
+                    logoutBtn.textContent = 'Cerrar Sesión';
+                    logoutBtn.className = 'btn-logout-nav';
+                    logoutBtn.style.marginLeft = '10px';
+                    logoutBtn.onclick = function(e) {
+                        e.preventDefault();
+                        if (window.authService) {
+                            window.authService.logout();
+                        }
+                    };
+                    loginBtn.parentNode.appendChild(logoutBtn);
+                }
+            }
+        }
+        
+        // Cargar autenticación opcional después de que se cargue la página
+        document.addEventListener('DOMContentLoaded', function() {
+            // Delay para evitar conflictos con otros scripts
+            setTimeout(loadAuthOptional, 500);
+        });
+    </script>
 </body>
 </html>
