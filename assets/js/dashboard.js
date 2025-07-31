@@ -761,7 +761,7 @@ class DashboardManager {
      */
     updateCharts(stats) {
         // Implementar gráficos con Chart.js o similar
-        console.log('Updating charts with stats:', stats);
+        // Actualizar gráficos con estadísticas
     }
 
     /**

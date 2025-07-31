@@ -1,15 +1,4 @@
-<!DOC    <meta name="description" content="Sistema de Gestión - Figger Energy SAS">
-    <title>Figger Energy SAS - Sistema de Gestión</title>
-    
-    <!-- Estilos -->
-    <link rel="stylesheet" href="assets/css/main.css">
-    <link rel="stylesheet" href="assets/css/components.css">
-    <link rel="stylesheet" href="assets/css/responsive.css">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
-    <link rel="shortcut icon" href="assets/images/favicon.ico">
-    <link rel="apple-touch-icon" href="assets/images/logo.png">
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -401,7 +390,7 @@
             async function checkBackendConnection() {
                 try {
                     await apiClient.getStatus();
-                    console.log('Conexión con backend establecida');
+                    // Conexión con backend establecida
                 } catch (error) {
                     console.warn('No se pudo conectar con el backend:', error);
                     showToast('Advertencia: No se pudo conectar con el servidor. Usando modo de demostración.', 'warning', 5000);

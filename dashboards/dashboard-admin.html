@@ -309,7 +309,7 @@
             }
 
             // Configuración específica del admin dashboard
-            console.log('Admin Dashboard initialized');
+            // Admin Dashboard inicializado
             
             // Manejar navegación de sidebar
             const menuLinks = document.querySelectorAll('.menu-link');
@@ -325,7 +325,7 @@
                     
                     // Aquí se pueden agregar acciones específicas para cada sección
                     const href = this.getAttribute('href');
-                    console.log('Navegando a:', href);
+                    // Navegación a: href
                 });
             });
 
@@ -383,8 +383,8 @@
 
             // Mostrar información de sesión en desarrollo
             if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-                console.log('Usuario actual:', authManager.getCurrentUser());
-                console.log('Permisos:', authManager.getCurrentUser()?.permissions);
+                // Usuario actual: authManager.getCurrentUser()
+                // Permisos: authManager.getCurrentUser()?.permissions
             }
         });
 
