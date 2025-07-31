@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dashboard Empleado - Figger Energy SAS">
+    <title>Dashboard Empleado - Figger Energy SAS</title>
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+    <link rel="shortcut icon" href="assets/images/favicon.ico">
+    <link rel="apple-touch-icon" href="assets/images/logo.png">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="container">
+                <div class="dashboard-logo">
+                    <img src="assets/images/logo.png" alt="Figger Energy SAS" class="dashboard-logo-img">
+                    <div class="dashboard-logo-text">
+                        <h1>Figger Energy SAS</h1>
+                        <div class="subtitle">Portal del Empleado</div>
+                    </div>
+                </div>
+                
+                <nav class="dashboard-nav">
+                    <button class="sidebar-toggle" style="display: none;">☰</button>
+                    
+                    <ul class="nav-links">
+                        <li><a href="#perfil" class="active">Mi Perfil</a></li>
+                        <li><a href="#equipo">Mi Equipo</a></li>
+                        <li><a href="#notificaciones">Notificaciones</a></li>
+                    </ul>
+                    
+                    <div class="user-info">
+                        <button class="notification-bell">
+                            🔔
+                            <span class="notification-badge" style="display: none;">0</span>
+                        </button>
+                        
+                        <div class="user-avatar"></div>
+                        
+                        <div class="user-details">
+                            <div class="user-name"></div>
+                            <div class="user-role"></div>
+                        </div>
+                        
+                        <button class="logout-btn">Cerrar Sesión</button>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="dashboard-wrapper">
+            <!-- Sidebar -->
+            <aside class="dashboard-sidebar">
+                <div class="sidebar-header">
+                    <h3 class="sidebar-title">Mi Área</h3>
+                </div>
+                
+                <nav class="sidebar-menu">
+                    <div class="menu-section">
+                        <h4 class="menu-section-title">Personal</h4>
+                        <ul class="menu-items">
+                            <li class="menu-item">
+                                <a href="#perfil" class="menu-link active">
+                                    <span class="menu-icon">👤</span>
+                                    <span>Mi Perfil</span>
+                                </a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="#datos" class="menu-link">
+                                    <span class="menu-icon">📄</span>
+                                    <span>Mis Datos</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="menu-section">
+                        <h4 class="menu-section-title">Departamento</h4>
+                        <ul class="menu-items">
+                            <li class="menu-item">
+                                <a href="#equipo" class="menu-link">
+                                    <span class="menu-icon">👥</span>
+                                    <span>Mi Equipo</span>
+                                </a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="#estadisticas" class="menu-link">
+                                    <span class="menu-icon">📊</span>
+                                    <span>Estadísticas</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="menu-section">
+                        <h4 class="menu-section-title">Comunicación</h4>
+                        <ul class="menu-items">
+                            <li class="menu-item">
+                                <a href="#notificaciones" class="menu-link">
+                                    <span class="menu-icon">🔔</span>
+                                    <span>Notificaciones</span>
+                                </a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="#mensajes" class="menu-link">
+                                    <span class="menu-icon">💬</span>
+                                    <span>Mensajes</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </aside>
+
+            <!-- Main Content Area -->
+            <main class="dashboard-main">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1 class="page-title">Bienvenido a tu portal</h1>
+                    <p class="page-subtitle">Gestiona tu información personal y mantente conectado con tu equipo</p>
+                    
+                    <div class="page-actions">
+                        <button class="btn btn-outline-primary refresh-btn">
+                            🔄 Actualizar
+                        </button>
+                        <button class="btn btn-primary edit-profile-btn">
+                            ✏️ Editar Perfil
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="quick-stats">
+                    <div class="quick-stat stat-department">
+                        <div class="stat-header">
+                            <div class="stat-info">
+                                <h3>Mi Departamento</h3>
+                            </div>
+                            <div class="stat-icon">🏢</div>
+                        </div>
+                        <div class="stat-value" id="user-department">Cargando...</div>
+                        <div class="stat-change neutral">
+                            <span>🏗️ Área de trabajo</span>
+                        </div>
+                    </div>
+                    
+                    <div class="quick-stat stat-team">
+                        <div class="stat-header">
+                            <div class="stat-info">
+                                <h3>Compañeros</h3>
+                            </div>
+                            <div class="stat-icon">👥</div>
+                        </div>
+                        <div class="stat-value" id="team-count">0</div>
+                        <div class="stat-change positive">
+                            <span>👫 En mi departamento</span>
+                        </div>
+                    </div>
+                    
+                    <div class="quick-stat stat-notifications">
+                        <div class="stat-header">
+                            <div class="stat-info">
+                                <h3>Notificaciones</h3>
+                            </div>
+                            <div class="stat-icon">🔔</div>
+                        </div>
+                        <div class="stat-value" id="notification-count">0</div>
+                        <div class="stat-change warning">
+                            <span>⚠️ Sin leer</span>
+                        </div>
+                    </div>
+                    
+                    <div class="quick-stat stat-role">
+                        <div class="stat-header">
+                            <div class="stat-info">
+                                <h3>Mi Rol</h3>
+                            </div>
+                            <div class="stat-icon">💼</div>
+                        </div>
+                        <div class="stat-value" id="user-role">Cargando...</div>
+                        <div class="stat-change neutral">
+                            <span>🎯 Función actual</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Widgets -->
+                <div class="dashboard-widgets">
+                    <!-- Profile Information Widget -->
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h3 class="widget-title">Mi Información Personal</h3>
+                            <div class="widget-actions">
+                                <button class="widget-action edit-profile-btn" title="Editar">✏️</button>
+                                <button class="widget-action" title="Actualizar" onclick="location.reload()">🔄</button>
+                            </div>
+                        </div>
+                        <div class="widget-body">
+                            <div class="profile-info" id="profile-info">
+                                <div class="loading-container">
+                                    <div class="loading-spinner"></div>
+                                    <div class="loading-text">Cargando información...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Notifications Widget -->
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h3 class="widget-title">Mis Notificaciones</h3>
+                            <div class="widget-actions">
+                                <button class="widget-action" title="Marcar todas como leídas" id="mark-all-read">✓</button>
+                            </div>
+                        </div>
+                        <div class="widget-body">
+                            <div class="notification-panel">
+                                <ul class="notification-list" id="notification-list">
+                                    <li class="notification-item">
+                                        <div class="notification-content">
+                                            <p class="notification-text">Cargando notificaciones...</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Team Section -->
+                <div class="dashboard-widgets">
+                    <!-- Team Members Widget -->
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h3 class="widget-title">Mi Equipo de Trabajo</h3>
+                            <div class="widget-actions">
+                                <button class="widget-action" title="Ver directorio completo">👥</button>
+                            </div>
+                        </div>
+                        <div class="widget-body">
+                            <div id="team-members-container">
+                                <div class="loading-container">
+                                    <div class="loading-spinner"></div>
+                                    <div class="loading-text">Cargando equipo...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Department Stats -->
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h3 class="widget-title">Estadísticas del Departamento</h3>
+                        </div>
+                        <div class="widget-body">
+                            <div class="department-stats" id="department-stats">
+                                <div style="text-align: center; padding: 2rem; color: var(--gray-600);">
+                                    📊 Estadísticas departamentales<br>
+                                    <small>Información sobre el rendimiento del área</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="widget">
+                    <div class="widget-header">
+                        <h3 class="widget-title">Acciones Rápidas</h3>
+                    </div>
+                    <div class="widget-body">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                            <button class="btn btn-outline-primary edit-profile-btn">
+                                ✏️ Actualizar mi perfil
+                            </button>
+                            <button class="btn btn-outline-success" id="contact-admin">
+                                📧 Contactar administrador
+                            </button>
+                            <button class="btn btn-outline-info" id="view-company-info">
+                                ℹ️ Información de la empresa
+                            </button>
+                            <button class="btn btn-outline-warning refresh-btn">
+                                🔄 Actualizar datos
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/api.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/components.js"></script>
+    <script src="assets/js/dashboard.js"></script>
+
+    <script>
+        // Configuración específica para dashboard de empleado
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar que sea empleado
+            if (!authManager.isAuthenticated() || !authManager.hasRole('empleado')) {
+                authManager.logout();
+                return;
+            }
+
+            console.log('Employee Dashboard initialized');
+            
+            // Cargar información del empleado
+            loadEmployeeProfile();
+            
+            // Cargar equipo de trabajo
+            loadTeamMembers();
+            
+            // Configurar eventos específicos
+            setupEmployeeEvents();
+            
+            // Manejar navegación de sidebar
+            setupSidebarNavigation();
+            
+            // Configurar responsive
+            setupResponsiveLayout();
+        });
+
+        async function loadEmployeeProfile() {
+            const user = authManager.getCurrentUser();
+            const profileContainer = document.getElementById('profile-info');
+            
+            try {
+                // Actualizar stats básicos
+                document.getElementById('user-department').textContent = user.department;
+                document.getElementById('user-role').textContent = user.role;
+                
+                // Cargar datos completos del empleado
+                const empleado = await apiClient.getEmpleado(user.id);
+                
+                // Mostrar información del perfil
+                profileContainer.innerHTML = `
+                    <div class="profile-grid">
+                        <div class="profile-item">
+                            <label>Nombre Completo:</label>
+                            <span>${empleado.nombre_completo || user.fullName}</span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Email:</label>
+                            <span>${empleado.email || user.email}</span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Documento:</label>
+                            <span>${empleado.tipo_documento} ${empleado.numero_documento}</span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Teléfono:</label>
+                            <span>${FormatUtils.formatPhone(empleado.telefono) || 'No registrado'}</span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Departamento:</label>
+                            <span>${empleado.departamento_nombre}</span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Rol:</label>
+                            <span>${empleado.rol_nombre}</span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Fecha de Ingreso:</label>
+                            <span>${FormatUtils.formatDate(empleado.fecha_ingreso)}</span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Estado:</label>
+                            <span class="badge badge-${empleado.estado === 'activo' ? 'success' : 'secondary'}">
+                                ${FormatUtils.capitalize(empleado.estado)}
+                            </span>
+                        </div>
+                    </div>
+                `;
+                
+            } catch (error) {
+                console.error('Error loading employee profile:', error);
+                profileContainer.innerHTML = `
+                    <div class="profile-grid">
+                        <div class="profile-item">
+                            <label>Nombre:</label>
+                            <span>${user.fullName}</span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Email:</label>
+                            <span>${user.email}</span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Departamento:</label>
+                            <span>${user.department}</span>
+                        </div>
+                        <div class="profile-item">
+                            <label>Rol:</label>
+                            <span>${user.role}</span>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1rem; padding: 1rem; background: var(--warning-color); color: var(--gray-900); border-radius: var(--border-radius);">
+                        ⚠️ No se pudieron cargar todos los datos del perfil.
+                    </div>
+                `;
+            }
+        }
+
+        async function loadTeamMembers() {
+            const user = authManager.getCurrentUser();
+            const teamContainer = document.getElementById('team-members-container');
+            
+            try {
+                // Cargar empleados del mismo departamento
+                const empleados = await apiClient.getEmpleados({
+                    departamento: user.department
+                });
+                
+                // Filtrar al usuario actual
+                const teamMembers = empleados.filter(emp => emp.id_empleado !== user.id);
+                
+                // Actualizar contador
+                document.getElementById('team-count').textContent = teamMembers.length;
+                
+                if (teamMembers.length === 0) {
+                    teamContainer.innerHTML = `
+                        <div style="text-align: center; padding: 2rem; color: var(--gray-600);">
+                            👥 No hay otros miembros en tu departamento
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Mostrar lista de compañeros
+                teamContainer.innerHTML = `
+                    <div class="team-grid">
+                        ${teamMembers.map(member => `
+                            <div class="team-member-card">
+                                <div class="member-avatar">
+                                    ${FormatUtils.getInitials(member.nombre_completo)}
+                                </div>
+                                <div class="member-info">
+                                    <h4 class="member-name">${member.nombre_completo}</h4>
+                                    <p class="member-role">${member.rol_nombre}</p>
+                                    <p class="member-contact">
+                                        <small>📧 ${member.email}</small>
+                                    </p>
+                                    ${member.telefono ? `<p class="member-contact"><small>📞 ${FormatUtils.formatPhone(member.telefono)}</small></p>` : ''}
+                                </div>
+                                <div class="member-status">
+                                    <span class="badge badge-${member.estado === 'activo' ? 'success' : 'secondary'}">
+                                        ${FormatUtils.capitalize(member.estado)}
+                                    </span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                
+            } catch (error) {
+                console.error('Error loading team members:', error);
+                teamContainer.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: var(--error-color);">
+                        ❌ Error al cargar información del equipo
+                    </div>
+                `;
+            }
+        }
+
+        function setupEmployeeEvents() {
+            // Botón editar perfil
+            const editButtons = document.querySelectorAll('.edit-profile-btn');
+            editButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    showToast('Función de edición de perfil en desarrollo', 'info');
+                });
+            });
+            
+            // Contactar administrador
+            const contactAdminBtn = document.getElementById('contact-admin');
+            if (contactAdminBtn) {
+                contactAdminBtn.addEventListener('click', () => {
+                    const modal = createModal({
+                        title: 'Contactar Administrador',
+                        content: `
+                            <p>Para contactar al administrador del sistema:</p>
+                            <div style="background: var(--gray-100); padding: 1rem; border-radius: var(--border-radius); margin: 1rem 0;">
+                                <strong>📧 Email:</strong> admin@figgerenergy.com<br>
+                                <strong>📞 Teléfono:</strong> +57 300 123 4567<br>
+                                <strong>🏢 Oficina:</strong> Departamento de Administración
+                            </div>
+                            <p><small>El administrador te contactará a la brevedad posible.</small></p>
+                        `,
+                        footer: '<button class="btn btn-primary" onclick="hideModal()">Entendido</button>'
+                    });
+                    showModal(modal);
+                });
+            }
+            
+            // Información de la empresa
+            const companyInfoBtn = document.getElementById('view-company-info');
+            if (companyInfoBtn) {
+                companyInfoBtn.addEventListener('click', () => {
+                    const modal = createModal({
+                        title: 'Figger Energy SAS',
+                        size: 'large',
+                        content: `
+                            <div class="company-info-modal">
+                                <h4>🌱 Nuestra Misión</h4>
+                                <p>Desarrollamos comunidades energéticas sostenibles en regiones post-mineras de Colombia, 
+                                ofreciendo alternativas económicas basadas en energía solar.</p>
+                                
+                                <h4>🏗️ Nuestras Operaciones</h4>
+                                <ul>
+                                    <li>Desarrollo de comunidades energéticas solares</li>
+                                    <li>Capacitación técnica para ex-mineros</li>
+                                    <li>Granjas solares conectadas al Sistema Interconectado Nacional</li>
+                                    <li>Reconversión laboral y desarrollo socioeconómico</li>
+                                </ul>
+                                
+                                <h4>🎯 Nuestros Valores</h4>
+                                <ul>
+                                    <li><strong>Sostenibilidad:</strong> Energía limpia y renovable</li>
+                                    <li><strong>Innovación:</strong> Tecnología al servicio de las comunidades</li>
+                                    <li><strong>Responsabilidad Social:</strong> Desarrollo de regiones post-mineras</li>
+                                    <li><strong>Calidad:</strong> Excelencia en todos nuestros proyectos</li>
+                                </ul>
+                                
+                                <div style="background: var(--primary-color); color: white; padding: 1rem; border-radius: var(--border-radius); margin-top: 1rem;">
+                                    <strong>📍 Ubicación:</strong> Colombia<br>
+                                    <strong>📅 Fundada:</strong> 2019<br>
+                                    <strong>🏢 Tipo:</strong> Empresa privada especializada en energía renovable
+                                </div>
+                            </div>
+                        `,
+                        footer: '<button class="btn btn-primary" onclick="hideModal()">Cerrar</button>'
+                    });
+                    showModal(modal);
+                });
+            }
+        }
+
+        function setupSidebarNavigation() {
+            const menuLinks = document.querySelectorAll('.menu-link');
+            menuLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remover active de todos los links
+                    menuLinks.forEach(l => l.classList.remove('active'));
+                    
+                    // Agregar active al link clickeado
+                    this.classList.add('active');
+                    
+                    const href = this.getAttribute('href');
+                    console.log('Empleado navegando a:', href);
+                });
+            });
+        }
+
+        function setupResponsiveLayout() {
+            const sidebarToggle = document.querySelector('.sidebar-toggle');
+            const sidebar = document.querySelector('.dashboard-sidebar');
+            
+            function handleResize() {
+                if (window.innerWidth <= 1023) {
+                    if (sidebarToggle) sidebarToggle.style.display = 'block';
+                } else {
+                    if (sidebarToggle) sidebarToggle.style.display = 'none';
+                    if (sidebar) sidebar.classList.remove('open');
+                }
+            }
+            
+            window.addEventListener('resize', handleResize);
+            handleResize();
+            
+            if (sidebarToggle && sidebar) {
+                sidebarToggle.addEventListener('click', function() {
+                    sidebar.classList.toggle('open');
+                });
+            }
+        }
+    </script>
+
+    <style>
+        /* Estilos específicos para dashboard de empleado */
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .profile-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .profile-item label {
+            font-weight: 600;
+            color: var(--gray-600);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .profile-item span {
+            color: var(--text-color);
+            font-size: 1rem;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .team-member-card {
+            background: var(--gray-50);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: var(--transition-fast);
+        }
+
+        .team-member-card:hover {
+            background: var(--gray-100);
+            transform: translateY(-1px);
+        }
+
+        .member-avatar {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            background: var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--primary-color);
+            flex-shrink: 0;
+        }
+
+        .member-info {
+            flex: 1;
+        }
+
+        .member-name {
+            margin: 0;
+            font-size: 1rem;
+            color: var(--primary-color);
+        }
+
+        .member-role {
+            margin: 0.25rem 0;
+            color: var(--gray-600);
+            font-size: 0.9rem;
+        }
+
+        .member-contact {
+            margin: 0.25rem 0;
+            color: var(--gray-600);
+        }
+
+        .member-status {
+            flex-shrink: 0;
+        }
+
+        .company-info-modal h4 {
+            color: var(--primary-color);
+            margin: 1.5rem 0 0.5rem 0;
+        }
+
+        .company-info-modal h4:first-child {
+            margin-top: 0;
+        }
+
+        .company-info-modal ul {
+            margin: 0.5rem 0 1rem 1rem;
+        }
+
+        .company-info-modal li {
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</body>
+</html>
