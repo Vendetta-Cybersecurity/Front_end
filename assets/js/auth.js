@@ -11,17 +11,17 @@ class AuthManager {
             admin: {
                 name: 'Administrador',
                 permissions: ['read', 'write', 'delete', 'manage_users', 'manage_departments', 'view_all'],
-                dashboard: 'dashboard-admin.html'
+                dashboard: 'dashboards/dashboard-admin.html'
             },
             empleado: {
                 name: 'Empleado',
                 permissions: ['read', 'update_own_profile', 'view_department'],
-                dashboard: 'dashboard-empleado.html'
+                dashboard: 'dashboards/dashboard-empleado.html'
             },
             auditor: {
                 name: 'Auditor',
                 permissions: ['read', 'view_all', 'export_reports'],
-                dashboard: 'dashboard-auditor.html'
+                dashboard: 'dashboards/dashboard-auditor.html'
             }
         };
         
@@ -136,9 +136,11 @@ class AuthManager {
         this.currentUser = null;
         this.clearSession();
         
-        // Redirigir a login
+        // Redirigir a login - detectar si estamos en subcarpeta
         if (window.location.pathname !== '/index.html' && window.location.pathname !== '/') {
-            window.location.href = 'index.html';
+            // Si estamos en dashboards/, ir un nivel arriba
+            const indexPath = window.location.pathname.includes('/dashboards/') ? '../index.html' : 'index.html';
+            window.location.href = indexPath;
         }
     }
 
@@ -333,7 +335,9 @@ class AuthManager {
      */
     protectPage(requiredPermissions = []) {
         if (!this.isAuthenticated()) {
-            window.location.href = 'index.html';
+            // Si estamos en dashboards/, ir un nivel arriba
+            const indexPath = window.location.pathname.includes('/dashboards/') ? '../index.html' : 'index.html';
+            window.location.href = indexPath;
             return false;
         }
         
